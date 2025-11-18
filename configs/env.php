@@ -1,6 +1,7 @@
 <?php
-
 define('BASE_URL',          'http://localhost/su25/bl2/ca6/BaseMVC/');
+define('BASE_URL',          'http://localhost/D%E1%BB%B1_%C3%A1n_1/BaseMVC/');
+
 
 define('PATH_ROOT',         __DIR__ . '/../');
 
@@ -20,7 +21,9 @@ define('DB_HOST',     'localhost');
 define('DB_PORT',     '3306');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
+
 define('DB_NAME',     'tour_management');
+define('DB_NAME',     'quan_ly_tour');
 define('DB_OPTIONS', [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

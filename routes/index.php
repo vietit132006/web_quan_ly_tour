@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/../controllers/HomeController.php';
 require_once __DIR__ . '/../controllers/ManageController.php';
 require_once __DIR__ . '/../controllers/GroupController.php';
@@ -46,3 +47,10 @@ switch ($action) {
     default:
         echo "Action not found!";
 }
+
+$action = $_GET['action'] ?? '/';
+
+match ($action) {
+    '/'         => (new HomeController)->index(),
+};
+
