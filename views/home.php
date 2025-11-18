@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
   <meta charset="UTF-8">
-  <title>Travel Dashboard</title>
+  <title>Quản lý Tour Du Lịch</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
   <style>
@@ -25,6 +25,7 @@
       flex-direction: column;
       align-items: center;
       padding-top: 10px;
+      z-index: 200;
     }
 
     .sidebar a {
@@ -89,6 +90,7 @@
     .card {
       border-radius: 15px;
       box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+      border: none;
     }
 
     .hotel-card img {
@@ -110,116 +112,125 @@
     .badge-plus {
       background-color: #00bfa5;
     }
+
+    /* Thêm kiểu cho bảng tour */
+    .table thead th {
+      background-color: #e9ecef;
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- Sidebar trái -->
   <div class="sidebar">
-    <a href="#"><i class="bi bi-list"></i></a>
-    <a href="#" class="active"><i class="bi bi-house-door"></i></a>
-    <a href="#"><i class="bi bi-graph-up"></i></a>
-    <a href="#"><i class="bi bi-person"></i></a>
-    <a href="#"><i class="bi bi-gear"></i></a>
+    <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Menu"><i class="bi bi-list"></i></a>
+    <a href="index.php?action=/" data-bs-toggle="tooltip" data-bs-placement="right" title="Bảng điều khiển"><i class="bi bi-house-door"></i></a>
+    <a href="index.php?action=booking" class="active" data-bs-toggle="tooltip" data-bs-placement="right" title="Quản lý Tour"><i class="bi bi-calendar-check"></i></a>
+    <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Báo cáo"><i class="bi bi-graph-up"></i></a>
+    <a href="index.php?action=users-roles" data-bs-toggle="tooltip" data-bs-placement="right" title="admin/editer"><i class="bi bi-person"></i></a>
+    <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Cài đặt"><i class="bi bi-gear"></i></a>
   </div>
 
-  <!-- Thanh công cụ trên cùng -->
   <div class="topbar">
     <div class="search-bar">
-      <input type="text" placeholder="Search...">
+      <input type="text" placeholder="Tìm kiếm...">
     </div>
     <div class="top-icons">
-      <i class="bi bi-sun"></i>
-      <i class="bi bi-bell"></i>
-      <i class="bi bi-chat-dots"></i>
-      <img src="https://i.pravatar.cc/40" alt="User">
+      <i class="bi bi-sun" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Chế độ sáng/tối"></i>
+      <i class="bi bi-bell" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Thông báo"></i>
+      <i class="bi bi-chat-dots" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tin nhắn"></i>
+      <img src="https://i.pravatar.cc/40" alt="Ảnh người dùng" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tài khoản">
     </div>
   </div>
 
-  <!-- Nội dung chính -->
   <div class="content">
     <div class="container-fluid">
-      <h4 class="mb-4 fw-bold">Travel History</h4>
+      <h4 class="mb-4 fw-bold">Bảng Điều Khiển Tour</h4>
       <div class="row text-center mb-4">
         <div class="col-md-4">
           <div class="card p-3">
-            <h6>Total Profit</h6>
-            <h3>52,329</h3>
+            <h6 class="text-muted">Tổng Lợi Nhuận</h6>
+            <h3 class="fw-bold text-success">52,329,000 đ</h3>
           </div>
         </div>
         <div class="col-md-4">
           <div class="card p-3">
-            <h6>Total Revenue</h6>
-            <h3>78,200</h3>
+            <h6 class="text-muted">Tổng Doanh Thu</h6>
+            <h3 class="fw-bold text-primary">78,200,000 đ</h3>
           </div>
         </div>
         <div class="col-md-4">
           <div class="card p-3">
-            <h6>Total Visitors</h6>
-            <h3>22,500</h3>
+            <h6 class="text-muted">Tổng Khách Hàng</h6>
+            <h3 class="fw-bold text-info">22,500</h3>
           </div>
         </div>
       </div>
 
-      <!-- Travel Table -->
       <div class="card p-3 mb-4">
-        <table class="table align-middle">
+        <h5 class="mb-3 fw-bold">Danh Sách Tour Đã Tạo</h5>
+        <table class="table align-middle table-hover">
           <thead>
             <tr>
-              <th>Tour</th>
-              <th>Country</th>
-              <th>Nights</th>
-              <th>From</th>
-              <th>To</th>
-              <th>Adult</th>
-              <th>Price</th>
+              <th></th> 
+              <th>ID</th>
+              <th>Tên Tour</th>
+              <th>Giá cơ bản</th>
+              <th>Thời lượng</th>
+              <th>Mô tả</th>
+              <th>Trạng thái</th>
+              <th>Ngày tạo</th>
+              <th>ID Danh mục Tour</th>
             </tr>
           </thead>
           <tbody>
             <?php
-            $tours = [
-              ["The great wall of China", "China", 5, "10 Jan 2023", "16 Jan 2023", 2, "$124"],
-              ["Taj Mahal", "India", 4, "8 Dec 2023", "21 Dec 2023", 2, "$140"],
-              ["Niagara Falls", "Canada", 12, "11 Dec 2023", "11 Dec 2023", 5, "$560"],
-              ["Great Barrier Reef", "Italy", 3, "22 Dec 2023", "25 Dec 2023", 2, "$200"],
-              ["Pyramid", "Greek", 4, "24 Dec 2023", "28 Dec 2023", 3, "$900"]
-            ];
-            foreach ($tours as $tour) {
-              echo "<tr>
-                      <td>{$tour[0]}</td>
-                      <td>{$tour[1]}</td>
-                      <td>{$tour[2]} Night</td>
-                      <td>{$tour[3]}</td>
-                      <td>{$tour[4]}</td>
-                      <td>{$tour[5]} Adult</td>
-                      <td>{$tour[6]}</td>
-                    </tr>";
+          
+            // **Kiểm tra xem biến $tours đã được truyền từ Controller chưa**
+            if (isset($tours) && is_array($tours)) {
+                foreach ($tours as $tour) {
+                    // Dữ liệu từ CSDL là mảng kết hợp (key là tên cột)
+                    $status_badge = ($tour['status'] == 1) ? "<span class='badge bg-success'>Hoạt động</span>" : "<span class='badge bg-warning text-dark'>Tạm dừng</span>";
+                    
+                    echo "<tr>
+                            <td><a href='edit.php?id={$tour['id']}' class='text-primary' title='Sửa'><i class='bi bi-pencil-square'></i></a></td> 
+                            <td>{$tour['id']}</td>
+                            <td class='fw-bold'>{$tour['name']}</td>
+                            <td>" . number_format($tour['base_price'], 0, ',', '.') . " đ</td>
+                            <td>{$tour['duration']} Ngày</td>
+                            <td>" . (strlen($tour['description']) > 50 ? substr($tour['description'], 0, 50) . "..." : $tour['description']) . "</td>
+                            <td>{$status_badge}</td>
+                            <td class='small text-muted'>{$tour['created_at']}</td>
+                            <td>{$tour['tour_category_id']}</td>
+                        </tr>";
+                }
+            } else {
+                echo "<tr><td colspan='9' class='text-center text-danger'>Không tìm thấy dữ liệu tour. Vui lòng kiểm tra Model/Controller.</td></tr>";
             }
             ?>
           </tbody>
         </table>
       </div>
 
-      <!-- Top Hotels -->
-      <h4 class="mb-3 fw-bold">Top Hotels</h4>
+      <h4 class="mb-3 fw-bold">Khách sạn Hàng đầu</h4>
       <div class="row">
         <?php
         $hotels = [
-          ["Billas hotel&Motel", "img/h1.jpg", "LUX", "$62/day", "4.8", "2 BEDS | 3 ADULT"],
-          ["Taj Hotel", "img/h2.jpg", "LUX", "$78/day", "4.6", "2 BEDS | 2 ADULT"],
-          ["The great wall of China", "img/h3.jpg", "PENTHOUSE", "$102/day", "4.2", "3 BEDS | 6 ADULT"],
-          ["Elite Hotel", "img/h4.jpg", "PLUS", "$92/day", "4.1", "1 BED | 2 ADULT"],
+          ["Khách sạn Billas", "https://picsum.photos/300/160?random=1", "LUXURY", "620,000 đ/ngày", "4.8", "2 Giường | 3 Người lớn"],
+          ["Khách sạn Taj", "https://picsum.photos/300/160?random=2", "LUXURY", "780,000 đ/ngày", "4.6", "2 Giường | 2 Người lớn"],
+          ["Khách sạn Phượng Hoàng", "https://picsum.photos/300/160?random=3", "PENTHOUSE", "1,020,000 đ/ngày", "4.2", "3 Giường | 6 Người lớn"],
+          ["Khách sạn Elite", "https://picsum.photos/300/160?random=4", "PLUS", "920,000 đ/ngày", "4.1", "1 Giường | 2 Người lớn"],
         ];
         foreach ($hotels as $h) {
-          $badgeClass = strtolower($h[2]) == 'lux' ? 'badge-lux' : (strtolower($h[2]) == 'penthouse' ? 'badge-pent' : 'badge-plus');
+          // Điều chỉnh logic cho lớp badge tiếng Việt
+          $badgeClass = strtolower($h[2]) == 'luxury' ? 'badge-lux' : (strtolower($h[2]) == 'penthouse' ? 'badge-pent' : 'badge-plus');
           echo "
           <div class='col-md-3 mb-4'>
             <div class='card p-2 hotel-card'>
               <img src='{$h[1]}' alt='{$h[0]}'>
               <div class='p-2'>
                 <h6 class='fw-bold'>{$h[0]}</h6>
-                <span class='badge $badgeClass'>{$h[2]}</span>
+                <span class='badge $badgeClass'>" . strtoupper($h[2]) . "</span>
                 <p class='small mt-2 text-muted'>{$h[5]}</p>
                 <div class='d-flex justify-content-between'>
                   <span class='fw-bold'>{$h[3]}</span>
@@ -233,6 +244,15 @@
       </div>
     </div>
   </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+      // Kích hoạt Tooltips của Bootstrap
+      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+      })
+  </script>
 
 </body>
 
