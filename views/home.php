@@ -123,12 +123,14 @@
 <body>
 
   <div class="sidebar">
-    <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Menu"><i class="bi bi-list"></i></a>
-    <a href="index.php?action=/" data-bs-toggle="tooltip" data-bs-placement="right" title="Bảng điều khiển"><i class="bi bi-house-door"></i></a>
-    <a href="index.php?action=booking" class="active" data-bs-toggle="tooltip" data-bs-placement="right" title="Quản lý Tour"><i class="bi bi-calendar-check"></i></a>
-    <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Báo cáo"><i class="bi bi-graph-up"></i></a>
-    <a href="index.php?action=users-roles" data-bs-toggle="tooltip" data-bs-placement="right" title="admin/editer"><i class="bi bi-person"></i></a>
-    <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Cài đặt"><i class="bi bi-gear"></i></a>
+    <a href="#"><i class="bi bi-list"></i></a>
+    <a href="index.php?action=/" class="active"><i class="bi bi-house-door"></i></a>
+    <a href="index.php?action=booking"><i class="bi bi-calendar-check"></i></a>
+    <a href="index.php?action=manage"><i class="bi bi-graph-up"></i></a>
+    <a href="#" class="active"><i class="bi bi-house-door"></i></a>
+    <a href="#"><i class="bi bi-graph-up"></i></a>
+    <a href="#"><i class="bi bi-person"></i></a>
+    <a href="#"><i class="bi bi-gear"></i></a>
   </div>
 
   <div class="topbar">

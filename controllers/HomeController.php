@@ -1,5 +1,4 @@
 <?php
-
 class HomeController
 {
     public function index() 
@@ -11,3 +10,4 @@ class HomeController
         require_once PATH_VIEW . 'home.php';
     }
 }
+
