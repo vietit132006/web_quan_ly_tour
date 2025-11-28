@@ -22,23 +22,23 @@ class ManageController extends DB
     }
 
     public function store()
-    {
-        $data = [
-    'id' => $_POST['id'],
-    'tour_name' => $_POST['tour_name'],
-    'start_date' => $_POST['start_date'],
-    'end_date' => $_POST['end_date'],
-    'total_days' => $_POST['total_days'],
-    'departure_time' => $_POST['departure_time'],
-    'number_guests' => $_POST['number_guests'],
-    'guide_name' => $_POST['guide_name'],
-    'service_list' => $_POST['service_list']
-];
+{
+    $data = [
+        'tour_id' => $_POST['tour_id'],            // ID tour, không phải tour_name
+        'start_date' => $_POST['start_date'],
+        'end_date' => $_POST['end_date'],
+        'number_guests' => $_POST['number_guests'],
+        'departure_time' => $_POST['departure_time'],
+        'guide_id' => $_POST['guide_id'],
+        'address' => $_POST['address'],
+        'status' => 1,
+        'services' => $_POST['services'] ?? []     // danh sách service_id[]
+    ];
 
+    $this->groupModel->insert($data);
 
-        $this->groupModel->insert($data);
+    header("Location: " . BASE_URL . "?action=manage");
+    exit;
+}
 
-        header("Location: " . BASE_URL . "?action=manage");
-        exit;
-    }
 }

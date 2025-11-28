@@ -115,6 +115,13 @@
             transform: scale(0.98);
         }
 
+        .day-display {
+            grid-column: 1 / -1;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
         @media (max-width: 640px) {
             .form-grid {
                 grid-template-columns: 1fr;
@@ -129,10 +136,6 @@
             }
         }
     </style>
-  <style>@view-transition { navigation: auto; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
-  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
-  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
  </head>
  <body>
   <main>
@@ -141,29 +144,77 @@
      <h1>Quản lý Tour</h1>
      <p>Vui lòng điền thông tin tour</p>
     </header>
-    <form action="/manage/store" method="POST">
+    <form action="?action=manage-store" method="POST">
      <div class="form-grid">
-      <div class="form-group"><label for="stt">STT</label> <input type="number" id="stt" name="stt" required min="1">
+
+      <div class="form-group"><label for="tour_name">Tour</label> 
+        <input type="text" id="tour_name" name="tour_name" required placeholder="Nhập tên tour">
       </div>
-      <div class="form-group"><label for="tour_name">Tour</label> <input type="text" id="tour_name" name="tour_id" required placeholder="Nhập tên tour">
+
+      <div class="form-group"><label for="start_date">Ngày bắt đầu</label> 
+        <input type="date" id="start_date" name="start_date" required>
       </div>
-      <div class="form-group"><label for="start_date">Ngày bắt đầu</label> <input type="date" id="start_date" name="start_date" required>
+
+      <div class="form-group"><label for="end_date">Ngày kết thúc</label> 
+        <input type="date" id="end_date" name="end_date" required>
       </div>
-      <div class="form-group"><label for="end_date">Ngày kết thúc</label> <input type="date" id="end_date" name="end_date" required>
+
+      <!-- Hiển thị số ngày – số đêm -->
+      <div class="day-display">
+        <span id="so_ngay">0</span> ngày - <span id="so_dem">0</span> đêm
       </div>
-      <div class="form-group"><label for="number_guests">Số khách</label> <input type="number" id="number_guests" name="number_guests" required min="1" placeholder="0">
+
+      <div class="form-group"><label for="number_guests">Số khách</label> 
+        <input type="number" id="number_guests" name="number_guests" required min="1" placeholder="0">
       </div>
-      <div class="form-group"><label for="total_days">Tổng ngày</label> <input type="number" id="total_days" name="total_days" required min="1" placeholder="0">
+
+      <!-- Input ẩn để gửi tổng ngày lên server -->
+      <input type="hidden" id="total_days" name="total_days">
+
+      <div class="form-group"><label for="guide_name">Hướng dẫn viên</label> 
+        <input type="text" id="guide_name" name="guide_name" required placeholder="Tên hướng dẫn viên">
       </div>
-      <div class="form-group"><label for="guide_name">Hướng dẫn viên</label> <input type="text" id="guide_name" name="guide_name" required placeholder="Tên hướng dẫn viên">
+
+      <div class="form-group"><label for="departure_time">Giờ khởi hành</label> 
+        <input type="time" id="departure_time" name="departure_time" required>
       </div>
-      <div class="form-group"><label for="departure_time">Giờ khởi hành</label> <input type="time" id="departure_time" name="departure_time" required>
+
+      <div class="form-group full-width"><label for="service_list">Dịch vụ</label> 
+        <input type="text" id="service_list" name="service_list" required placeholder="Nhập các dịch vụ">
       </div>
-      <div class="form-group full-width"><label for="service_list">Dịch vụ</label> <input type="text" id="service_list" name="service_list" required placeholder="Nhập các dịch vụ">
-      </div>
-     </div><button type="submit" class="submit-button">Thêm</button>
+     </div>
+     <button type="submit" class="submit-button">Thêm</button>
     </form>
    </div>
   </main>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a542e77d006e656',t:'MTc2NDI3MzMxMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+
+  <!-- JS tự động tính số ngày và số đêm -->
+  <script>
+    const startDateInput = document.getElementById('start_date');
+    const endDateInput = document.getElementById('end_date');
+    const totalDaysInput = document.getElementById('total_days');
+    const displayDays = document.getElementById('so_ngay');
+    const displayNights = document.getElementById('so_dem');
+
+    function calculateTotalDays() {
+        const start = new Date(startDateInput.value);
+        const end = new Date(endDateInput.value);
+
+        if (start && end && end >= start) {
+            const diffTime = end - start; // milliseconds
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // tính cả ngày đầu
+            totalDaysInput.value = diffDays;
+            displayDays.innerText = diffDays;
+            displayNights.innerText = diffDays - 1;
+        } else {
+            totalDaysInput.value = '';
+            displayDays.innerText = 0;
+            displayNights.innerText = 0;
+        }
+    }
+
+    startDateInput.addEventListener('change', calculateTotalDays);
+    endDateInput.addEventListener('change', calculateTotalDays);
+  </script>
+ </body>
 </html>

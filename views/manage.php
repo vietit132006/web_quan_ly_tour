@@ -171,6 +171,7 @@
             <th>Ngày bắt đầu</th>
             <th>Ngày kết thúc</th>
             <th>Ngày tour</th>
+            <th>Giờ khởi hành</th>
             <th>Số khách</th>
             <th>Hướng dẫn viên</th>
             <th>Dịch vụ</th>
@@ -186,6 +187,7 @@
                 <td><?= htmlspecialchars($tg['start_date']) ?></td>
                 <td><?= htmlspecialchars($tg['end_date']) ?></td>
                 <td><?= htmlspecialchars($tg['so_ngay']) ?> ngày  <?= htmlspecialchars($tg['so_dem']) ?> đêm</td>
+                <td><?= htmlspecialchars($tg['departure_time']) ?></td>
                 <td><?= htmlspecialchars($tg['number_guests']) ?></td>
                 <td><?= htmlspecialchars($tg['guide_name']) ?></td>
                 <td><?= htmlspecialchars($tg['service_list']) ?></td>
