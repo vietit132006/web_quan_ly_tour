@@ -54,7 +54,7 @@ if (isset($_GET['delete'])) {
 
 $bookings = $_SESSION['bookings'] ?? [];
 ?>
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
