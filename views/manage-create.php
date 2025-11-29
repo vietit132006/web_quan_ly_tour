@@ -1,4 +1,13 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    echo '<pre>';
+    var_dump($_POST);
+    echo '</pre>';
+}
+?>
+
 <!doctype html>
+
 <html lang="vi">
  <head>
   <meta charset="UTF-8">
@@ -148,10 +157,11 @@
      <div class="form-grid">
 
     <div class="form-group">
-    <label for="tour_id">Tour</label>
+    <label>Tour</label>
     <select name="tour_id" id="tour_id">
+        
         <?php foreach ($tours as $tour): ?>
-            <option value="<?= $tour['id'] ?>"><?= $tour['name'] ?></option>
+            <option value="<?= $tour['tour_id'] ?>"><?= $tour['tour_name'] ?></option>
         <?php endforeach ?>
     </select>
 </div>

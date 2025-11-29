@@ -2,27 +2,22 @@
 
 class Manage extends DB
 {
-    public function getTourGroups()
-    {
-        return $this->query("SELECT g.*, s.name AS service_name, u.full_name AS guide_name FROM tour_group g LEFT JOIN service s ON 
-        g.service_id = s.id LEFT JOIN tour_guides tg ON g.guide_id = tg.id LEFT JOIN users u ON tg.user_id = u.id;")->fetchAll();
-    }
-
     public function insertGroup($data)
     {
-        $sql = "INSERT INTO tour_group (tour_id, start_date, end_date, total_days, departure_time, number_guests, guide_id) 
-                VALUES (?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO tour_group (tour_name, start_date, end_date, departure_time, number_guests, guide_name, service_list) 
+                VALUES (:tour_name, :start_date, :end_date, :departure_time, :number_guests, :guide_name, :service_list)";
 
-        $this->query($sql, [
-            $data['tour_id'],
-            $data['start_date'],
-            $data['end_date'],
-            $data['total_days'],
-            $data['departure_time'],
-            $data['number_guests'],
-            $data['guide_id']
+        $stmt = $this->pdo->prepare($sql);
+
+        return $stmt->execute([
+            ':tour_name' => $data['tour_name'],
+            ':start_date' => $data['start_date'],
+            ':end_date' => $data['end_date'],
+            ':departure_time' => $data['departure_time'],
+            ':number_guests' => $data['number_guests'],
+            ':guide_name' => $data['guide_name'],
+            ':service_list' => $data['service_list'],
+
         ]);
-
-        return $this->lastInsertId();
     }
 }
