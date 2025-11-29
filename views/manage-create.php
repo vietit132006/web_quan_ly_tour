@@ -147,9 +147,15 @@
     <form action="?action=manage-store" method="POST">
      <div class="form-grid">
 
-      <div class="form-group"><label for="tour_name">Tour</label> 
-        <input type="text" id="tour_name" name="tour_name" required placeholder="Nhập tên tour">
-      </div>
+    <div class="form-group">
+    <label for="tour_id">Tour</label>
+    <select name="tour_id" id="tour_id">
+        <?php foreach ($tours as $tour): ?>
+            <option value="<?= $tour['id'] ?>"><?= $tour['name'] ?></option>
+        <?php endforeach ?>
+    </select>
+</div>
+
 
       <div class="form-group"><label for="start_date">Ngày bắt đầu</label> 
         <input type="date" id="start_date" name="start_date" required>
