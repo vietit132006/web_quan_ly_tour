@@ -1,129 +1,59 @@
 <?php
-class ManageController
+
+class ManageController extends DB
 {
-    private $pdo;
+    private $groupModel;
+    private $tourModel;
 
     public function __construct()
     {
-        // Kết nối DB
-        $this->pdo = new PDO(
-            "mysql:host=localhost;dbname=tour_management;charset=utf8mb4",
-            "root", "",
-            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-        );
-        try {
-    $pdo = new PDO("mysql:host=localhost;dbname=tour_management;charset=utf8mb4", "root", "");
-    echo "Kết nối DB thành công!";
-} catch (PDOException $e) {
-    echo "Lỗi kết nối DB: " . $e->getMessage();
-}
-
+        parent::__construct();
+        $this->groupModel = new GroupModel();
+        $this->tourModel = new TourModel(); // Thêm model Tour
     }
 
-    public function index() 
+    // Hiển thị danh sách nhóm
+    public function index()
     {
-        // Lấy dữ liệu từ database
-        $tour_group = $this->getTourGroups();
-        $guides     = $this->getGuides();
-        $services   = $this->getServices();
-        $users = $this->getUsers();
-
-        require_once PATH_VIEW . 'manage.php';
+        $tour_group = $this->groupModel->all(); // Lấy tất cả nhóm
+        require_once PATH_VIEW . "manage.php";
     }
-public function saveGroup()
+
+    // Hiển thị form tạo mới
+ public function create()
 {
-    $id             = $_POST['id'] ?? null;
-    $tour_id        = $_POST['tour_id'];
-    $start_date     = $_POST['start_date'];
-    $end_date       = $_POST['end_date'];
-    $total_days     = $_POST['total_days'];
-    $departure_time = $_POST['departure_time'];
-    $number_guests  = $_POST['number_guests'];
-    $guide_id       = $_POST['guide_id'];
-    $services       = $_POST['services'] ?? []; // multiple service_id
+    $tourModel = new TourModel();
+    $guideModel = new GuideModel();
+    $serviceModel = new ServiceModel();
 
-    if ($id) {
-        // --- CẬP NHẬT ---
-        $sql = "UPDATE tour_group 
-                SET tour_id=?, start_date=?, end_date=?, total_days=?, departure_time=?, number_guests=?, guide_id=?
-                WHERE id=?";
-
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([
-            $tour_id,
-            $start_date,
-            $end_date,
-            $total_days,
-            $departure_time,
-            $number_guests,
-            $guide_id,
-            $id
-        ]);
-
-        // Xóa dịch vụ cũ
-        $this->pdo->prepare("DELETE FROM group_service WHERE group_id=?")->execute([$id]);
-
-        // Thêm dịch vụ mới
-        foreach ($services as $sv) {
-            $this->pdo->prepare(
-                "INSERT INTO group_service (group_id, service_id) VALUES (?,?)"
-            )->execute([$id, $sv]);
-        }
-
-    } else {
-        // --- THÊM MỚI ---
-        $sql = "INSERT INTO tour_group (tour_id, start_date, end_date, total_days, departure_time, number_guests, guide_id) 
-                VALUES (?,?,?,?,?,?,?)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([
-            $tour_id,
-            $start_date,
-            $end_date,
-            $total_days,
-            $departure_time,
-            $number_guests,
-            $guide_id
-        ]);
-
-        $new_id = $this->pdo->lastInsertId();
-
-        // Thêm dịch vụ
-        foreach ($services as $sv) {
-            $this->pdo->prepare(
-                "INSERT INTO group_service (group_id, service_id) VALUES (?,?)"
-            )->execute([$new_id, $sv]);
-        }
-    }
-
-    echo "OK";
-    exit;
+    $tours = $tourModel->getAllTours();
+    $guides = $guideModel->getAllActiveGuides();
+    $services = $serviceModel->getAllServiceModel();
+    require_once PATH_VIEW . "manage-create.php";
 }
 
 
-    private function getTourGroups()
+
+    // Xử lý lưu dữ liệu mới
+    public function store()
     {
-        $stmt = $this->pdo->query("SELECT tour_group.*, tours.name AS tour_name, service.name AS service_name FROM tour_group JOIN tours ON tour_group.tour_id = tours.id JOIN service ON tour_group.service_id = service.id;"); // bảng tour_groups
-        return $stmt->fetchAll();
+        // Lấy dữ liệu từ form
+        $data = [
+            'tour_id' => $_POST['tour_id'], // thêm tour_id
+            'start_date' => $_POST['start_date'],
+            'end_date' => $_POST['end_date'],
+            'number_guests' => $_POST['number_guests'],
+            'departure_time' => $_POST['departure_time'],
+            'status' => 1,
+            'services' => $_POST['services'] ?? [], // danh sách service_id[]
+            'guide_id'   => $_POST['guide_id']
+        ];
+
+        // Gọi model để insert dữ liệu
+        $this->groupModel->insert($data);
+
+        // Chuyển hướng về trang quản lý
+        header("Location: " . BASE_URL . "?action=manage");
+        exit;
     }
-
-    private function getGuides()
-    {
-        $stmt = $this->pdo->query("SELECT * FROM tour_guides"); // bảng guides
-        return $stmt->fetchAll();
-    }
-
-    private function getServices()
-    {
-        $stmt = $this->pdo->query("SELECT * FROM service"); // bảng services
-        return $stmt->fetchAll();
-    }
-
-    private function getUsers()
-{
-    $stmt = $this->pdo->query("SELECT tour_guides.*, users.full_name FROM tour_guides JOIN users ON tour_guides.user_id = users.id");
-    
-    return $stmt->fetchAll();
-}
-
-
 }

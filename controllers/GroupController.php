@@ -5,21 +5,18 @@ class GroupController {
     private $model;
 
     public function __construct() {
-        $this->model = new Group();
+        $this->model = new GroupModel();
     }
-
+    public function detail($id)
+    {
+        echo "Chi tiết tour có ID: $id";
+    }
     // Hiển thị danh sách nhóm
     public function index() {
         $groups = $this->model->all();
         require __DIR__.'/../../views/groups.php';
     }
 
-    // Xóa nhóm
-    public function delete($id) {
-        $this->model->delete($id);
-        header('Location: index.php?controller=group');
-        exit;
-    }
 
     // Thêm/Sửa nhóm
     public function save() {
