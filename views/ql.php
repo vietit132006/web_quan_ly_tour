@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gray-100 font-sans">
 
-<!-- Header -->
+
 <header class="bg-blue-600 text-white p-4 flex justify-between items-center">
     <h1 class="text-xl font-bold">Quản lý Lịch Khởi Hành & Phân bổ Nhân sự</h1>
     <div>Admin | <a href="#" class="underline">Đăng xuất</a></div>
