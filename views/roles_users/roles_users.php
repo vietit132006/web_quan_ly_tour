@@ -106,13 +106,14 @@
 
 <body>
 
-    <div class="sidebar">
-        <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Menu"><i class="bi bi-list"></i></a>
-        <a href="index.php?action=/" data-bs-toggle="tooltip" data-bs-placement="right" title="Bảng điều khiển"><i class="bi bi-house-door"></i></a>
-        <a href="index.php?action=users-roles" class="active" data-bs-toggle="tooltip" data-bs-placement="right" title="Quản lý Người dùng"><i class="bi bi-people"></i></a>
-        <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Báo cáo"><i class="bi bi-graph-up"></i></a>
-        <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Cài đặt"><i class="bi bi-gear"></i></a>
-    </div>
+   <div class="sidebar">
+    <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Menu"><i class="bi bi-list"></i></a>
+    <a href="index.php?action=/" data-bs-toggle="tooltip" data-bs-placement="right" title="Bảng điều khiển"><i class="bi bi-house-door"></i></a>
+    <a href="index.php?action=booking" class="active" data-bs-toggle="tooltip" data-bs-placement="right" title="Quản lý Tour"><i class="bi bi-calendar-check"></i></a>
+    <a href="index.php?action=nhacungcap" data-bs-toggle="tooltip" data-bs-placement="right" title="Nhà cung cấp"><i class="bi bi-graph-up"></i></a>
+    <a href="index.php?action=users-roles" data-bs-toggle="tooltip" data-bs-placement="right" title="admin/editer"><i class="bi bi-person"></i></a>
+    <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Cài đặt"><i class="bi bi-gear"></i></a>
+  </div>
 
     <div class="topbar">
         <div class="search-bar">
@@ -145,7 +146,7 @@
                 <div class="tab-pane fade show active" id="users_tab">
                     <div class="d-flex justify-content-between mb-3">
                         <h5 class="fw-bold">👥 User List</h5>
-                        <a href="index.php?action=user_add" class="btn btn-success">
+                        <a href="index.php?action=users_add" class="btn btn-success">
                             <i class="bi bi-person-plus"></i> Add User
                         </a>
                     </div>
@@ -184,10 +185,10 @@
                                                 <?php endif; ?>
                                             </td>
                                             <td>
-                                                <a href="index.php?action=user_edit&id=<?= $u['id'] ?>" class="btn btn-warning btn-sm" title="Edit">
+                                                <a href="index.php?action=users_edit&id=<?= $u['id'] ?>" class="btn btn-warning btn-sm" title="Edit">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <a href="index.php?action=user_delete&id=<?= $u['id'] ?>"
+                                                <a href="index.php?action=users_delete&id=<?= $u['id'] ?>"
                                                     class="btn btn-danger btn-sm"
                                                     onclick="return confirm('Delete user ID: <?= $u['id'] ?>?');" title="Delete">
                                                     <i class="bi bi-trash"></i>
@@ -234,10 +235,10 @@
                                             <td><?= $r['description'] ?? 'Không có mô tả' ?></td>
                                             <td><?= $r['created_at'] ?? 'lỗi' ?></td>
                                             <td>
-                                                <a href="index.php?action=role_edit&id=<?= $r['id'] ?>" class="btn btn-warning btn-sm" title="Edit">
+                                                <a href="index.php?action=roles_edit&id=<?= $r['id'] ?>" class="btn btn-warning btn-sm" title="Edit">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <a href="index.php?action=role_delete&id=<?= $r['id'] ?>"
+                                                <a href="index.php?action=roles_delete&id=<?= $r['id'] ?>"
                                                     class="btn btn-danger btn-sm"
                                                     onclick="return confirm('Delete role ID: <?= $r['id'] ?>?');" title="Delete">
                                                     <i class="bi bi-trash"></i>

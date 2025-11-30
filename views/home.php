@@ -126,7 +126,7 @@
     <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Menu"><i class="bi bi-list"></i></a>
     <a href="index.php?action=/" data-bs-toggle="tooltip" data-bs-placement="right" title="Bảng điều khiển"><i class="bi bi-house-door"></i></a>
     <a href="index.php?action=booking" class="active" data-bs-toggle="tooltip" data-bs-placement="right" title="Quản lý Tour"><i class="bi bi-calendar-check"></i></a>
-    <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Báo cáo"><i class="bi bi-graph-up"></i></a>
+    <a href="index.php?action=nhacungcap" data-bs-toggle="tooltip" data-bs-placement="right" title="Nhà cung cấp"><i class="bi bi-graph-up"></i></a>
     <a href="index.php?action=users-roles" data-bs-toggle="tooltip" data-bs-placement="right" title="admin/editer"><i class="bi bi-person"></i></a>
     <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Cài đặt"><i class="bi bi-gear"></i></a>
   </div>
@@ -190,7 +190,7 @@
             if (isset($tours) && is_array($tours)) {
                 foreach ($tours as $tour) {
                     // Dữ liệu từ CSDL là mảng kết hợp (key là tên cột)
-                    $status_badge = ($tour['status'] == 1) ? "<span class='badge bg-success'>Hoạt động</span>" : "<span class='badge bg-warning text-dark'>Tạm dừng</span>";
+                    $status_badge = ($tour['status'] == 1) ? "<span class='badge bg-success'>Hoạt động</span>" : "<span class='badge bg-danger text-white'>Tạm dừng</span>";
                     
                     echo "<tr>
                             <td><a href='edit.php?id={$tour['id']}' class='text-primary' title='Sửa'><i class='bi bi-pencil-square'></i></a></td> 

@@ -38,24 +38,68 @@ LEFT JOIN roles
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     public function createUser($data)
-{
-    $sql = "INSERT INTO users 
+    {
+        $sql = "INSERT INTO users 
             (username, password_hash, full_name, email, phone, role_id, avatar, status, created_at)
             VALUES 
             (:username, :password_hash, :full_name, :email, :phone, :role_id, :avatar, :status, NOW())";
 
-    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-    return $stmt->execute([
-        ':username'      => $data['username'],
-        ':password_hash' => password_hash($data['password'], PASSWORD_DEFAULT),
-        ':full_name'     => $data['full_name'],
-        ':email'         => $data['email'],
-        ':phone'         => $data['phone'],
-        ':role_id'       => $data['role_id'],
-        ':avatar'        => $data['avatar'] ?? null,
-        ':status'        => $data['status'] ?? 1,
-    ]);
+        return $stmt->execute([
+            ':username'      => $data['username'],
+            ':password_hash' => password_hash($data['password'], PASSWORD_DEFAULT),
+            ':full_name'     => $data['full_name'],
+            ':email'         => $data['email'],
+            ':phone'         => $data['phone'],
+            ':role_id'       => $data['role_id'],
+            ':avatar'        => $data['avatar'] ?? null,
+            ':status'        => $data['status'] ?? 1,
+        ]);
+    }
+    public function updateUser($id, $data)
+    {
+        $fields = "";
+
+        foreach ($data as $key => $value) {
+            $fields .= "$key = :$key,";
+        }
+
+        $fields = rtrim($fields, ",");
+
+        $sql = "UPDATE {$this->table} SET $fields WHERE id = :id";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $data['id'] = $id;
+
+        return $stmt->execute($data);
+    }
+    public function deleteUser($id)
+{
+    try {
+        $this->pdo->beginTransaction();
+
+        // 1) Xóa bảng con trước (ví dụ tour_guides)
+        $sql1 = "DELETE FROM tour_guides WHERE user_id = :id";
+        $stmt1 = $this->pdo->prepare($sql1);
+        $stmt1->execute(['id' => $id]);
+
+        // Nếu còn bảng khác tham chiếu users, xóa tương tự:
+        // $this->pdo->prepare("DELETE FROM bookings WHERE user_id = :id")->execute(['id' => $id]);
+
+        // 2) Xóa user
+        $sql2 = "DELETE FROM {$this->table} WHERE id = :id";
+        $stmt2 = $this->pdo->prepare($sql2);
+        $stmt2->execute(['id' => $id]);
+
+        $this->pdo->commit();
+        return true;
+    } catch (PDOException $e) {
+        $this->pdo->rollBack();
+        // Log lỗi nếu cần
+        return false;
+    }
 }
 
 
@@ -69,7 +113,7 @@ LEFT JOIN roles
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-      public function getRoleById($id)
+    public function getRoleById($id)
     {
         $stmt = $this->pdo->prepare("SELECT * FROM roles WHERE id = :id");
         $stmt->execute(['id' => $id]);
