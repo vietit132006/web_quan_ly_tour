@@ -79,8 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php if (!empty($services)): ?>
         <?php foreach ($services as $service): ?>
             <label style="display:block; margin-bottom:5px;">
-             <input type="checkbox" name="services[]" value="<?= $services['id'] ?>">
-                <?= htmlspecialchars($service['name']) ?>
+             <input type="checkbox" name="services[]" value="<?= htmlspecialchars($service['id'] ?? '') ?>">
+                <?= htmlspecialchars($service['name'] ?? '') ?>
             </label>
         <?php endforeach; ?>
     <?php else: ?>
