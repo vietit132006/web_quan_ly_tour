@@ -31,10 +31,7 @@ class ManageController extends DB
     $services = $serviceModel->getAllServiceModel();
     require_once PATH_VIEW . "manage-create.php";
 }
-
-
-
-    // Xử lý lưu dữ liệu mới
+    // Xử lý lưu dữ liệu mới manager
     public function store()
     {
         // Lấy dữ liệu từ form
