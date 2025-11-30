@@ -32,19 +32,19 @@ class GroupModel extends DB
         $total_days = ($end - $start) / 86400 + 1;
 
         // Thêm tour_group
-        $sql = "INSERT INTO tour_group 
-                (tour_id, start_date, end_date, total_days, departure_time, number_guests, guide_id)
-                VALUES (?,?,?,?,?,?,?,?)";
+       $sql = "INSERT INTO tour_group 
+        (tour_id, start_date, end_date, total_days, departure_time, number_guests, guide_id)
+        VALUES (?,?,?,?,?,?,?)";
 
-        $this->query($sql, [
-            $data['tour_id'],
-            $data['start_date'],
-            $data['end_date'],
-            $total_days,
-            $data['departure_time'],
-            $data['number_guests'],
-            $data['guide_id']
-        ]);
+$this->query($sql, [
+    $data['tour_id'],
+    $data['start_date'],
+    $data['end_date'],
+    $total_days,
+    $data['departure_time'],
+    $data['number_guests'],
+    $data['guide_id'] ?? null
+]);
 
         // Lấy ID vừa tạo
         $groupId = $this->lastInsertId();

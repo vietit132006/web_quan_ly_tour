@@ -2,7 +2,8 @@
 require_once __DIR__ . '/../controllers/HomeController.php';
 require_once __DIR__ . '/../controllers/ManageController.php';
 require_once __DIR__ . '/../controllers/GroupController.php';
-
+require_once __DIR__ . '/../models/GuideModel.php';
+$model = new GuideModel();
 $action = $_GET['action'] ?? '/';
 switch ($action) {
     case '/':
@@ -45,4 +46,5 @@ switch ($action) {
 
     default:
         echo "❌ Action not found!";
+        
 }
