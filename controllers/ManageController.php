@@ -40,9 +40,9 @@ class ManageController extends DB
             'start_date' => $_POST['start_date'],
             'end_date' => $_POST['end_date'],
             'number_guests' => $_POST['number_guests'],
-            'departure_time' => $_POST['departure_time'],
-            'status' => 1,
+            'total_days' => $_POST['total_days'],
             'services' => $_POST['services'] ?? [], // danh sách service_id[]
+            'departure_time' => $_POST['departure_time'],
             'guide_id'   => $_POST['guide_id']
         ];
 

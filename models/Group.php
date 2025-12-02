@@ -53,15 +53,14 @@ $this->query($sql, [
         if (!empty($data['services'])) {
             foreach ($data['services'] as $serviceId) {
                 $this->query("
-                    INSERT INTO tour_group_service (tour_group_id, service_id, quantity, price, status)
-                    VALUES (?,?,?,?,?)
-                ", [
-                    $groupId,
-                    $serviceId,
-                    1,      // quantity default
-                    0,      // price default
-                    1       // status default (active)
-                ]);
+    INSERT INTO tour_group_service (tour_group_id, service_id, status)
+    VALUES (?,?,?)
+", [
+    $groupId,
+    $serviceId,
+    1     // status default
+]);
+
             }
         }
 

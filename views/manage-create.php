@@ -1,10 +1,4 @@
-<?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    echo '<pre>';
-    var_dump($_POST);
-    echo '</pre>';
-}
-?>
+
 <!doctype html>
 <html lang="vi">
  <head>
@@ -87,11 +81,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p>Không có dịch vụ nào</p>
     <?php endif; ?>
 </div>
-
-
      </div>
      <button type="submit" class="submit-button">Thêm</button>
     </form>
+    <?php 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    echo "<h3>DEBUG DỮ LIỆU FORM:</h3>";
+    
+    echo "Tour ID: " . ($_POST['tour_id'] ?? 'null') . "<br>";
+    echo "Ngày bắt đầu: " . ($_POST['start_date'] ?? 'null') . "<br>";
+    echo "Ngày kết thúc: " . ($_POST['end_date'] ?? 'null') . "<br>";
+    echo "Tổng ngày: " . ($_POST['total_days'] ?? 'null') . "<br>";
+    echo "Số khách: " . ($_POST['number_guests'] ?? 'null') . "<br>";
+    echo "HDV: " . ($_POST['guide_id'] ?? 'null') . "<br>";
+    echo "Giờ khởi hành: " . ($_POST['departure_time'] ?? 'null') . "<br>";
+
+    echo "Dịch vụ chọn: ";
+    if (!empty($_POST['services'])) {
+        foreach ($_POST['services'] as $sv) {
+            echo $sv . " ";
+        }
+    } else {
+        echo "Không chọn dịch vụ nào";
+    }
+}
+?>
+
    </div>
   </main>
 
