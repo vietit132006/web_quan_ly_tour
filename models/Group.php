@@ -1,4 +1,4 @@
-<?php
+<?php 
 class GroupModel extends DB
 {
     // Lấy danh sách tour group
@@ -24,46 +24,35 @@ class GroupModel extends DB
 
 
     // Thêm mới tour group + dịch vụ
-    public function insert($data)
-    {
-        // Tính số ngày
-        $start = strtotime($data['start_date']);
-        $end   = strtotime($data['end_date']);
-        $total_days = ($end - $start) / 86400 + 1;
+  public function insert($data) {
+    // 1. Insert tour_group
+    $sql = "INSERT INTO tour_group (tour_id, start_date, end_date, number_guests, total_days, guide_id, departure_time)
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    DB::query($sql, [
+        $data['tour_id'],
+        $data['start_date'],
+        $data['end_date'],
+        $data['number_guests'],
+        $data['total_days'],
+        $data['guide_id'],
+        $data['departure_time'],
+    ]);
 
-        // Thêm tour_group
-       $sql = "INSERT INTO tour_group 
-        (tour_id, start_date, end_date, total_days, departure_time, number_guests, guide_id)
-        VALUES (?,?,?,?,?,?,?)";
+    $tour_group_id = DB::lastInsertId();
 
-$this->query($sql, [
-    $data['tour_id'],
-    $data['start_date'],
-    $data['end_date'],
-    $total_days,
-    $data['departure_time'],
-    $data['number_guests'],
-    $data['guide_id'] ?? null
-]);
-
-        // Lấy ID vừa tạo
-        $groupId = $this->lastInsertId();
-
-        // Nếu có dịch vụ thì thêm vào bảng trung gian
-        if (!empty($data['services'])) {
-            foreach ($data['services'] as $serviceId) {
-                $this->query("
-    INSERT INTO tour_group_service (tour_group_id, service_id, status)
-    VALUES (?,?,?)
-", [
-    $groupId,
-    $serviceId,
-    1     // status default
-]);
-
-            }
-        }
-
-        return $groupId;
+    // 2. Insert dịch vụ chỉ khi hợp lệ
+  if (!empty($data['services'])) {
+    foreach ($data['services'] as $service_id) {
+        if ($service_id <= 0) continue; // bỏ qua rỗng, 0
+        DB::query(
+            "INSERT INTO tour_group_service (tour_group_id, service_id, status) VALUES (?, ?, 1)",
+            [$tour_group_id, $service_id]
+        );
     }
+}
+
+
+    return $tour_group_id;
+}
+
 }

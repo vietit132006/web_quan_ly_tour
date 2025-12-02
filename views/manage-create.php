@@ -71,6 +71,7 @@
 <div class="form-group">
     <label>Dịch vụ</label>
     <?php if (!empty($services)): ?>
+        
         <?php foreach ($services as $service): ?>
             <label style="display:block; margin-bottom:5px;">
              <input type="checkbox" name="services[]" value="<?= htmlspecialchars($service['id'] ?? '') ?>">

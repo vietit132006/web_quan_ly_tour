@@ -9,48 +9,54 @@ class ManageController extends DB
     {
         parent::__construct();
         $this->groupModel = new GroupModel();
-        $this->tourModel = new TourModel(); // Thêm model Tour
+        $this->tourModel = new TourModel(); 
     }
 
     // Hiển thị danh sách nhóm
     public function index()
     {
-        $tour_group = $this->groupModel->all(); // Lấy tất cả nhóm
+        $tour_group = $this->groupModel->all();
         require_once PATH_VIEW . "manage.php";
     }
 
     // Hiển thị form tạo mới
- public function create()
-{
-    $tourModel = new TourModel();
-    $guideModel = new GuideModel();
-    $serviceModel = new ServiceModel();
-
-    $tours = $tourModel->getAllTours();
-    $guides = $guideModel->getAllActiveGuides();
-    $services = $serviceModel->getAllServiceModel();
-    require_once PATH_VIEW . "manage-create.php";
-}
-    // Xử lý lưu dữ liệu mới manager
-    public function store()
+    public function create()
     {
-        // Lấy dữ liệu từ form
-        $data = [
-            'tour_id' => $_POST['tour_id'], // thêm tour_id
-            'start_date' => $_POST['start_date'],
-            'end_date' => $_POST['end_date'],
-            'number_guests' => $_POST['number_guests'],
-            'total_days' => $_POST['total_days'],
-            'services' => $_POST['services'] ?? [], // danh sách service_id[]
-            'departure_time' => $_POST['departure_time'],
-            'guide_id'   => $_POST['guide_id']
-        ];
+        $tourModel = new TourModel();
+        $guideModel = new GuideModel();
+        $serviceModel = new ServiceModel();
 
-        // Gọi model để insert dữ liệu
-        $this->groupModel->insert($data);
-
-        // Chuyển hướng về trang quản lý
-        header("Location: " . BASE_URL . "?action=manage");
-        exit;
+        $tours = $tourModel->getAllTours();
+        $guides = $guideModel->getAllActiveGuides();
+        $services = $serviceModel->getAllServiceModel();
+        require_once PATH_VIEW . "manage-create.php";
     }
+
+    // Xử lý lưu dữ liệu mới
+    public function store()
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        die("Phải submit bằng POST form!");
+    }
+
+    $data = [
+        'tour_id'        => $_POST['tour_id'] ?? null,
+        'start_date'     => $_POST['start_date'] ?? null,
+        'end_date'       => $_POST['end_date'] ?? null,
+        'number_guests'  => (int) ($_POST['number_guests'] ?? 0),
+        'total_days'     => (int) ($_POST['total_days'] ?? 0),
+        'services'       => isset($_POST['services']) && is_array($_POST['services'])
+                            ? array_map('intval', $_POST['services'])
+                            : [],
+        'departure_time' => $_POST['departure_time'] ?? null,
+        'guide_id'       => $_POST['guide_id'] ?? null
+    ];
+
+    $groupId = $this->groupModel->insert($data);
+
+    $_SESSION['success'] = "Thêm tour group thành công!";
+    header("Location: ?action=manage");
+    exit;
+}
+
 }
