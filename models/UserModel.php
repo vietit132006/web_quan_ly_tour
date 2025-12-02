@@ -119,4 +119,21 @@ LEFT JOIN roles
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    // Hướng dẫn viên
+    public function getAllGuides()
+{
+    // Giả sử role_id = 3 là hướng dẫn viên
+    $sql = "SELECT tg.id AS guide_id, u.full_name, u.email, u.phone
+FROM tour_guides tg
+JOIN users u ON tg.user_id = u.id
+WHERE tg.status = 1
+ORDER BY u.full_name ASC
+";
+    
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 }
