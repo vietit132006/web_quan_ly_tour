@@ -46,5 +46,4 @@ switch ($action) {
 
     default:
         echo "❌ Action not found!";
-        
 }

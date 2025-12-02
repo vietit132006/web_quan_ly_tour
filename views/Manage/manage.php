@@ -138,9 +138,9 @@
 <body>
   <div class="sidebar">
     <a href="#"><i class="bi bi-list"></i></a>
-    <a href="index.php?action=/" class="active"><i class="bi bi-house-door"></i></a>
+    <a href="index.php?action=/" ><i class="bi bi-house-door"></i></a>
     <a href="index.php?action=booking"><i class="bi bi-calendar-check"></i></a>
-    <a href="index.php?action=manage"><i class="bi bi-graph-up"></i></a>
+    <a href="index.php?action=manage"class="active"><i class="bi bi-kanban"></i></a>
     <a href="#"><i class="bi bi-person"></i></a>
     <a href="#"><i class="bi bi-gear"></i></a>
   </div>

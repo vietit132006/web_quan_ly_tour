@@ -126,10 +126,8 @@
     <a href="#"><i class="bi bi-list"></i></a>
     <a href="index.php?action=/" class="active"><i class="bi bi-house-door"></i></a>
     <a href="index.php?action=booking"><i class="bi bi-calendar-check"></i></a>
-    <a href="index.php?action=manage"><i class="bi bi-graph-up"></i></a>
-    <a href="#" class="active"><i class="bi bi-house-door"></i></a>
-    <a href="#"><i class="bi bi-graph-up"></i></a>
-    <a href="#"><i class="bi bi-person"></i></a>
+    <a href="index.php?action=manage"><i class="bi bi-kanban"></i></a>
+        <a href="#"><i class="bi bi-person"></i></a>
     <a href="#"><i class="bi bi-gear"></i></a>
   </div>
 
@@ -200,7 +198,11 @@
                             <td class='fw-bold'>{$tour['name']}</td>
                             <td>" . number_format($tour['base_price'], 0, ',', '.') . " đ</td>
                             <td>{$tour['duration']} Ngày</td>
-                            <td>" . (strlen($tour['description']) > 50 ? substr($tour['description'], 0, 50) . "..." : $tour['description']) . "</td>
+                            <td>" . (
+    strlen($tour['description'] ?? '') > 50 
+        ? substr($tour['description'] ?? '', 0, 50) . "..." 
+        : ($tour['description'] ?? '')
+) . "</td>
                             <td>{$status_badge}</td>
                             <td class='small text-muted'>{$tour['created_at']}</td>
                             <td>{$tour['tour_category_id']}</td>

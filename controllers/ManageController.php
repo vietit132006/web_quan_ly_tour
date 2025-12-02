@@ -16,7 +16,7 @@ class ManageController extends DB
     public function index()
     {
         $tour_group = $this->groupModel->all();
-        require_once PATH_VIEW . "manage.php";
+        require_once PATH_VIEW . "Manage/manage.php";
     }
 
     // Hiển thị form tạo mới
@@ -29,7 +29,7 @@ class ManageController extends DB
         $tours = $tourModel->getAllTours();
         $guides = $guideModel->getAllActiveGuides();
         $services = $serviceModel->getAllServiceModel();
-        require_once PATH_VIEW . "manage-create.php";
+        require_once PATH_VIEW . "Manage/manage-create.php";
     }
 
     // Xử lý lưu dữ liệu mới
