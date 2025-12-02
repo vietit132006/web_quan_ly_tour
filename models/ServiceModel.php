@@ -5,7 +5,7 @@ class ServiceModel extends BaseModel
 
     public function getAllServiceModel()
     {
-        $sql = "SELECT service.name FROM service";
+        $sql = "SELECT * FROM service WHERE status = 1";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
