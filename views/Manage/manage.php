@@ -191,7 +191,7 @@
                 <td><?= htmlspecialchars($tg['guide_name']) ?></td>
                 <td><?= htmlspecialchars($tg['service_list']) ?></td>
                 <td class="action-btns">
-                  <a href="<?= BASE_URL ?>?action=edit&id=<?= $tg['id'] ?>" class="btn-edit">Sửa</a>
+                  <a href="<?= BASE_URL ?>?action=edit" class="btn-edit">Sửa</a>
                   <a href="<?= BASE_URL ?>?action=delete&id=<?= $tg['id'] ?>" class="btn-delete">Xóa</a>
                 </td>
               </tr>

@@ -3,8 +3,10 @@ require_once __DIR__ . '/../controllers/HomeController.php';
 require_once __DIR__ . '/../controllers/ManageController.php';
 require_once __DIR__ . '/../controllers/GroupController.php';
 require_once __DIR__ . '/../models/GuideModel.php';
+
 $model = new GuideModel();
 $action = $_GET['action'] ?? '/';
+
 switch ($action) {
     case '/':
     case 'home':
@@ -15,6 +17,24 @@ switch ($action) {
         (new ManageController)->index();
         break;
 
+    case 'manage-create':
+        (new ManageController)->create();
+        break;
+
+    case 'manage-store':
+        (new ManageController)->store();
+        break;
+
+    case 'manage-edit':
+        $id = $_GET['id'] ?? null;
+        (new ManageController)->edit($id);
+        break;
+
+    case 'manage-update':
+        $id = $_GET['id'] ?? null;
+        (new ManageController)->update($id);
+        break;
+
     case 'group_index':
         (new GroupController)->index();
         break;
@@ -22,13 +42,6 @@ switch ($action) {
     case 'group_detail':
         $id = $_GET['id'] ?? null;
         (new GroupController)->detail($id);
-        break;
-
-    case 'manage-create':
-        (new ManageController)->create();
-        break;
-      case 'manage-store':
-        (new ManageController)->store();
         break;
 
     case 'group_addService':
