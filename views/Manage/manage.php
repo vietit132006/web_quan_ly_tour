@@ -159,7 +159,8 @@
 
   <div class="content">
     <h3>Lịch trình tour</h3>
- <a href="index.php?action=manage-create">Thêm mới</a>
+ <a href="#" onclick="openModal('<?= BASE_URL ?>?action=manage-create')">Thêm mới</a>
+
 
     <div class="table-responsive">
       <table class="table table-striped align-middle">
@@ -191,7 +192,11 @@
                 <td><?= htmlspecialchars($tg['guide_name']) ?></td>
                 <td><?= htmlspecialchars($tg['service_list']) ?></td>
                 <td class="action-btns">
-                  <a href="<?= BASE_URL ?>?action=manage-edit&id=<?= $tg['id'] ?>" class="btn-edit">Sửa</a>
+                  <a href="#" class="btn-edit"
+   onclick="openModal('<?= BASE_URL ?>?action=manage-edit&id=<?= $tg['id'] ?>')">
+   Sửa
+</a>
+
                   <a href="<?= BASE_URL ?>?action=manage-delete&id=<?= $tg['id'] ?>" class="btn-delete"
                    onclick="return confirm('Bạn có chắc muốn xóa lịch trình tour này không?')">Xóa</a>
 
@@ -208,6 +213,38 @@
       </table>
     </div>
   </div>
+  <!-- Modal hiển thị Form -->
+<div class="modal fade" id="tourModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Đang tải...</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="modalContent">
+          <!-- Nội dung form sẽ được load bằng AJAX -->
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function openModal(url) {
+    const modal = new bootstrap.Modal(document.getElementById('tourModal'));
+    document.querySelector("#modalContent").innerHTML = "<p>Đang tải...</p>";
+
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector("#modalContent").innerHTML = html;
+        })
+        .catch(err => {
+            document.querySelector("#modalContent").innerHTML = "<p>Lỗi tải dữ liệu!</p>";
+        });
+
+    modal.show();
+}
+</script>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
