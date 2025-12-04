@@ -8,7 +8,7 @@ class ManageController
     public function __construct()
     {
         $this->groupModel = new GroupModel();
-        $this->tourModel = new TourModel(); 
+        $this->tourModel = new TourModel();
     }
 
     // Hiển thị danh sách nhóm
@@ -19,13 +19,13 @@ class ManageController
     }
 
     // Hiển thị form tạo mới
-   public function create()
-{
-    $tours = (new TourModel())->getAllTours();
-    $guides = (new GuideModel())->getAllActiveGuides();
-    $services = (new ServiceModel())->getAllServiceModel();
-    require_once PATH_VIEW . "Manage/manage-create-modal.php";
-}
+    public function create()
+    {
+        $tours = (new TourModel())->getAllTours();
+        $guides = (new GuideModel())->getAllActiveGuides();
+        $services = (new ServiceModel())->getAllServiceModel();
+        require_once PATH_VIEW . "Manage/manage-create-modal.php";
+    }
 
 
     // Lưu dữ liệu mới
@@ -55,31 +55,31 @@ class ManageController
 
     // Hiển thị form edit
     public function edit($id)
-{
-    $tours = (new TourModel())->getAllTours();
-    $guides = (new GuideModel())->getAllActiveGuides();
-    $services = (new ServiceModel())->getAllServiceModel();
+    {
+        $tours = (new TourModel())->getAllTours();
+        $guides = (new GuideModel())->getAllActiveGuides();
+        $services = (new ServiceModel())->getAllServiceModel();
 
-    $group = $this->groupModel->find($id);
-    $selectedServices = $this->groupModel->getServices($id);
-    require_once PATH_VIEW . "Manage/manage-edit-modal.php";
-}
+        $group = $this->groupModel->find($id);
+        $selectedServices = $this->groupModel->getServices($id);
+        require_once PATH_VIEW . "Manage/manage-edit-modal.php";
+    }
 
     // Xóa dữ liệu
-  public function delete($id)
-{
-    if (!$id) {
-        $_SESSION['error'] = "Không tìm thấy ID cần xóa!";
+    public function delete($id)
+    {
+        if (!$id) {
+            $_SESSION['error'] = "Không tìm thấy ID cần xóa!";
+            header("Location: ?action=manage");
+            exit;
+        }
+
+        $this->groupModel->delete($id);
+
+        $_SESSION['success'] = "Xóa tour group thành công!";
         header("Location: ?action=manage");
         exit;
     }
-
-    $this->groupModel->delete($id);
-
-    $_SESSION['success'] = "Xóa tour group thành công!";
-    header("Location: ?action=manage");
-    exit;
-}
 
 
     // Cập nhật dữ liệu

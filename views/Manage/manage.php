@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <title>Quản lý Tour Du Lịch</title>
@@ -138,9 +139,9 @@
 <body>
   <div class="sidebar">
     <a href="#"><i class="bi bi-list"></i></a>
-    <a href="index.php?action=/" ><i class="bi bi-house-door"></i></a>
+    <a href="index.php?action=/"><i class="bi bi-house-door"></i></a>
     <a href="index.php?action=booking"><i class="bi bi-calendar-check"></i></a>
-    <a href="index.php?action=manage"class="active"><i class="bi bi-kanban"></i></a>
+    <a href="index.php?action=manage" class="active"><i class="bi bi-kanban"></i></a>
     <a href="#"><i class="bi bi-person"></i></a>
     <a href="#"><i class="bi bi-gear"></i></a>
   </div>
@@ -159,7 +160,7 @@
 
   <div class="content">
     <h3>Lịch trình tour</h3>
- <a href="#" onclick="openModal('<?= BASE_URL ?>?action=manage-create')">Thêm mới</a>
+    <a href="#" onclick="openModal('<?= BASE_URL ?>?action=manage-create')">Thêm mới</a>
 
 
     <div class="table-responsive">
@@ -186,19 +187,19 @@
                 <td><?= htmlspecialchars($tg['tour_name']) ?></td>
                 <td><?= htmlspecialchars($tg['start_date']) ?></td>
                 <td><?= htmlspecialchars($tg['end_date']) ?></td>
-                <td><?= htmlspecialchars($tg['so_ngay']) ?> ngày  <?= htmlspecialchars($tg['so_dem']) ?> đêm</td>
+                <td><?= htmlspecialchars($tg['so_ngay']) ?> ngày <?= htmlspecialchars($tg['so_dem']) ?> đêm</td>
                 <td><?= htmlspecialchars($tg['departure_time']) ?></td>
                 <td><?= htmlspecialchars($tg['number_guests']) ?></td>
                 <td><?= htmlspecialchars($tg['guide_name']) ?></td>
                 <td><?= htmlspecialchars($tg['service_list']) ?></td>
                 <td class="action-btns">
                   <a href="#" class="btn-edit"
-   onclick="openModal('<?= BASE_URL ?>?action=manage-edit&id=<?= $tg['id'] ?>')">
-   Sửa
-</a>
+                    onclick="openModal('<?= BASE_URL ?>?action=manage-edit&id=<?= $tg['id'] ?>')">
+                    Sửa
+                  </a>
 
                   <a href="<?= BASE_URL ?>?action=manage-delete&id=<?= $tg['id'] ?>" class="btn-delete"
-                   onclick="return confirm('Bạn có chắc muốn xóa lịch trình tour này không?')">Xóa</a>
+                    onclick="return confirm('Bạn có chắc muốn xóa lịch trình tour này không?')">Xóa</a>
 
 
                 </td>
@@ -213,39 +214,39 @@
       </table>
     </div>
   </div>
-  <!-- Modal hiển thị Form -->
-<div class="modal fade" id="tourModal" tabindex="-1">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Đang tải...</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body" id="modalContent">
-          <!-- Nội dung form sẽ được load bằng AJAX -->
-      </div>
-    </div>
-  </div>
-</div>
-<script>
-function openModal(url) {
-    const modal = new bootstrap.Modal(document.getElementById('tourModal'));
-    document.querySelector("#modalContent").innerHTML = "<p>Đang tải...</p>";
+  <script>
+    function openModal(url) {
+      const modal = new bootstrap.Modal(document.getElementById('tourModal'));
+      document.querySelector("#modalContent").innerHTML = "<p>Đang tải...</p>";
 
-    fetch(url)
+      fetch(url)
         .then(response => response.text())
         .then(html => {
-            document.querySelector("#modalContent").innerHTML = html;
+          document.querySelector("#modalContent").innerHTML = html;
         })
         .catch(err => {
-            document.querySelector("#modalContent").innerHTML = "<p>Lỗi tải dữ liệu!</p>";
+          document.querySelector("#modalContent").innerHTML = "<p>Lỗi tải dữ liệu!</p>";
         });
 
-    modal.show();
-}
-</script>
+      modal.show();
+    }
+  </script>
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Modal hiển thị Form -->
+  <div class="modal fade" id="tourModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="modalContent">
+          <!-- Nội dung form sẽ được load bằng AJAX -->
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
+
 </html>
