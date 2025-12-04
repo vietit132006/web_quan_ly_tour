@@ -138,9 +138,9 @@
 <body>
   <div class="sidebar">
     <a href="#"><i class="bi bi-list"></i></a>
-    <a href="index.php?action=/" class="active"><i class="bi bi-house-door"></i></a>
+    <a href="index.php?action=/" ><i class="bi bi-house-door"></i></a>
     <a href="index.php?action=booking"><i class="bi bi-calendar-check"></i></a>
-    <a href="index.php?action=manage"><i class="bi bi-graph-up"></i></a>
+    <a href="index.php?action=manage"class="active"><i class="bi bi-kanban"></i></a>
     <a href="#"><i class="bi bi-person"></i></a>
     <a href="#"><i class="bi bi-gear"></i></a>
   </div>
@@ -191,8 +191,11 @@
                 <td><?= htmlspecialchars($tg['guide_name']) ?></td>
                 <td><?= htmlspecialchars($tg['service_list']) ?></td>
                 <td class="action-btns">
-                  <a href="<?= BASE_URL ?>?action=edit&id=<?= $tg['id'] ?>" class="btn-edit">Sửa</a>
-                  <a href="<?= BASE_URL ?>?action=delete&id=<?= $tg['id'] ?>" class="btn-delete">Xóa</a>
+                  <a href="<?= BASE_URL ?>?action=manage-edit&id=<?= $tg['id'] ?>" class="btn-edit">Sửa</a>
+                  <a href="<?= BASE_URL ?>?action=manage-delete&id=<?= $tg['id'] ?>" class="btn-delete"
+                   onclick="return confirm('Bạn có chắc muốn xóa lịch trình tour này không?')">Xóa</a>
+
+
                 </td>
               </tr>
             <?php endforeach; ?>

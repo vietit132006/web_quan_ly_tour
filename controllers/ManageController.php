@@ -1,13 +1,12 @@
 <?php
 
-class ManageController extends DB
+class ManageController
 {
     private $groupModel;
     private $tourModel;
 
     public function __construct()
     {
-        parent::__construct();
         $this->groupModel = new GroupModel();
         $this->tourModel = new TourModel(); 
     }
@@ -16,47 +15,95 @@ class ManageController extends DB
     public function index()
     {
         $tour_group = $this->groupModel->all();
-        require_once PATH_VIEW . "manage.php";
+        require_once PATH_VIEW . "Manage/manage.php";
     }
 
     // Hiển thị form tạo mới
     public function create()
     {
-        $tourModel = new TourModel();
-        $guideModel = new GuideModel();
-        $serviceModel = new ServiceModel();
+        $tours = (new TourModel())->getAllTours();
+        $guides = (new GuideModel())->getAllActiveGuides();
+        $services = (new ServiceModel())->getAllServiceModel();
 
-        $tours = $tourModel->getAllTours();
-        $guides = $guideModel->getAllActiveGuides();
-        $services = $serviceModel->getAllServiceModel();
-        require_once PATH_VIEW . "manage-create.php";
+        require_once PATH_VIEW . "Manage/manage-create.php";
     }
 
-    // Xử lý lưu dữ liệu mới
+    // Lưu dữ liệu mới
     public function store()
-{
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        die("Phải submit bằng POST form!");
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            die("Phải submit bằng POST!");
+        }
+
+        $data = [
+            'tour_id'        => $_POST['tour_id'] ?? null,
+            'start_date'     => $_POST['start_date'] ?? null,
+            'end_date'       => $_POST['end_date'] ?? null,
+            'number_guests'  => (int) ($_POST['number_guests'] ?? 0),
+            'total_days'     => (int) ($_POST['total_days'] ?? 0),
+            'services'       => isset($_POST['services']) ? array_map('intval', $_POST['services']) : [],
+            'departure_time' => $_POST['departure_time'] ?? null,
+            'guide_id'       => $_POST['guide_id'] ?? null
+        ];
+
+        $this->groupModel->insert($data);
+
+        $_SESSION['success'] = "Thêm tour group thành công!";
+        header("Location: ?action=manage");
+        exit;
     }
 
-    $data = [
-        'tour_id'        => $_POST['tour_id'] ?? null,
-        'start_date'     => $_POST['start_date'] ?? null,
-        'end_date'       => $_POST['end_date'] ?? null,
-        'number_guests'  => (int) ($_POST['number_guests'] ?? 0),
-        'total_days'     => (int) ($_POST['total_days'] ?? 0),
-        'services'       => isset($_POST['services']) && is_array($_POST['services'])
-                            ? array_map('intval', $_POST['services'])
-                            : [],
-        'departure_time' => $_POST['departure_time'] ?? null,
-        'guide_id'       => $_POST['guide_id'] ?? null
-    ];
+    // Hiển thị form edit
+    public function edit($id)
+    {
+        $tours = (new TourModel())->getAllTours();
+        $guides = (new GuideModel())->getAllActiveGuides();
+        $services = (new ServiceModel())->getAllServiceModel();
 
-    $groupId = $this->groupModel->insert($data);
+        $group = $this->groupModel->find($id);
+        $selectedServices = $this->groupModel->getServices($id);
 
-    $_SESSION['success'] = "Thêm tour group thành công!";
+        require_once PATH_VIEW . "Manage/manage-edit.php";
+    }
+    // Xóa dữ liệu
+  public function delete($id)
+{
+    if (!$id) {
+        $_SESSION['error'] = "Không tìm thấy ID cần xóa!";
+        header("Location: ?action=manage");
+        exit;
+    }
+
+    $this->groupModel->delete($id);
+
+    $_SESSION['success'] = "Xóa tour group thành công!";
     header("Location: ?action=manage");
     exit;
 }
 
+
+    // Cập nhật dữ liệu
+    public function update($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            die("Phải submit bằng POST!");
+        }
+
+        $data = [
+            'tour_id'        => $_POST['tour_id'] ?? null,
+            'start_date'     => $_POST['start_date'] ?? null,
+            'end_date'       => $_POST['end_date'] ?? null,
+            'number_guests'  => (int) ($_POST['number_guests'] ?? 0),
+            'total_days'     => (int) ($_POST['total_days'] ?? 0),
+            'services'       => isset($_POST['services']) ? array_map('intval', $_POST['services']) : [],
+            'departure_time' => $_POST['departure_time'] ?? null,
+            'guide_id'       => $_POST['guide_id'] ?? null
+        ];
+
+        $this->groupModel->update($id, $data);
+
+        $_SESSION['success'] = "Cập nhật tour group thành công!";
+        header("Location: ?action=manage");
+        exit;
+    }
 }
