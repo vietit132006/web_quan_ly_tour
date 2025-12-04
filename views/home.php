@@ -117,6 +117,18 @@
     .table thead th {
       background-color: #e9ecef;
     }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-icons {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
   </style>
 </head>
 
@@ -128,7 +140,7 @@
     <a href="index.php?action=/" data-bs-toggle="tooltip" data-bs-placement="right" title="Bảng điều khiển"><i class="bi bi-house-door"></i></a>
     <a href="index.php?action=booking" class="active" data-bs-toggle="tooltip" data-bs-placement="right" title="Quản lý Tour"><i class="bi bi-calendar-check"></i></a>
     <a href="index.php?action=nhacungcap" data-bs-toggle="tooltip" data-bs-placement="right" title="Nhà cung cấp"><i class="bi bi-graph-up"></i></a>
-    <a href="index.php?action=users-roles" data-bs-toggle="tooltip" data-bs-placement="right" title="admin/editer"><i class="bi bi-person"></i></a>
+    <a href="index.php?action=users" data-bs-toggle="tooltip" data-bs-placement="right" title="admin/editer"><i class="bi bi-person"></i></a>
     <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Cài đặt"><i class="bi bi-gear"></i></a>
 
   </div>
@@ -137,12 +149,40 @@
     <div class="search-bar">
       <input type="text" placeholder="Tìm kiếm...">
     </div>
+
     <div class="top-icons">
-      <i class="bi bi-sun" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Chế độ sáng/tối"></i>
-      <i class="bi bi-bell" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Thông báo"></i>
-      <i class="bi bi-chat-dots" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tin nhắn"></i>
-      <img src="https://i.pravatar.cc/40" alt="Ảnh người dùng" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tài khoản">
+      <i class="bi bi-sun" data-bs-toggle="tooltip" title="Chế độ sáng/tối"></i>
+      <i class="bi bi-bell" data-bs-toggle="tooltip" title="Thông báo"></i>
+      <i class="bi bi-chat-dots" data-bs-toggle="tooltip" title="Tin nhắn"></i>
+
+      <div class="dropdown">
+        <?php if (empty($_SESSION["user"])): ?>
+          <!-- CHƯA LOGIN -->
+          <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+            class="rounded-circle"
+            style="width:40px; cursor:pointer;"
+            id="avatarDropdown"
+            data-bs-toggle="dropdown">
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="index.php?action=login_form">Đăng nhập</a></li>
+          </ul>
+
+        <?php else: ?>
+          <!-- ĐÃ LOGIN -->
+          <img src="<?= htmlspecialchars($_SESSION['user']['avatar'] ?? 'https://i.pravatar.cc/40') ?>"
+            class="rounded-circle"
+            style="width:40px; cursor:pointer;"
+            id="avatarDropdown"
+            data-bs-toggle="dropdown">
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="index.php?action=logout">Đăng xuất</a></li>
+          </ul>
+        <?php endif; ?>
+      </div>
+
     </div>
+
+
   </div>
 
   <div class="content">
@@ -174,7 +214,7 @@
         <table class="table align-middle table-hover">
           <thead>
             <tr>
-              <th></th> 
+              <th></th>
               <th>ID</th>
               <th>Tên Tour</th>
               <th>Giá cơ bản</th>
@@ -182,33 +222,48 @@
               <th>Mô tả</th>
               <th>Trạng thái</th>
               <th>Ngày tạo</th>
-              <th>ID Danh mục Tour</th>
+              <th>Danh mục Tour</th>
             </tr>
           </thead>
           <tbody>
             <?php
-          
+
             // **Kiểm tra xem biến $tours đã được truyền từ Controller chưa**
             if (isset($tours) && is_array($tours)) {
-                foreach ($tours as $tour) {
-                    // Dữ liệu từ CSDL là mảng kết hợp (key là tên cột)
-                    $status_badge = ($tour['status'] == 1) ? "<span class='badge bg-success'>Hoạt động</span>" : "<span class='badge bg-danger text-white'>Tạm dừng</span>";
-                    
-                    echo "<tr>
-                            <td><a href='edit.php?id={$tour['id']}' class='text-primary' title='Sửa'><i class='bi bi-pencil-square'></i></a></td> 
-                            <td>{$tour['id']}</td>
-                            <td class='fw-bold'>{$tour['name']}</td>
-                            <td>" . number_format($tour['base_price'], 0, ',', '.') . " đ</td>
-                            <td>{$tour['duration']} Ngày</td>
-                            <td>" . (strlen($tour['description']) > 50 ? substr($tour['description'], 0, 50) . "..." : $tour['description']) . "</td>
-                            <td>{$status_badge}</td>
-                            <td class='small text-muted'>{$tour['created_at']}</td>
-                            <td>{$tour['tour_category_id']}</td>
-                        </tr>";
-                }
+              foreach ($tours as $tour) {
+
+                // Badge trạng thái
+                $status_badge = ($tour['status'] == 1)
+                  ? "<span class='badge bg-success'>Hoạt động</span>"
+                  : "<span class='badge bg-danger text-white'>Tạm dừng</span>";
+
+                // Mô tả rút gọn
+                $desc = $tour['description'] ?? '';
+                $short_desc = strlen($desc) > 50 ? substr($desc, 0, 50) . "..." : $desc;
+
+                // Category name
+                $category_name = ($tour['tour_category_id'] == 1) ? "Trong nước" : "Nước ngoài";
+
+                echo "<tr>
+                <td><a href='edit.php?id={$tour['id']}' class='text-primary' title='Sửa'>
+                    <i class='bi bi-pencil-square'></i></a>
+                </td>
+                <td>{$tour['id']}</td>
+                <td class='fw-bold'>{$tour['name']}</td>
+                <td>" . number_format($tour['base_price'], 0, ',', '.') . " đ</td>
+                <td>{$tour['duration']} Ngày</td>
+                <td>{$short_desc}</td>
+                <td>{$status_badge}</td>
+                <td class='small text-muted'>{$tour['created_at']}</td>
+                <td>{$category_name}</td>
+            </tr>";
+              }
             } else {
-                echo "<tr><td colspan='9' class='text-center text-danger'>Không tìm thấy dữ liệu tour. Vui lòng kiểm tra Model/Controller.</td></tr>";
+              echo "<tr><td colspan='9' class='text-center text-danger'>
+            Không tìm thấy dữ liệu tour. Vui lòng kiểm tra Model/Controller.
+          </td></tr>";
             }
+
             ?>
           </tbody>
         </table>
@@ -246,14 +301,14 @@
       </div>
     </div>
   </div>
-  
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-      // Kích hoạt Tooltips của Bootstrap
-      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-          return new bootstrap.Tooltip(tooltipTriggerEl)
-      })
+    // Kích hoạt Tooltips của Bootstrap
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
   </script>
 
 </body>

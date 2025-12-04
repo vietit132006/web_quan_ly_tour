@@ -1,16 +1,37 @@
+
 <?php
+require_once __DIR__ . '/../models/DB.php'; 
+require_once __DIR__ . '/../models/BaseModel.php';
 require_once __DIR__ . '/../controllers/HomeController.php';
 require_once __DIR__ . '/../controllers/ManageController.php';
 require_once __DIR__ . '/../controllers/GroupController.php';
 require_once __DIR__ . '/../controllers/BookingController.php';
 require_once __DIR__ . '/../controllers/UserController.php';
 require_once __DIR__ . '/../controllers/SupplierController.php';
+require_once __DIR__ . '/../models/SupplierModel.php';
 require_once __DIR__ . '/../models/GuideModel.php';
+require_once __DIR__ . '/../controllers/AuthController.php';
+require_once __DIR__ . '/../middleware/AuthMiddleware.php';
+require_once __DIR__ . '/../models/UserModel.php';
 
 $model = new GuideModel();
 $action = $_GET['action'] ?? '/';
 
+
+// Các action KHÔNG cần đăng nhập
+$public_actions = ['login', 'login_form'];
+
+if (!in_array($action, $public_actions)) {
+    AuthMiddleware::checkLogin();
+}
 match ($action) {
+    
+    // ============ AUTH ============ //
+    'login_form'        => (new AuthController)->loginForm(),
+    'login'             => (new AuthController)->login(),
+    'logout'            => (new AuthController)->logout(),
+
+    //home
     '/'                 => (new HomeController)->index(),
     'home'              => (new HomeController)->index(),
 
@@ -48,6 +69,7 @@ match ($action) {
         json_decode(file_get_contents("php://input"), true)['quantity'],
         json_decode(file_get_contents("php://input"), true)['date_use']
     ),
+    
 
     default => function () {
         http_response_code(404);
