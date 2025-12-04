@@ -19,14 +19,14 @@ class ManageController
     }
 
     // Hiển thị form tạo mới
-    public function create()
-    {
-        $tours = (new TourModel())->getAllTours();
-        $guides = (new GuideModel())->getAllActiveGuides();
-        $services = (new ServiceModel())->getAllServiceModel();
+   public function create()
+{
+    $tours = (new TourModel())->getAllTours();
+    $guides = (new GuideModel())->getAllActiveGuides();
+    $services = (new ServiceModel())->getAllServiceModel();
+    require_once PATH_VIEW . "Manage/manage-create-modal.php";
+}
 
-        require_once PATH_VIEW . "Manage/manage-create.php";
-    }
 
     // Lưu dữ liệu mới
     public function store()
@@ -55,16 +55,16 @@ class ManageController
 
     // Hiển thị form edit
     public function edit($id)
-    {
-        $tours = (new TourModel())->getAllTours();
-        $guides = (new GuideModel())->getAllActiveGuides();
-        $services = (new ServiceModel())->getAllServiceModel();
+{
+    $tours = (new TourModel())->getAllTours();
+    $guides = (new GuideModel())->getAllActiveGuides();
+    $services = (new ServiceModel())->getAllServiceModel();
 
-        $group = $this->groupModel->find($id);
-        $selectedServices = $this->groupModel->getServices($id);
+    $group = $this->groupModel->find($id);
+    $selectedServices = $this->groupModel->getServices($id);
+    require_once PATH_VIEW . "Manage/manage-edit-modal.php";
+}
 
-        require_once PATH_VIEW . "Manage/manage-edit.php";
-    }
     // Xóa dữ liệu
   public function delete($id)
 {

@@ -1,25 +1,5 @@
-<!doctype html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cập nhật Tour</title>
 
     <style>
-        body {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f4f8;
-            min-height: 100%;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem 1rem;
-        }
-
         .form-container {
             background: #ffffff;
             border-radius: 12px;
@@ -113,11 +93,6 @@
             }
         }
     </style>
-
-</head>
-<body>
-
-<main>
 <div class="form-container">
     <header class="form-header">
         <h1>Cập nhật Tour</h1>
@@ -205,8 +180,6 @@
     </form>
 
 </div>
-</main>
-
 <script>
     const s = document.getElementById('start_date');
     const e = document.getElementById('end_date');
@@ -229,5 +202,3 @@
     e.addEventListener("change", calc);
 </script>
 
-</body>
-</html>
