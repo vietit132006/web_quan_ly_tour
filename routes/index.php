@@ -34,6 +34,10 @@ switch ($action) {
         $id = $_GET['id'] ?? null;
         (new ManageController)->update($id);
         break;
+    case 'manage-delete':
+        $id = $_GET['id'] ?? null;
+        (new ManageController)->delete($id);
+        break;
 
     case 'group_index':
         (new GroupController)->index();
@@ -44,18 +48,18 @@ switch ($action) {
         (new GroupController)->detail($id);
         break;
 
-    case 'group_addService':
-        $data = json_decode(file_get_contents("php://input"), true);
-        $group_id = $_GET['id'] ?? null;
-        echo json_encode([
-            'id' => (new GroupController)->save(
-                $group_id,
-                $data['service_id'],
-                $data['quantity'],
-                $data['date_use']
-            )
-        ]);
-        break;
+    // case 'group_addService':
+    //     $data = json_decode(file_get_contents("php://input"), true);
+    //     $group_id = $_GET['id'] ?? null;
+    //     echo json_encode([
+    //         'id' => (new GroupController)->save(
+    //             $group_id,
+    //             $data['service_id'],
+    //             $data['quantity'],
+    //             $data['date_use']
+    //         )
+    //     ]);
+    //     break;
 
     default:
         echo "❌ Action not found!";

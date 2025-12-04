@@ -63,9 +63,15 @@ class ManageController
         $group = $this->groupModel->find($id);
         $selectedServices = $this->groupModel->getServices($id);
 
-        require_once PATH_VIEW . "views/Manage/manage-edit.php";
+        require_once PATH_VIEW . "Manage/manage-edit.php";
     }
-
+    // Xóa dữ liệu
+    public function delete($id)
+    {
+        $_SESSION['success'] = "Xóa tour group thành công!";
+        header("Location: ?action=manage");
+        exit;
+    }
     // Cập nhật dữ liệu
     public function update($id)
     {
