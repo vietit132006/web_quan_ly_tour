@@ -24,7 +24,7 @@ class ManageController
     $tours = (new TourModel())->getAllTours();
     $guides = (new GuideModel())->getAllActiveGuides();
     $services = (new ServiceModel())->getAllServiceModel();
-    require_once PATH_VIEW . "Manage/manage-create-modal.php";
+    require_once PATH_VIEW . "Manage/manage-create.php";
 }
 
 
@@ -62,7 +62,7 @@ class ManageController
 
     $group = $this->groupModel->find($id);
     $selectedServices = $this->groupModel->getServices($id);
-    require_once PATH_VIEW . "Manage/manage-edit-modal.php";
+    require_once PATH_VIEW . "Manage/manage-edit.php";
 }
 
     // Xóa dữ liệu

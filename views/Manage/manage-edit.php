@@ -95,8 +95,8 @@
     </style>
 <div class="form-container">
     <header class="form-header">
-        <h1>Cập nhật Tour</h1>
-        <p>Chỉnh sửa thông tin tour group</p>
+        <h1>Cập nhật lịch trình tour</h1>
+        <p>Chỉnh sửa thông tin</p>
     </header>
 
     <form action="<?= BASE_URL ?>?action=manage-update&id=<?= $group['id'] ?>" method="POST">

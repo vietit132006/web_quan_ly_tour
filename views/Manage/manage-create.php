@@ -1,4 +1,5 @@
 
+
  <style>
         .form-container {
             background: #ffffff;
@@ -119,8 +120,8 @@
  </style>
    <div class="form-container">
     <header class="form-header">
-     <h1>Quản lý Tour</h1>
-     <p>Vui lòng điền thông tin tour</p>
+     <h1>THÊM LỊCH TRÌNH TOUR</h1>
+     <p>Vui lòng điền thông tin</p>
     </header>
     <form id="tourForm" action="?action=manage-store" method="POST">
      <div class="form-grid">
