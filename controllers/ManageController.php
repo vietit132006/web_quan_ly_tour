@@ -66,12 +66,22 @@ class ManageController
         require_once PATH_VIEW . "Manage/manage-edit.php";
     }
     // Xóa dữ liệu
-    public function delete($id)
-    {
-        $_SESSION['success'] = "Xóa tour group thành công!";
+  public function delete($id)
+{
+    if (!$id) {
+        $_SESSION['error'] = "Không tìm thấy ID cần xóa!";
         header("Location: ?action=manage");
         exit;
     }
+
+    $this->groupModel->delete($id);
+
+    $_SESSION['success'] = "Xóa tour group thành công!";
+    header("Location: ?action=manage");
+    exit;
+}
+
+
     // Cập nhật dữ liệu
     public function update($id)
     {

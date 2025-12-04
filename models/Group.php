@@ -67,6 +67,21 @@ class GroupModel extends DB
         SELECT service_id FROM tour_group_service WHERE tour_group_id = ?
         ", [$tour_group_id])->fetchAll(PDO::FETCH_COLUMN);
     }
+    public function delete($id)
+{
+    // 1. Xóa dịch vụ khỏi tour_group_service
+    $this->query("DELETE FROM tour_group_service WHERE tour_group_id = ?", [$id]);
+
+    // 2. Xóa assigned_tour liên quan
+    $this->query("DELETE FROM assigned_tour WHERE group_id = ?", [$id]);
+
+    // 3. Xóa tour_group
+    $this->query("DELETE FROM tour_group WHERE id = ?", [$id]);
+}
+
+
+
+
      // Cập nhật tour group + dịch vụ
     public function update($id, $data)
     {
