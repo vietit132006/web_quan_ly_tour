@@ -70,5 +70,7 @@ class TourModel extends BaseModel
         $stmt = $this->pdo->prepare("DELETE FROM {$this->table} WHERE id = :id");
         return $stmt->execute(['id' => $id]); // Đảm bảo key truyền vào là 'id'
     }
+
+    
 }
 ?>

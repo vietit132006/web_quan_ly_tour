@@ -17,12 +17,14 @@ define('PATH_CONTROLLER',       PATH_ROOT . 'controllers/');
 
 define('PATH_MODEL',            PATH_ROOT . 'models/');
 
+define("PATH_PUBLIC", BASE_URL . "public");
+
 define('DB_HOST',     'localhost');
 define('DB_PORT',     '3306');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
 
-define('DB_NAME',     'tour_management');
+define('DB_NAME',     'tour_management2');
 define('DB_OPTIONS', [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

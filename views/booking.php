@@ -120,28 +120,56 @@ $bookings = $_SESSION['bookings'] ?? [];
 </style>
 </head>
 <body>
-<!-- Sidebar trái -->
 <div class="sidebar">
-    <a href="#"><i class="bi bi-list"></i></a>
-    <a href="index.php?action=/"><i class="bi bi-house-door"></i></a>
-    <a href="index.php?action=booking" class="active"><i class="bi bi-calendar-check"></i></a>
-    <a href="index.php?action=manage"><i class="bi bi-graph-up"></i></a>
-    <a href="#"><i class="bi bi-person"></i></a>
-    <a href="#"><i class="bi bi-gear"></i></a>
-</div>
 
-<!-- Topbar -->
-<div class="topbar">
+    <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Menu"><i class="bi bi-list"></i></a>
+    <a href="index.php?action=/" data-bs-toggle="tooltip" data-bs-placement="right" title="Bảng điều khiển"><i class="bi bi-house-door"></i></a>
+    <a href="index.php?action=booking" class="active" data-bs-toggle="tooltip" data-bs-placement="right" title="Quản lý Tour"><i class="bi bi-calendar-check"></i></a>
+    <a href="index.php?action=nhacungcap" data-bs-toggle="tooltip" data-bs-placement="right" title="Nhà cung cấp"><i class="bi bi-graph-up"></i></a>
+    <a href="index.php?action=users" data-bs-toggle="tooltip" data-bs-placement="right" title="admin/editer"><i class="bi bi-person"></i></a>
+    <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Cài đặt"><i class="bi bi-gear"></i></a>
+
+  </div>
+
+  <div class="topbar">
     <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Tìm kiếm booking...">
+      <input type="text" placeholder="Tìm kiếm...">
     </div>
+
     <div class="top-icons">
-        <i class="bi bi-sun"></i>
-        <i class="bi bi-bell"></i>
-        <i class="bi bi-chat-dots"></i>
-        <img src="https://i.pravatar.cc/40" alt="User">
+      <i class="bi bi-sun" data-bs-toggle="tooltip" title="Chế độ sáng/tối"></i>
+      <i class="bi bi-bell" data-bs-toggle="tooltip" title="Thông báo"></i>
+      <i class="bi bi-chat-dots" data-bs-toggle="tooltip" title="Tin nhắn"></i>
+
+      <div class="dropdown">
+        <?php if (empty($_SESSION["user"])): ?>
+          <!-- CHƯA LOGIN -->
+          <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+            class="rounded-circle"
+            style="width:40px; cursor:pointer;"
+            id="avatarDropdown"
+            data-bs-toggle="dropdown">
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="index.php?action=login_form">Đăng nhập</a></li>
+          </ul>
+
+        <?php else: ?>
+          <!-- ĐÃ LOGIN -->
+          <img src="<?= htmlspecialchars($_SESSION['user']['avatar'] ?? 'https://i.pravatar.cc/40') ?>"
+            class="rounded-circle"
+            style="width:40px; cursor:pointer;"
+            id="avatarDropdown"
+            data-bs-toggle="dropdown">
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="index.php?action=logout">Đăng xuất</a></li>
+          </ul>
+        <?php endif; ?>
+      </div>
+
     </div>
-</div>
+
+
+  </div>
 
 <!-- Nội dung chính -->
 <main class="content">
