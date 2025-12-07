@@ -17,10 +17,6 @@ switch ($action) {
         (new ManageController)->index();
         break;
 
-    case 'manage-create':
-        (new ManageController)->create();
-        break;
-
     case 'manage-store':
         (new ManageController)->store();
         break;

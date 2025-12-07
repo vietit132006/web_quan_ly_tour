@@ -8,24 +8,18 @@ class ManageController
     public function __construct()
     {
         $this->groupModel = new GroupModel();
-        $this->tourModel = new TourModel(); 
+        $this->tourModel = new TourModel();
     }
 
     // Hiển thị danh sách nhóm
     public function index()
     {
         $tour_group = $this->groupModel->all();
+        $tours = (new TourModel())->getAllTours();
+        $guides = (new GuideModel())->getAllActiveGuides();
+        $services = (new ServiceModel())->getAllServiceModel();
         require_once PATH_VIEW . "Manage/manage.php";
     }
-
-    // Hiển thị form tạo mới
-   public function create()
-{
-    $tours = (new TourModel())->getAllTours();
-    $guides = (new GuideModel())->getAllActiveGuides();
-    $services = (new ServiceModel())->getAllServiceModel();
-    require_once PATH_VIEW . "Manage/manage-create.php";
-}
 
 
     // Lưu dữ liệu mới
@@ -45,6 +39,11 @@ class ManageController
             'departure_time' => $_POST['departure_time'] ?? null,
             'guide_id'       => $_POST['guide_id'] ?? null
         ];
+        $tour_id = $_POST['tour_id'] ?? null;
+        if (!$tour_id) {
+            header("Location: ?action=manage&error=missing_tour");
+            exit;
+        }
 
         $this->groupModel->insert($data);
 
@@ -55,31 +54,31 @@ class ManageController
 
     // Hiển thị form edit
     public function edit($id)
-{
-    $tours = (new TourModel())->getAllTours();
-    $guides = (new GuideModel())->getAllActiveGuides();
-    $services = (new ServiceModel())->getAllServiceModel();
+    {
+        $tours = (new TourModel())->getAllTours();
+        $guides = (new GuideModel())->getAllActiveGuides();
+        $services = (new ServiceModel())->getAllServiceModel();
 
-    $group = $this->groupModel->find($id);
-    $selectedServices = $this->groupModel->getServices($id);
-    require_once PATH_VIEW . "Manage/manage-edit.php";
-}
+        $group = $this->groupModel->find($id);
+        $selectedServices = $this->groupModel->getServices($id);
+        require_once PATH_VIEW . "Manage/manage-edit-modal.php";
+    }
 
     // Xóa dữ liệu
-  public function delete($id)
-{
-    if (!$id) {
-        $_SESSION['error'] = "Không tìm thấy ID cần xóa!";
+    public function delete($id)
+    {
+        if (!$id) {
+            $_SESSION['error'] = "Không tìm thấy ID cần xóa!";
+            header("Location: ?action=manage");
+            exit;
+        }
+
+        $this->groupModel->delete($id);
+
+        $_SESSION['success'] = "Xóa tour group thành công!";
         header("Location: ?action=manage");
         exit;
     }
-
-    $this->groupModel->delete($id);
-
-    $_SESSION['success'] = "Xóa tour group thành công!";
-    header("Location: ?action=manage");
-    exit;
-}
 
 
     // Cập nhật dữ liệu
