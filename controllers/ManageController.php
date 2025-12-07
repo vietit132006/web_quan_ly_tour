@@ -15,16 +15,10 @@ class ManageController
     public function index()
     {
         $tour_group = $this->groupModel->all();
-        require_once PATH_VIEW . "Manage/manage.php";
-    }
-
-    // Hiển thị form tạo mới
-    public function create()
-    {
         $tours = (new TourModel())->getAllTours();
         $guides = (new GuideModel())->getAllActiveGuides();
         $services = (new ServiceModel())->getAllServiceModel();
-        require_once PATH_VIEW . "Manage/manage-create-modal.php";
+        require_once PATH_VIEW . "Manage/manage.php";
     }
 
 
@@ -45,6 +39,11 @@ class ManageController
             'departure_time' => $_POST['departure_time'] ?? null,
             'guide_id'       => $_POST['guide_id'] ?? null
         ];
+        $tour_id = $_POST['tour_id'] ?? null;
+        if (!$tour_id) {
+            header("Location: ?action=manage&error=missing_tour");
+            exit;
+        }
 
         $this->groupModel->insert($data);
 
