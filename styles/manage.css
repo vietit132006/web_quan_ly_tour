@@ -1,0 +1,261 @@
+
+    body {
+      background-color: #f9fdf8;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* Sidebar trái */
+    .sidebar {
+      width: 80px;
+      height: 100vh;
+      background-color: #fff;
+      position: fixed;
+      top: 0;
+      left: 0;
+      border-right: 1px solid #eee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 10px;
+      z-index: 200;
+    }
+
+    .sidebar a {
+      color: #555;
+      text-decoration: none;
+      font-size: 20px;
+      margin: 20px 0;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      color: #00a86b;
+    }
+
+    /* Thanh trên cùng */
+    .topbar {
+      position: fixed;
+      left: 80px;
+      right: 0;
+      top: 0;
+      height: 60px;
+      background-color: #fff;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 100;
+    }
+
+    .search-bar input {
+      border: none;
+      background-color: #f2f6f4;
+      padding: 6px 12px;
+      border-radius: 20px;
+      outline: none;
+      width: 220px;
+    }
+
+    .top-icons i {
+      font-size: 20px;
+      color: #555;
+      margin-left: 20px;
+      cursor: pointer;
+    }
+
+    .top-icons img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      margin-left: 20px;
+    }
+
+    /* Nội dung chính */
+    .content {
+      margin-left: 100px;
+      margin-top: 80px;
+      padding: 20px;
+    }
+
+    .card {
+      border-radius: 15px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+      border: none;
+    }
+
+    .hotel-card img {
+      width: 100%;
+      height: 160px;
+      border-radius: 15px;
+      object-fit: cover;
+    }
+
+    .badge-lux {
+      background-color: #ffca28;
+      color: #000;
+    }
+
+    .badge-pent {
+      background-color: #1976d2;
+      color: #fff;
+    }
+
+    .badge-plus {
+      background-color: #00bfa5;
+      color: #fff;
+    }
+
+    /* Bảng tour */
+    .table thead th {
+      background-color: #e9ecef;
+    }
+
+    .action-btns a {
+      margin-right: 5px;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .action-btns a.btn-edit {
+      color: #0d6efd;
+    }
+
+    .action-btns a.btn-delete {
+      color: #dc3545;
+    }
+
+    .form-container {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      padding: 2.5rem;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .form-header h1 {
+      color: #2c3e50;
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .form-header p {
+      color: #7f8c8d;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      color: #34495e;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    input {
+      padding: 0.75rem;
+      border: 1px solid #dce4ec;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      background: #ffffff;
+      color: #2c3e50;
+    }
+
+    input::placeholder {
+      color: #95a5a6;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #5dade2;
+      box-shadow: 0 0 0 3px rgba(93, 173, 226, 0.1);
+    }
+
+    input:hover {
+      border-color: #aeb6bf;
+    }
+
+    .submit-button {
+      width: 100%;
+      padding: 0.875rem;
+      background: #5dade2;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 0.75rem;
+    }
+
+    .submit-button:hover {
+      background: #3498db;
+    }
+
+    .submit-button:active {
+      transform: scale(0.98);
+    }
+
+    .day-display {
+      grid-column: 1 / -1;
+      font-weight: 500;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+
+    select {
+      padding: 0.75rem;
+      border: 1px solid #dce4ec;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      background: #ffffff;
+      color: #2c3e50;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #5dade2;
+      box-shadow: 0 0 0 3px rgba(93, 173, 226, 0.1);
+    }
+
+
+    @media (max-width: 640px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-container {
+        padding: 2rem 1.5rem;
+      }
+
+      .form-header h1 {
+        font-size: 1.5rem;
+      }
+    }

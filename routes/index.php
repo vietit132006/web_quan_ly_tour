@@ -1,6 +1,6 @@
 
 <?php
-require_once __DIR__ . '/../models/DB.php'; 
+require_once __DIR__ . '/../models/DB.php';
 require_once __DIR__ . '/../models/BaseModel.php';
 require_once __DIR__ . '/../controllers/HomeController.php';
 require_once __DIR__ . '/../controllers/ManageController.php';
@@ -14,6 +14,7 @@ require_once __DIR__ . '/../controllers/AuthController.php';
 require_once __DIR__ . '/../middleware/AuthMiddleware.php';
 require_once __DIR__ . '/../models/UserModel.php';
 
+
 $model = new GuideModel();
 $action = $_GET['action'] ?? '/';
 
@@ -25,7 +26,7 @@ if (!in_array($action, $public_actions)) {
     AuthMiddleware::checkLogin();
 }
 match ($action) {
-    
+
     // ============ AUTH ============ //
     'login_form'        => (new AuthController)->loginForm(),
     'login'             => (new AuthController)->login(),
@@ -52,24 +53,25 @@ match ($action) {
     'nhacungcap_add'    => (new SupplierController)->addSupplier(),
     'supplier_store'    => (new SupplierController)->storeSupplier(),
     'nhacungcap_edit'   => (new SupplierController)->editSupplier(),
-    'nhacungcap_update' => (new SupplierController)->updateSupplier(),
+    'update' => (new SupplierController)->updateSupplier(),
     'nhacungcap_delete' => (new SupplierController)->deleteSupplier(),
 
     // Manage
     'manage'            => (new ManageController)->index(),
-    'manage-create'     => (new ManageController)->create(),
     'manage-store'      => (new ManageController)->store(),
+    'manage-update'     => (new ManageController)->update($_GET['id'] ?? null),
+    'manage-delete'     => (new ManageController)->delete($_GET['id'] ?? null),
 
     // Group
     'group_index'       => (new GroupController)->index(),
     'group_detail'      => (new GroupController)->detail($_GET['id'] ?? null),
-    'group_addService'  => (new GroupController)->save(
-        $_GET['id'] ?? null,
-        json_decode(file_get_contents("php://input"), true)['service_id'],
-        json_decode(file_get_contents("php://input"), true)['quantity'],
-        json_decode(file_get_contents("php://input"), true)['date_use']
-    ),
-    
+    // 'group_addService'  => (new GroupController)->save(
+    //     $_GET['id'] ?? null,
+    //     json_decode(file_get_contents("php://input"), true)['service_id'],
+    //     json_decode(file_get_contents("php://input"), true)['quantity'],
+    //     json_decode(file_get_contents("php://input"), true)['date_use']
+    // ),
+
 
     default => function () {
         http_response_code(404);
