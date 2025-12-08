@@ -139,7 +139,7 @@
     </style>
   </head>
 
-  <>
+  <body>
 
     <!-- SIDEBAR -->
     <div class="sidebar">
@@ -165,6 +165,12 @@
         class="<?= $current == 'nhacungcap' ? 'active' : '' ?>">
         <i class="bi bi-building"></i>
         <span>Nhà cung cấp</span>
+      </a>
+
+      <a href="index.php?action=manage"
+        class="<?= $current == 'booking' ? 'active' : '' ?>">
+        <i class="bi bi-kanban"></i>
+        <span>Lịch trình tour</span>
       </a>
 
       <a href="index.php?action=users"
@@ -343,6 +349,6 @@
       })
     </script>
 
-    </body>
+  </body>
 
-    </html>
+  </html>
