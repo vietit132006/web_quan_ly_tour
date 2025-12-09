@@ -37,7 +37,12 @@ match ($action) {
     'home'              => (new HomeController)->index(),
 
     // Booking
-    'booking'           => (new BookingController)->index(),
+    // ============ BOOKING ============ //
+    'booking'               => (new BookingController)->index(),
+    'booking-detail'        => (new BookingController)->detail(),
+    'booking-update'        => (new BookingController)->updateStatus(),
+
+
 
     // Users
     'users'             => (new UserController)->listUser(),
