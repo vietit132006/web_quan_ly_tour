@@ -8,7 +8,7 @@ class DB
     {
         try {
             $this->pdo = new PDO(
-                "mysql:host=localhost;dbname=tour_management3;charset=utf8mb4",
+                "mysql:host=localhost;dbname=tour_management;charset=utf8mb4",
                 "root",
                 "",
                 [
@@ -20,7 +20,7 @@ class DB
             die("Database connection failed: " . $e->getMessage());
         }
     }
-     public function query($sql, $params = [])
+    public function query($sql, $params = [])
     {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
