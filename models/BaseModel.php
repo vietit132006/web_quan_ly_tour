@@ -1,28 +1,52 @@
 <?php
 require_once __DIR__ . '/../configs/database.php';
 
-require_once __DIR__ . '/../configs/database.php';
-
-
 class BaseModel
 {
     protected $table;
     protected $pdo;
 
-    // Kết nối CSDL
     public function __construct()
     {
-        $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8', DB_HOST, DB_PORT, DB_NAME);
+        $dsn = sprintf(
+            'mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
+            DB_HOST,
+            DB_PORT,
+            DB_NAME
+        );
 
         try {
-            $this->pdo = new PDO($dsn, DB_USERNAME, DB_PASSWORD, DB_OPTIONS);
+            $this->pdo = new PDO(
+                $dsn,
+                DB_USERNAME,
+                DB_PASSWORD,
+                DB_OPTIONS
+            );
         } catch (PDOException $e) {
-            // Xử lý lỗi kết nối
-            die("Kết nối cơ sở dữ liệu thất bại: {$e->getMessage()}. Vui lòng thử lại sau.");
+            die("Kết nối CSDL thất bại: " . $e->getMessage());
         }
     }
 
-    // Hủy kết nối CSDL
+    /* ================= CORE QUERY ================= */
+
+    protected function query($sql, $params = [])
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt;
+    }
+
+    protected function execute($sql, $params = [])
+    {
+        $this->query($sql, $params);
+        return true;
+    }
+
+    public function lastInsertId()
+    {
+        return $this->pdo->lastInsertId();
+    }
+
     public function __destruct()
     {
         $this->pdo = null;
