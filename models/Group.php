@@ -1,4 +1,5 @@
 <?php
+
 class GroupModel extends DB
 {
     // Lấy danh sách tour group
@@ -22,14 +23,15 @@ class GroupModel extends DB
         ")->fetchAll();
     }
 
-
     // Thêm mới tour group + dịch vụ
     public function insert($data)
     {
         // 1. Insert tour_group
-        $sql = "INSERT INTO tour_group (tour_id, start_date, end_date, number_guests, total_days, guide_id, departure_time)
+        $sql = "INSERT INTO tour_group 
+            (tour_id, start_date, end_date, number_guests, total_days, guide_id, departure_time)
             VALUES (?, ?, ?, ?, ?, ?, ?)";
-        DB::query($sql, [
+
+        $this->query($sql, [
             $data['tour_id'],
             $data['start_date'],
             $data['end_date'],
@@ -39,60 +41,70 @@ class GroupModel extends DB
             $data['departure_time'],
         ]);
 
-        $tour_group_id = DB::lastInsertId();
+        $tour_group_id = $this->lastInsertId();
 
-        // 2. Insert dịch vụ chỉ khi hợp lệ
+        // 2. Insert dịch vụ
         if (!empty($data['services'])) {
             foreach ($data['services'] as $service_id) {
-                if ($service_id <= 0) continue; // bỏ qua rỗng, 0
-                DB::query(
+                $service_id = (int) $service_id;
+                if ($service_id <= 0) continue;
+
+                $this->query(
                     "INSERT INTO tour_group_service (tour_group_id, service_id, status) VALUES (?, ?, 1)",
                     [$tour_group_id, $service_id]
                 );
             }
         }
 
-
         return $tour_group_id;
     }
+
     // Lấy chi tiết 1 tour group
     public function find($id)
     {
         return $this->query("
-        SELECT * FROM tour_group WHERE tour_group.id = ?
+            SELECT * FROM tour_group WHERE id = ?
         ", [$id])->fetch();
     }
 
-    // Lấy dịch vụ của 1 tour group
+    // Lấy danh sách service id của 1 tour group
     public function getServices($tour_group_id)
     {
         return $this->query("
-        SELECT service_id FROM tour_group_service WHERE tour_group_id = ?
+            SELECT service_id 
+            FROM tour_group_service 
+            WHERE tour_group_id = ?
         ", [$tour_group_id])->fetchAll(PDO::FETCH_COLUMN);
     }
+
+    // Xóa tour group
     public function delete($id)
     {
-        // 1. Xóa dịch vụ khỏi tour_group_service
+        // 1. Xóa dịch vụ
         $this->query("DELETE FROM tour_group_service WHERE tour_group_id = ?", [$id]);
 
-        // 2. Xóa assigned_tour liên quan
+        // 2. Xóa bảng liên quan (nếu có)
         $this->query("DELETE FROM assigned_tour WHERE group_id = ?", [$id]);
 
-        // 3. Xóa tour_group
+        // 3. Xóa tour group
         $this->query("DELETE FROM tour_group WHERE id = ?", [$id]);
     }
-
-
-
 
     // Cập nhật tour group + dịch vụ
     public function update($id, $data)
     {
         // 1. Update tour_group
         $sql = "UPDATE tour_group 
-                SET tour_id=?, start_date=?, end_date=?, number_guests=?, total_days=?, guide_id=?, departure_time=? 
-                WHERE id=?";
-        DB::query($sql, [
+                SET tour_id = ?, 
+                    start_date = ?, 
+                    end_date = ?, 
+                    number_guests = ?, 
+                    total_days = ?, 
+                    guide_id = ?, 
+                    departure_time = ? 
+                WHERE id = ?";
+
+        $this->query($sql, [
             $data['tour_id'],
             $data['start_date'],
             $data['end_date'],
@@ -104,14 +116,15 @@ class GroupModel extends DB
         ]);
 
         // 2. Xóa dịch vụ cũ
-        DB::query("DELETE FROM tour_group_service WHERE tour_group_id=?", [$id]);
+        $this->query("DELETE FROM tour_group_service WHERE tour_group_id = ?", [$id]);
 
         // 3. Insert dịch vụ mới
         if (!empty($data['services'])) {
             foreach ($data['services'] as $service_id) {
                 $service_id = (int) $service_id;
                 if ($service_id <= 0) continue;
-                DB::query(
+
+                $this->query(
                     "INSERT INTO tour_group_service (tour_group_id, service_id, status) VALUES (?, ?, 1)",
                     [$id, $service_id]
                 );
