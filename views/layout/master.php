@@ -1,14 +1,20 @@
 <?php
-// $view là đường dẫn của file nội dung trang
-// vd: booking/index.php hoặc users/list.php
+$current = $_GET['action'] ?? '/';
 ?>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <?php include __DIR__ . '/header.php'; ?>
+</head>
+<body>
 
-<?php include "views/layout/header.php"; ?>
-<?php include "views/layout/sidebar.php"; ?>
-<?php include "views/layout/topbar.php"; ?>
+<?php include __DIR__ . '/sidebar.php'; ?>
+<?php include __DIR__ . '/topbar.php'; ?>
 
 <div class="content">
-    <?php include "views/" . $view; ?>
+  <?= $content ?? '' ?>
 </div>
 
-<?php include "views/layout/footer.php"; ?>
+<?php include __DIR__ . '/footer.php'; ?>
+</body>
+</html>

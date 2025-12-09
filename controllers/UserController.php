@@ -20,41 +20,27 @@ class UserController
 
     // Xử lý thêm vào DB
     public function storeUser()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            $data = [
-                'username' => $_POST['username'],
-                'password' => $_POST['password'],
-                'full_name' => $_POST['full_name'],
-                'email' => $_POST['email'],
-                'phone' => $_POST['phone'],
-                'role_id' => $_POST['role_id'],
-                'status' => $_POST['status'] ?? 1,
-                'avatar' => $_FILES['avatar']['name'] ?? null
-            ];
+        $data = [
+            'username'  => $_POST['username'],
+            'password'  => $_POST['password'],
+            'full_name' => $_POST['full_name'],
+            'email'     => $_POST['email'],
+            'phone'     => $_POST['phone'],
+            'role_id'   => $_POST['role_id'],
+            'status'    => $_POST['status'] ?? 1,
+            'avatar'    => $_POST['avatar'] ?? null // LẤY URL
+        ];
 
-            if (!empty($_FILES['avatar']['name'])) {
+        $userModel = new UserModel();
+        $userModel->createUser($data);
 
-                $fileName = time() . '-' . $_FILES['avatar']['name'];
-                $filePath = 'users/' . $fileName;
-
-                move_uploaded_file(
-                    $_FILES['avatar']['tmp_name'],
-                    PATH_ASSETS_UPLOADS . $filePath
-                );
-
-                $data['avatar'] = $filePath;
-            }
-
-
-            $userModel = new UserModel();
-            $userModel->createUser($data);
-
-            header("Location: index.php?action=users");
-            exit;
-        }
+        header("Location: index.php?action=users");
+        exit;
     }
+}
     // Hiển thị form sửa
     public function editUser()
     {
@@ -85,6 +71,7 @@ class UserController
                 'phone'     => $_POST['phone'],
                 'role_id'   => $_POST['role_id'],
                 'status'    => $_POST['status'] ?? 1,
+                'avatar'    => $_POST['avatar'] ?? ''
             ];
 
             // Xử lý avatar mới

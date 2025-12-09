@@ -1,8 +1,30 @@
+<?php $current = $_GET['action'] ?? '/'; ?>
+
 <div class="sidebar">
-    <a href="#" title="Menu"><i class="bi bi-list"></i></a>
-    <a href="index.php?action=/" title="Bảng điều khiển"><i class="bi bi-house-door"></i></a>
-    <a href="index.php?action=booking" class="active" title="Quản lý Tour"><i class="bi bi-calendar-check"></i></a>
-    <a href="#" title="Báo cáo"><i class="bi bi-graph-up"></i></a>
-    <a href="index.php?action=users-roles" title="Roles"><i class="bi bi-person"></i></a>
-    <a href="#" title="Cài đặt"><i class="bi bi-gear"></i></a>
+  <a href="#"><i class="bi bi-list"></i><span>Menu</span></a>
+
+  <a href="index.php?action=/"
+     class="<?= $current == '/' ? 'active' : '' ?>">
+    <i class="bi bi-house-door"></i><span>Trang chủ</span>
+  </a>
+
+  <a href="index.php?action=manage"
+     class="<?= $current == 'manage' ? 'active' : '' ?>">
+    <i class="bi bi-calendar-check"></i><span>Quản lý Tour</span>
+  </a>
+
+  <a href="index.php?action=manage"
+     class="<?= $current == 'manage' ? 'active' : '' ?>">
+    <i class="bi bi-calendar-check"></i><span>Quản lý Lịch Trình Tour</span>
+  </a>
+
+  <a href="index.php?action=nhacungcap"
+     class="<?= $current == 'nhacungcap' ? 'active' : '' ?>">
+    <i class="bi bi-building"></i><span>Nhà cung cấp</span>
+  </a>
+
+  <a href="index.php?action=users"
+     class="<?= $current == 'users' ? 'active' : '' ?>">
+    <i class="bi bi-people"></i><span>Tài khoản</span>
+  </a>
 </div>
