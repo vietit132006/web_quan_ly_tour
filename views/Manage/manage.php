@@ -342,10 +342,11 @@
                 <td><?= htmlspecialchars($tg['guide_name']) ?></td>
                 <td><?= htmlspecialchars($tg['service_list']) ?></td>
                 <td class="action-btns">
-                  <a href="#" class="btn-edit"
-                    onclick="openModal('<?= BASE_URL ?>?action=manage-edit&id=<?= $tg['id'] ?>')">
+                  <a href="<?= BASE_URL ?>?action=manage-edit&id=<?= $tg['id'] ?>"
+                    class="btn-edit">
                     Sửa
                   </a>
+
 
                   <a href="<?= BASE_URL ?>?action=manage-delete&id=<?= $tg['id'] ?>" class="btn-delete"
                     onclick="return confirm('Bạn có chắc muốn xóa lịch trình tour này không?')">Xóa</a>

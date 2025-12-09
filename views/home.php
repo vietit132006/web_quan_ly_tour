@@ -158,9 +158,10 @@
 
     <a href="index.php?action=booking"
       class="<?= $current == 'booking' ? 'active' : '' ?>">
-      <i class="bi bi-calendar-check"></i>
-      <span>Quản lý Tour</span>
+      <i class="bi bi-bookmark-check-fill"></i>
+      <span>Booking</span>
     </a>
+
 
     <a href="index.php?action=nhacungcap"
       class="<?= $current == 'nhacungcap' ? 'active' : '' ?>">
