@@ -8,10 +8,16 @@
     <i class="bi bi-house-door"></i><span>Trang chủ</span>
   </a>
 
-  <a href="index.php?action=manage"
-     class="<?= $current == 'manage' ? 'active' : '' ?>">
+  <a href="index.php?action=#"
+     class="<?= $current == '#' ? 'active' : '' ?>">
     <i class="bi bi-calendar-check"></i><span>Quản lý Tour</span>
   </a>
+
+   <a href="index.php?action=booking"
+     class="<?= $current == 'booking' ? 'active' : '' ?>">
+    <i class="bi bi-calendar-check"></i><span>Quản lý Booking</span>
+  </a>
+
 
   <a href="index.php?action=manage"
      class="<?= $current == 'manage' ? 'active' : '' ?>">
