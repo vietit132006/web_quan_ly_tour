@@ -1,4 +1,8 @@
-
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+?>
 <?php
 require_once __DIR__ . '/../models/DB.php';
 require_once __DIR__ . '/../models/BaseModel.php';
@@ -13,6 +17,8 @@ require_once __DIR__ . '/../models/GuideModel.php';
 require_once __DIR__ . '/../controllers/AuthController.php';
 require_once __DIR__ . '/../middleware/AuthMiddleware.php';
 require_once __DIR__ . '/../models/UserModel.php';
+require_once __DIR__ . '/../controllers/TourController.php';
+require_once __DIR__ . '/../models/TourModel.php';
 
 
 $model = new GuideModel();
@@ -27,6 +33,7 @@ if (!in_array($action, $public_actions)) {
 }
 match ($action) {
 
+
     // ============ AUTH ============ //
     'login_form'        => (new AuthController)->loginForm(),
     'login'             => (new AuthController)->login(),
@@ -35,6 +42,14 @@ match ($action) {
     //home
     '/'                 => (new HomeController)->index(),
     'home'              => (new HomeController)->index(),
+
+    // Tour
+    'tours'            => (new TourController)->list(),
+    'tour-store'       => (new TourController)->store(),
+    'tour-update'      => (new TourController)->update($_GET['id'] ?? null),
+    'tour-delete'      => (new TourController)->delete($_GET['id'] ?? null),
+
+
 
     // Booking
     // ============ BOOKING ============ //
@@ -83,3 +98,4 @@ match ($action) {
         echo "Trang không tồn tại (action chưa được khai báo).";
     }
 };
+error_log("ACTION: " . $action);

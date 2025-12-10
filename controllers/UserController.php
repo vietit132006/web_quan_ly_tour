@@ -4,43 +4,48 @@ class UserController
 {
     public function listUser()
     {
-        $userModle = new UserModel();
-        $users = $userModle->getAllUsers();
-        $roles = $userModle->getAllRoles();
-        include(PATH_VIEW . './roles_users/roles_users.php');
+        $userModel = new UserModel();
+        $users = $userModel->getAllUsers();
+        $roles = $userModel->getAllRoles();
+
+        $view = PATH_VIEW . "roles_users/roles_users.php";
+        require_once PATH_VIEW . "layout/master.php";
     }
+
     // Hiển thị form thêm
     public function addUser()
     {
         $userModel = new UserModel();
-        $users = $userModel->getAllUsers(); // để load ra danh sách role
         $roles = $userModel->getAllRoles();
-        include PATH_VIEW . './roles_users/user_add.php';
+
+        $view = PATH_VIEW . "roles_users/user_add.php";
+        require_once PATH_VIEW . "layout/master.php";
     }
+
 
     // Xử lý thêm vào DB
     public function storeUser()
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        $data = [
-            'username'  => $_POST['username'],
-            'password'  => $_POST['password'],
-            'full_name' => $_POST['full_name'],
-            'email'     => $_POST['email'],
-            'phone'     => $_POST['phone'],
-            'role_id'   => $_POST['role_id'],
-            'status'    => $_POST['status'] ?? 1,
-            'avatar'    => $_POST['avatar'] ?? null // LẤY URL
-        ];
+            $data = [
+                'username'  => $_POST['username'],
+                'password'  => $_POST['password'],
+                'full_name' => $_POST['full_name'],
+                'email'     => $_POST['email'],
+                'phone'     => $_POST['phone'],
+                'role_id'   => $_POST['role_id'],
+                'status'    => $_POST['status'] ?? 1,
+                'avatar'    => $_POST['avatar'] ?? null // LẤY URL
+            ];
 
-        $userModel = new UserModel();
-        $userModel->createUser($data);
+            $userModel = new UserModel();
+            $userModel->createUser($data);
 
-        header("Location: index.php?action=users");
-        exit;
+            header("Location: index.php?action=users");
+            exit;
+        }
     }
-}
     // Hiển thị form sửa
     public function editUser()
     {
@@ -54,8 +59,10 @@ class UserController
         $user = $userModel->getUserById($id);
         $roles = $userModel->getAllRoles();
 
-        include PATH_VIEW . "roles_users/user_edit.php";
+        $view = PATH_VIEW . "roles_users/user_edit.php";
+        require_once PATH_VIEW . "layout/master.php";
     }
+
 
     // Xử lý cập nhật
     public function updateUser()

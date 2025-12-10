@@ -1,4 +1,236 @@
-<?php ob_start(); ?>
+<style>
+  /* ====== BẢNG LỊCH TRÌNH TOUR ====== */
+  /* ================= ROOT ================= */
+  :root {
+    --primary: #0d6efd;
+    --primary-dark: #0b5ed7;
+    --danger: #dc3545;
+    --bg-light: #f8f9fb;
+    --radius: 14px;
+    --transition: all 0.25s ease;
+    --shadow-soft: 0 12px 28px rgba(0, 0, 0, 0.08);
+  }
+
+  /* ================= CONTENT ================= */
+  .content {
+    background: var(--bg-light);
+    padding: 24px;
+    border-radius: var(--radius);
+  }
+
+  /* ================= TABLE ================= */
+  .tour-table,
+  .table {
+    background: #fff;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    font-size: 14px;
+  }
+
+  /* Header */
+  .table thead {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+  }
+
+  .table thead th {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 16px;
+    border: none;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+
+  /* Body */
+  .table tbody td {
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle;
+    border-top: 1px solid #eef1f5;
+    color: #333;
+    transition: var(--transition);
+  }
+
+  /* Hover row */
+  .table tbody tr {
+    transition: var(--transition);
+  }
+
+  .table tbody tr:hover {
+    background: #f6f9ff;
+    transform: scale(1.005);
+  }
+
+  /* Cột Tour */
+  .table tbody td:nth-child(2) {
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  /* Dịch vụ */
+  .table tbody td:nth-child(9) {
+    font-size: 13px;
+    color: #555;
+  }
+
+  /* ================= ACTION BUTTON ================= */
+  .action-btns {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .btn-edit,
+  .btn-delete {
+    padding: 7px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Edit */
+  .btn-edit {
+    background: #e7f1ff;
+    color: var(--primary);
+  }
+
+  .btn-edit:hover {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(13, 110, 253, 0.35);
+  }
+
+  /* Delete */
+  .btn-delete {
+    background: #ffe7e7;
+    color: var(--danger);
+  }
+
+  .btn-delete:hover {
+    background: var(--danger);
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(220, 53, 69, 0.35);
+  }
+
+  /* ================= BUTTON TOP ================= */
+  button.btn-primary {
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(13, 110, 253, 0.3);
+  }
+
+  /* ================= MODAL ================= */
+  .modal-content {
+    border-radius: var(--radius);
+    border: none;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .modal-header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    border: none;
+  }
+
+  .modal-title {
+    font-weight: 600;
+  }
+
+  .modal-body {
+    padding: 24px;
+  }
+
+  /* ================= FORM ================= */
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #e0e6ed;
+    transition: var(--transition);
+    font-size: 14px;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+    outline: none;
+  }
+
+  /* Checkbox service */
+  .form-group input[type="checkbox"] {
+    margin-right: 6px;
+  }
+
+  /* Day display */
+  .day-display {
+    margin: 10px 0 16px;
+    padding: 10px;
+    border-radius: 10px;
+    background: #f1f6ff;
+    font-weight: 600;
+    color: var(--primary);
+    text-align: center;
+  }
+
+  /* Submit button */
+  .submit-button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    transition: var(--transition);
+  }
+
+  .submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(13, 110, 253, 0.35);
+  }
+
+  /* ================= RESPONSIVE ================= */
+  @media (max-width: 992px) {
+
+    .table thead th,
+    .table tbody td {
+      font-size: 12px;
+      padding: 10px;
+    }
+
+    .action-btns {
+      flex-direction: column;
+    }
+
+    .content {
+      padding: 16px;
+    }
+  }
+</style>
 <div class="content">
   <h3>Lịch trình tour</h3>
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -151,8 +383,3 @@
     </div>
   </div>
 </div>
-
-<!-- Modal giữ nguyên -->
-
-<?php $content = ob_get_clean(); ?>
-<?php include __DIR__ . '/../layout/master.php'; ?>
