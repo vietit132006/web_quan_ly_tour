@@ -13,7 +13,12 @@ class BookingController
     public function index()
     {
         $bookings = $this->model->getAll();
-        require_once __DIR__ . '/../views/Booking/booking.php';
+
+        // ✅ view con
+        $view = __DIR__ . '/../views/Booking/booking.php';
+
+        // ✅ dùng layout chung
+        require_once __DIR__ . '/../views/layout/master.php';
     }
 
     public function detail()
@@ -25,7 +30,9 @@ class BookingController
         }
 
         $booking = $this->model->findById($id);
-        require_once __DIR__ . '/../views/Booking/booking_view.php';
+
+        $view = __DIR__ . '/../views/Booking/booking_view.php';
+        require_once __DIR__ . '/../views/layout/master.php';
     }
 
     public function updateStatus()
