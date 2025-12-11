@@ -99,7 +99,7 @@ class UserController
             $userModel = new UserModel();
             $userModel->updateUser($id, $data);
 
-            header("Location: index.php?action=users");
+            header("Location: index.php?action=roles_users");
             exit;
         }
     }

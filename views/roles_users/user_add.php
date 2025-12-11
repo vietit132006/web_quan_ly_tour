@@ -95,30 +95,6 @@
 </head>
 
 <body>
-
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Menu"><i class="bi bi-list"></i></a>
-    <a href="index.php?action=/" data-bs-toggle="tooltip" data-bs-placement="right" title="Bảng điều khiển"><i class="bi bi-house-door"></i></a>
-    <a href="index.php?action=booking" class="active" data-bs-toggle="tooltip" data-bs-placement="right" title="Quản lý Tour"><i class="bi bi-calendar-check"></i></a>
-    <a href="index.php?action=nhacungcap" data-bs-toggle="tooltip" data-bs-placement="right" title="Nhà cung cấp"><i class="bi bi-graph-up"></i></a>
-    <a href="index.php?action=users-roles" data-bs-toggle="tooltip" data-bs-placement="right" title="admin/editer"><i class="bi bi-person"></i></a>
-    <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Cài đặt"><i class="bi bi-gear"></i></a>
-  </div>
-
-  <!-- Topbar -->
-  <div class="topbar">
-    <div class="search-bar">
-      <input type="text" placeholder="Tìm kiếm...">
-    </div>
-    <div class="top-icons">
-      <i class="bi bi-sun"></i>
-      <i class="bi bi-bell"></i>
-      <i class="bi bi-chat-dots"></i>
-      <img src="https://i.pravatar.cc/40">
-    </div>
-  </div>
-
   <!-- Nội dung -->
   <div class="content">
     <div class="container">
