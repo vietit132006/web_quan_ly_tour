@@ -41,6 +41,12 @@ match ($action) {
     '/'                 => (new HomeController)->index(),
     'home'              => (new HomeController)->index(),
 
+<<<<<<< HEAD
+   // ============ BOOKING ============ //
+    'booking'               => (new BookingController)->index(),
+    'booking-detail'        => (new BookingController)->detail(),
+    'booking-update'        => (new BookingController)->updateStatus(),
+=======
     // Tour
     'tours'            => (new TourController)->list(),
     'tour-store'       => (new TourController)->store(),
@@ -56,6 +62,7 @@ match ($action) {
     'booking-update'        => (new BookingController)->updateStatus(),
 
 
+>>>>>>> master
 
     // Users
     // 'users'             => (new UserController)->listUser(),

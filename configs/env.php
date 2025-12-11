@@ -24,7 +24,11 @@ define('DB_PORT',     '3306');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
 
+<<<<<<< HEAD
+define('DB_NAME',     'tour_management4');
+=======
 define('DB_NAME',     'tour_management');
+>>>>>>> master
 define('DB_OPTIONS', [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
