@@ -1,3 +1,189 @@
+<style>
+    /* =====================================
+   🌐 ROOT – TRAVELPRO THEME
+===================================== */
+    :root {
+        --primary: #06a3c9;
+        --primary-dark: #008bb0;
+        --danger: #dc3545;
+        --success: #28a745;
+        --warning: #ffc107;
+
+        --text-dark: #2c3e50;
+        --text-light: #6c7a89;
+
+        --bg-card: #ffffff;
+        --bg-hover: #eefaff;
+
+        --radius: 14px;
+        --radius-sm: 8px;
+
+        --shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.12);
+
+        --transition: all 0.25s ease;
+    }
+
+    /* =====================================
+   📝 TITLE
+===================================== */
+    h3 {
+        font-weight: 700;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    /* =====================================
+   📊 BOOKING TABLE
+===================================== */
+    .table {
+        background: var(--bg-card);
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        margin-top: 15px;
+    }
+
+    /* Header */
+    .table thead {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+    }
+
+    .table thead th {
+        padding: 14px;
+        font-size: 13px;
+        text-transform: uppercase;
+        border: none;
+        letter-spacing: 0.5px;
+    }
+
+    /* Body */
+    .table tbody td {
+        padding: 14px;
+        font-size: 14px;
+        color: var(--text-dark);
+        vertical-align: middle;
+        border-top: 1px solid #eef1f5;
+    }
+
+    /* Hover row */
+    .table tbody tr {
+        transition: var(--transition);
+    }
+
+    .table tbody tr:hover {
+        background: var(--bg-hover);
+        transform: scale(1.005);
+    }
+
+    /* =====================================
+   🎖 BADGES (Trạng thái)
+===================================== */
+    .badge {
+        padding: 8px 12px;
+        font-size: 12px;
+        border-radius: 50px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    /* Pending */
+    .badge.bg-warning {
+        background: #fff4cc !important;
+        color: #a97800 !important;
+    }
+
+    /* Confirmed */
+    .badge.bg-success {
+        background: #d7f7df !important;
+        color: var(--success) !important;
+    }
+
+    /* Cancelled */
+    .badge.bg-danger {
+        background: #ffe1e1 !important;
+        color: var(--danger) !important;
+    }
+
+    /* =====================================
+   🔘 ACTION BUTTONS
+===================================== */
+    td .btn {
+        border-radius: 50px !important;
+        padding: 6px 10px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: var(--transition);
+        border: none !important;
+    }
+
+    /* View button */
+    .btn-info {
+        background: #e6f7ff !important;
+        color: var(--primary) !important;
+    }
+
+    .btn-info:hover {
+        background: var(--primary) !important;
+        color: white !important;
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* Confirm */
+    .btn-success {
+        background: #d7f7df !important;
+        color: var(--success) !important;
+    }
+
+    .btn-success:hover {
+        background: var(--success) !important;
+        color: white !important;
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* Cancel */
+    .btn-danger {
+        background: #ffe1e1 !important;
+        color: var(--danger) !important;
+    }
+
+    .btn-danger:hover {
+        background: var(--danger) !important;
+        color: white !important;
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* =====================================
+   📱 RESPONSIVE
+===================================== */
+    @media (max-width: 992px) {
+
+        .table thead th,
+        .table tbody td {
+            padding: 10px;
+            font-size: 12px;
+        }
+
+        td .btn {
+            padding: 5px 8px;
+        }
+    }
+</style>
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link rel="stylesheet" href="assets/css/styles.css">
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <h3 class="mb-4 text-xl font-bold">
     <i class="bi bi-calendar-check"></i> Quản lý Booking
 </h3>

@@ -1,82 +1,107 @@
 <style>
-  /* ====== BẢNG LỊCH TRÌNH TOUR ====== */
-  /* ================= ROOT ================= */
+  /* ===========================
+   🌐 ROOT – THEME SETUP
+=========================== */
   :root {
-    --primary: #0d6efd;
-    --primary-dark: #0b5ed7;
+    --primary: #06a3c9;
+    --primary-dark: #008bb0;
     --danger: #dc3545;
-    --bg-light: #f8f9fb;
+
+    --text-dark: #2c3e50;
+    --text-light: #6c7a89;
+
+    --bg-page: #f4f6fa;
+    --bg-card: #ffffff;
+    --bg-hover: #eefaff;
+
     --radius: 14px;
+    --radius-sm: 10px;
+
+    --shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.12);
+
     --transition: all 0.25s ease;
-    --shadow-soft: 0 12px 28px rgba(0, 0, 0, 0.08);
   }
 
-  /* ================= CONTENT ================= */
+  /* ===========================
+   📦 GENERAL LAYOUT
+=========================== */
+  body {
+    background: var(--bg-page);
+    font-family: "Inter", sans-serif;
+    color: var(--text-dark);
+  }
+
+  /* Content container */
   .content {
-    background: var(--bg-light);
-    padding: 24px;
+    background: var(--bg-card);
+    padding: 28px;
     border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin: 20px;
   }
 
-  /* ================= TABLE ================= */
-  .tour-table,
+  /* Page title */
+  .content h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--primary);
+  }
+
+  /* ===========================
+   📊 TABLE STYLE – PRO LEVEL
+=========================== */
   .table {
-    background: #fff;
+    background: var(--bg-card);
     border-radius: var(--radius);
     overflow: hidden;
-    box-shadow: var(--shadow-soft);
-    font-size: 14px;
+    box-shadow: var(--shadow);
   }
 
-  /* Header */
   .table thead {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: #fff;
   }
 
   .table thead th {
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
     padding: 16px;
-    border: none;
-    text-align: center;
+    font-size: 13px;
+    text-transform: uppercase;
     letter-spacing: 0.5px;
+    border: none;
   }
 
-  /* Body */
   .table tbody td {
     padding: 15px;
-    text-align: center;
     vertical-align: middle;
+    font-size: 14px;
+    color: var(--text-dark);
     border-top: 1px solid #eef1f5;
-    color: #333;
-    transition: var(--transition);
   }
 
-  /* Hover row */
-  .table tbody tr {
-    transition: var(--transition);
-  }
-
+  /* Hover row effect */
   .table tbody tr:hover {
-    background: #f6f9ff;
+    background: var(--bg-hover);
     transform: scale(1.005);
+    transition: var(--transition);
   }
 
-  /* Cột Tour */
+  /* Highlight column – Tour Name */
   .table tbody td:nth-child(2) {
-    color: var(--primary);
     font-weight: 600;
+    color: var(--primary);
   }
 
-  /* Dịch vụ */
+  /* Services column */
   .table tbody td:nth-child(9) {
     font-size: 13px;
-    color: #555;
+    color: var(--text-light);
   }
 
-  /* ================= ACTION BUTTON ================= */
+  /* ===========================
+   🎛 ACTION BUTTONS
+=========================== */
   .action-btns {
     display: flex;
     gap: 10px;
@@ -85,30 +110,27 @@
 
   .btn-edit,
   .btn-delete {
-    padding: 7px 16px;
-    border-radius: 999px;
+    padding: 7px 18px;
+    border-radius: 50px;
     font-size: 13px;
     font-weight: 600;
-    text-decoration: none;
-    transition: var(--transition);
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    text-decoration: none;
+    transition: var(--transition);
   }
 
-  /* Edit */
   .btn-edit {
-    background: #e7f1ff;
+    background: #e7f7ff;
     color: var(--primary);
   }
 
   .btn-edit:hover {
     background: var(--primary);
     color: #fff;
-    box-shadow: 0 8px 20px rgba(13, 110, 253, 0.35);
+    box-shadow: var(--shadow-lg);
   }
 
-  /* Delete */
   .btn-delete {
     background: #ffe7e7;
     color: var(--danger);
@@ -117,22 +139,32 @@
   .btn-delete:hover {
     background: var(--danger);
     color: #fff;
-    box-shadow: 0 8px 20px rgba(220, 53, 69, 0.35);
+    box-shadow: var(--shadow-lg);
   }
 
-  /* ================= BUTTON TOP ================= */
+  /* Add button */
   button.btn-primary {
-    border-radius: 10px;
-    padding: 8px 20px;
+    background: var(--primary) !important;
+    border: none !important;
+    padding: 10px 22px;
+    border-radius: var(--radius-sm);
     font-weight: 600;
-    box-shadow: 0 6px 18px rgba(13, 110, 253, 0.3);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
   }
 
-  /* ================= MODAL ================= */
+  button.btn-primary:hover {
+    background: var(--primary-dark) !important;
+    transform: translateY(-2px);
+  }
+
+  /* ===========================
+   📝 FORM – MODAL STYLE
+=========================== */
   .modal-content {
     border-radius: var(--radius);
     border: none;
-    box-shadow: var(--shadow-soft);
+    box-shadow: var(--shadow-lg);
   }
 
   .modal-header {
@@ -142,22 +174,21 @@
   }
 
   .modal-title {
-    font-weight: 600;
+    font-weight: 700;
   }
 
   .modal-body {
-    padding: 24px;
+    padding: 26px;
   }
 
-  /* ================= FORM ================= */
   .form-group {
-    margin-bottom: 16px;
+    margin-bottom: 18px;
   }
 
   .form-group label {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
-    color: #444;
+    color: var(--text-dark);
     margin-bottom: 6px;
     display: block;
   }
@@ -165,72 +196,78 @@
   .form-group input,
   .form-group select {
     width: 100%;
-    padding: 10px 14px;
-    border-radius: 10px;
-    border: 1px solid #e0e6ed;
-    transition: var(--transition);
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid #dde3eb;
     font-size: 14px;
+    transition: var(--transition);
   }
 
   .form-group input:focus,
   .form-group select:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
-    outline: none;
+    box-shadow: 0 0 0 3px rgba(6, 163, 201, 0.15);
   }
 
-  /* Checkbox service */
-  .form-group input[type="checkbox"] {
-    margin-right: 6px;
-  }
-
-  /* Day display */
+  /* Days box */
   .day-display {
-    margin: 10px 0 16px;
-    padding: 10px;
-    border-radius: 10px;
-    background: #f1f6ff;
-    font-weight: 600;
+    margin: 10px 0 18px;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    background: #e6f7ff;
     color: var(--primary);
     text-align: center;
+    font-weight: 700;
   }
 
-  /* Submit button */
+  /* Submit */
   .submit-button {
     width: 100%;
     padding: 12px;
-    border-radius: 12px;
-    border: none;
+    border-radius: var(--radius);
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border: none;
     color: #fff;
-    font-weight: 600;
     font-size: 15px;
+    font-weight: 600;
     transition: var(--transition);
   }
 
   .submit-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(13, 110, 253, 0.35);
+    box-shadow: var(--shadow-lg);
   }
 
-  /* ================= RESPONSIVE ================= */
+  /* ===========================
+   📱 RESPONSIVE
+=========================== */
   @media (max-width: 992px) {
+    .content {
+      padding: 18px;
+    }
 
-    .table thead th,
-    .table tbody td {
-      font-size: 12px;
+    .table tbody td,
+    .table thead th {
       padding: 10px;
+      font-size: 12px;
     }
 
     .action-btns {
       flex-direction: column;
     }
-
-    .content {
-      padding: 16px;
-    }
   }
 </style>
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link rel="stylesheet" href="assets/css/styles.css">
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <div class="content">
   <h3>Lịch trình tour</h3>
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
