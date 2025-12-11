@@ -1,5 +1,4 @@
 <?php $current = 'users'; ?>
-<?php ob_start(); ?>
 
 <div class="content">
     <div class="container-fluid">
@@ -139,4 +138,3 @@
 </div>
 
 <?php $content = ob_get_clean(); ?>
-<?php include PATH_VIEW . 'layout/master.php'; ?>

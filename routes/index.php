@@ -1,15 +1,11 @@
-<?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-?>
+
 <?php
 require_once __DIR__ . '/../models/DB.php';
 require_once __DIR__ . '/../models/BaseModel.php';
 require_once __DIR__ . '/../controllers/HomeController.php';
 require_once __DIR__ . '/../controllers/ManageController.php';
 require_once __DIR__ . '/../controllers/GroupController.php';
-require_once __DIR__ . '/../controllers/BookingController.php';
+require_once __DIR__ . '/../controllers/BookIngController.php';
 require_once __DIR__ . '/../controllers/UserController.php';
 require_once __DIR__ . '/../controllers/SupplierController.php';
 require_once __DIR__ . '/../models/SupplierModel.php';
@@ -31,6 +27,8 @@ $public_actions = ['login', 'login_form'];
 if (!in_array($action, $public_actions)) {
     AuthMiddleware::checkLogin();
 }
+
+
 match ($action) {
 
 
@@ -60,8 +58,9 @@ match ($action) {
 
 
     // Users
-    'users'             => (new UserController)->listUser(),
-    'users-roles'       => (new UserController)->listUser(),
+    // 'users'             => (new UserController)->listUser(),
+    // 'users-roles'       => (new UserController)->listUser(),
+    'roles_users'       => (new UserController)->listUser(),
     'users_add'         => (new UserController)->addUser(),
     'users_store'       => (new UserController)->storeUser(),
     'users_edit'        => (new UserController)->editUser(),

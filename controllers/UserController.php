@@ -12,6 +12,7 @@ class UserController
         require_once PATH_VIEW . "layout/master.php";
     }
 
+
     // Hiển thị form thêm
     public function addUser()
     {

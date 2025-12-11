@@ -6,64 +6,61 @@ $formAction = $isEdit
 ?>
 
 <style>
-    .description-short {
-        display: inline-block;
-        max-width: 250px;
-        /* chỉnh theo table */
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        vertical-align: middle;
-    }
-
-    .view-more {
-        color: #0d6efd;
-        cursor: pointer;
-        font-weight: 500;
-    }
-
-    .tour-img {
-        width: 100px;
-        height: 85px;
-        object-fit: cover;
-        border-radius: 6px;
-        border: 1px solid #ddd;
-    }
-
-    /* ====== PAGE TITLE ====== */
-    h3.mb-4 {
-        font-size: 26px;
-        font-weight: 700;
-        color: #1e293b;
+    /* ======================== GLOBAL LAYOUT ======================== */
+    .layout-wrapper {
         display: flex;
-        align-items: center;
-        gap: 10px;
+        gap: 28px;
+        margin-top: 24px;
     }
 
-    /* ====== CARD FORM ====== */
-    .card.mb-4 {
+    /* ======================== FILTER CARD ======================== */
+    .filter-card {
+        width: 180px;
+        flex-shrink: 0;
+    }
+
+    /* ===================== FORM 2 CỘT ======================= */
+    .form-2col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px 28px;
+    }
+
+    .form-full {
+        grid-column: span 2;
+    }
+
+    /* ======================== CARD STYLE ======================== */
+    .card {
         border-radius: 14px;
-        border: none;
         background: #ffffff;
-        box-shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
+        border: none;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.07);
+        overflow: hidden;
+        transition: 0.25s ease;
     }
 
-    /* ====== CARD HEADER ====== */
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.09);
+    }
+
+    /* ======================== CARD HEADER ======================== */
     .card-header {
-        background: linear-gradient(135deg, #2563eb, #4f46e5);
-        color: #fff;
-        font-size: 18px;
-        padding: 16px 22px;
-        border-radius: 14px 14px 0 0;
-        letter-spacing: .3px;
+        background: linear-gradient(135deg, #10b981, #0d8f6e);
+        color: #ffffff;
+        font-size: 19px;
+        font-weight: 600;
+        padding: 18px 24px;
+        letter-spacing: 0.4px;
     }
 
-    /* ====== CARD BODY ====== */
+    /* ======================== CARD BODY ======================== */
     .card-body {
         padding: 26px;
     }
 
-    /* ====== FORM LABEL ====== */
+    /* ======================== LABEL ======================== */
     .card-body label {
         font-size: 14px;
         font-weight: 600;
@@ -71,184 +68,179 @@ $formAction = $isEdit
         margin-bottom: 6px;
     }
 
-    /* ====== INPUT / SELECT / TEXTAREA ====== */
+    /* ======================== INPUTS ======================== */
     .form-control,
     .form-select {
-        border-radius: 10px;
-        padding: 10px 14px;
+        border-radius: 12px;
+        padding: 12px 14px;
         font-size: 14px;
         border: 1px solid #cbd5e1;
-        transition: all 0.2s ease;
+        background: #f8fafc;
+        transition: all 0.25s ease;
     }
 
     .form-control:focus,
     .form-select:focus {
-        border-color: #6366f1;
-        box-shadow: 0 0 0 4px rgba(99, 102, 241, .18);
+        border-color: #10b981;
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.25);
+        background: #fff;
     }
 
-    /* ====== TEXTAREA ====== */
+    /* Textarea */
     textarea.form-control {
-        min-height: 120px;
+        min-height: 130px;
         resize: vertical;
     }
 
-    /* ====== FORM ROW SPACING ====== */
-    .row>div {
-        margin-bottom: 14px;
-    }
-
-    /* ====== BUTTON STYLE ====== */
+    /* ======================== BUTTONS ======================== */
     .btn-success {
-        background: linear-gradient(135deg, #22c55e, #16a34a);
-        border: none;
-        border-radius: 10px;
-        padding: 10px 24px;
+        background: linear-gradient(135deg, #10b981, #0d8f6e);
+        border: none !important;
+        border-radius: 12px;
+        padding: 10px 26px;
         font-weight: 600;
+        transition: 0.2s ease;
     }
 
     .btn-success:hover {
-        opacity: .92;
+        opacity: 0.9;
     }
 
     .btn-secondary {
-        border-radius: 10px;
+        border-radius: 12px;
         padding: 10px 22px;
     }
 
-    /* ====== DESCRIPTION SHORT ====== */
+    /* ======================== TABLE DESCRIPTION ======================== */
     .description-short {
         max-width: 260px;
         font-size: 14px;
-        color: #334155;
+        color: #475569;
     }
 
-    /* ====== VIEW MORE ====== */
+    /* "Xem thêm" */
     .view-more {
-        display: inline-block;
         margin-left: 6px;
         font-size: 13px;
-        color: #2563eb;
-        transition: .2s;
+        color: #0ea5e9;
+        transition: 0.2s ease;
     }
 
     .view-more:hover {
         text-decoration: underline;
-        color: #1d4ed8;
+        color: #0284c7;
     }
 
-    /* ====== IMAGE ====== */
+    /* ======================== IMAGE STYLE ======================== */
     .tour-img {
-        width: 100px;
-        height: 80px;
+        width: 110px;
+        height: 82px;
         object-fit: cover;
-        border-radius: 10px;
+        border-radius: 12px;
         border: 1px solid #e2e8f0;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        transition: 0.25s ease;
+    }
+
+    .tour-img:hover {
+        transform: scale(1.03);
+    }
+
+    .description-short {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        /* số dòng muốn hiển thị */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 260px;
+        font-size: 14px;
+        color: #334155;
+        line-height: 1.4;
+    }
+
+    .description-empty {
+        font-style: italic;
+        color: #94a3b8;
+        font-size: 14px;
+        opacity: 0.8;
+    }
+
+    .description-short {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        /* Thu gọn tối đa 3 dòng */
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .description-empty {
+        font-style: italic;
+        color: #94a3b8;
+        font-size: 14px;
+        opacity: 0.8;
     }
 </style>
-<h3 class="mb-4 text-xl font-bold">
-    <i class="bi bi-calendar-check"></i> Quản lý tour
-</h3>
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- ======================== FORM THÊM / SỬA ======================== -->
 <div class="card mb-4">
-    <div class="card-body">
-        <form method="get" action="index.php" class="row g-3 align-items-end">
-            <input type="hidden" name="action" value="tours">
-
-            <!-- Tìm theo tên tour -->
-            <div class="col-md-4">
-                <label class="form-label">Tìm tour</label>
-                <input type="text"
-                    name="keyword"
-                    class="form-control"
-                    placeholder="Nhập tên tour..."
-                    value="<?= $_GET['keyword'] ?? '' ?>">
-            </div>
-
-            <!-- Lọc danh mục -->
-            <div class="col-md-3">
-                <label class="form-label">Danh mục</label>
-                <select name="category" class="form-select">
-                    <option value="">-- Tất cả --</option>
-                    <option value="1" <?= ($_GET['category'] ?? '') == 1 ? 'selected' : '' ?>>Trong nước</option>
-                    <option value="2" <?= ($_GET['category'] ?? '') == 2 ? 'selected' : '' ?>>Ngoài nước</option>
-                    <option value="3" <?= ($_GET['category'] ?? '') == 3 ? 'selected' : '' ?>>Mạo hiểm</option>
-                </select>
-            </div>
-
-            <!-- Lọc giá -->
-            <div class="col-md-3">
-                <label class="form-label">Khoảng giá</label>
-                <select name="price" class="form-select">
-                    <option value="">-- Tất cả --</option>
-                    <option value="1" <?= ($_GET['price'] ?? '') == 1 ? 'selected' : '' ?>>Dưới 5 triệu</option>
-                    <option value="2" <?= ($_GET['price'] ?? '') == 2 ? 'selected' : '' ?>>5 - 10 triệu</option>
-                    <option value="3" <?= ($_GET['price'] ?? '') == 3 ? 'selected' : '' ?>>Trên 10 triệu</option>
-                </select>
-            </div>
-
-            <!-- Buttons -->
-            <div class="col-md-2 d-grid">
-                <button class="btn btn-success">
-                    <i class="bi bi-search"></i> Lọc
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="card mb-4">
-    <div class="card-header fw-bold">
+    <div class="card-header">
         <?= $isEdit ? 'Cập nhật tour' : 'Thêm tour mới' ?>
     </div>
 
     <div class="card-body">
-        <form method="post" action="<?= $formAction ?>">
 
-            <div class="mb-3">
-                <label>Tên tour</label>
-                <input type="text" name="name" class="form-control"
-                    value="<?= $editTour['name'] ?? '' ?>" required>
+        <form method="post" action="<?= $formAction ?>" class="form-2col">
+
+            <!-- Tên tour -->
+            <div>
+                <label class="fw-bold">Tên tour</label>
+                <input type="text" name="name" class="form-control" required
+                    value="<?= $editTour['name'] ?? '' ?>">
             </div>
 
-            <div class="row">
-                <div class="col-md-3 mb-3">
-                    <label>Giá</label>
-                    <input type="number" name="base_price" class="form-control"
-                        value="<?= $editTour['base_price'] ?? '' ?>" required>
-                </div>
-
-                <div class="col-md-3 mb-3">
-                    <label>Số ngày</label>
-                    <input type="number" name="duration" class="form-control"
-                        value="<?= $editTour['duration'] ?? '' ?>" required>
-                </div>
-
-                <div class="col-md-3 mb-3">
-                    <label>Số người</label>
-                    <input
-                        type="number" class="form-control"
-                        name="so_nguoi"
-                        min="7"
-                        max="30"
-                        required
-                        value="<?= $editTour['so_nguoi'] ?? '' ?>"
-                        placeholder="7-30">
-                </div>
-
-
-                <div class="col-md-3 mb-3">
-                    <label>Trạng thái</label>
-                    <select name="status" class="form-select">
-                        <option value="1" <?= (($editTour['status'] ?? 1) == 1) ? 'selected' : '' ?>>Hoạt động</option>
-                        <option value="2" <?= (($editTour['status'] ?? '') == 2) ? 'selected' : '' ?>>Đã dừng</option>
-                        <option value="3" <?= (($editTour['status'] ?? '') == 3) ? 'selected' : '' ?>>Bảo trì</option>
-                    </select>
-                </div>
+            <!-- Giá -->
+            <div>
+                <label class="fw-bold">Giá</label>
+                <input type="number" name="base_price" class="form-control" required
+                    value="<?= $editTour['base_price'] ?? '' ?>">
             </div>
 
-            <div class="mb-3">
-                <label>Danh mục</label>
+            <!-- Số ngày -->
+            <div>
+                <label class="fw-bold">Số ngày</label>
+                <input type="number" name="duration" class="form-control" required
+                    value="<?= $editTour['duration'] ?? '' ?>">
+            </div>
+
+            <!-- Số người -->
+            <div>
+                <label class="fw-bold">Số người</label>
+                <input type="number" name="so_nguoi" class="form-control"
+                    min="7" max="30" required
+                    value="<?= $editTour['so_nguoi'] ?? '' ?>">
+            </div>
+
+            <!-- Trạng thái -->
+            <div>
+                <label class="fw-bold">Trạng thái</label>
+                <select name="status" class="form-select">
+                    <option value="1" <?= (($editTour['status'] ?? 1) == 1) ? 'selected' : '' ?>>Hoạt động</option>
+                    <option value="2" <?= (($editTour['status'] ?? '') == 2) ? 'selected' : '' ?>>Đã dừng</option>
+                    <option value="3" <?= (($editTour['status'] ?? '') == 3) ? 'selected' : '' ?>>Bảo trì</option>
+                </select>
+            </div>
+
+            <!-- Danh mục -->
+            <div>
+                <label class="fw-bold">Danh mục</label>
                 <select name="tour_category_id" class="form-select">
                     <option value="1" <?= (($editTour['tour_category_id'] ?? '') == 1) ? 'selected' : '' ?>>Trong nước</option>
                     <option value="2" <?= (($editTour['tour_category_id'] ?? '') == 2) ? 'selected' : '' ?>>Ngoài nước</option>
@@ -256,159 +248,167 @@ $formAction = $isEdit
                 </select>
             </div>
 
-            <div class="mb-3">
-                <label>Ảnh</label>
+            <!-- Ảnh -->
+            <div>
+                <label class="fw-bold">Ảnh</label>
                 <input type="text" name="image" class="form-control"
                     value="<?= $editTour['image'] ?? '' ?>">
             </div>
 
-            <div class="mb-3">
-                <label>Mô tả</label>
+            <!-- Mô tả (FULL WIDTH) -->
+            <div class="form-full">
+                <label class="fw-bold">Mô tả</label>
                 <textarea name="description" class="form-control"><?= $editTour['description'] ?? '' ?></textarea>
             </div>
 
-            <button class="btn btn-success">
-                <?= $isEdit ? 'Cập nhật' : 'Thêm tour' ?>
-            </button>
+            <!-- Nút -->
+            <div class="form-full mt-2">
+                <button class="btn btn-success"><?= $isEdit ? 'Cập nhật' : 'Thêm tour' ?></button>
 
-            <?php if ($isEdit): ?>
-                <a href="index.php?action=tours" class="btn btn-secondary ms-2">
-                    Hủy
-                </a>
-            <?php endif; ?>
+                <?php if ($isEdit): ?>
+                    <a href="index.php?action=tours" class="btn btn-secondary ms-2">Hủy</a>
+                <?php endif; ?>
+            </div>
 
         </form>
     </div>
 </div>
-<table class="table table-bordered table-hover align-middle" width="100%">
-    <thead class="table-light">
-        <tr class="text-center">
-            <th>ID</th>
-            <th>Ảnh</th>
-            <th>Tour</th>
-            <th>Giá gốc</th>
-            <th>Thời gian diễn ra tour</th>
-            <th>Mô tả</th>
-            <th>Số người</th>
-            <th>Trạng thái</th>
-            <th>Thời gian tạo</th>
-            <th>Danh mục tour</th>
-            <th>Hành động</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        <?php foreach ($tours as $tour): ?>
-            <tr>
-                <!-- ID -->
-                <td class="text-center"><?= $tour['id'] ?></td>
-                <!-- Ảnh -->
-                <td class="text-center">
-                    <?php if (!empty($tour['image'])): ?>
-                        <img
-                            src="<?= htmlspecialchars($tour['image']) ?>"
-                            alt="Ảnh tour"
-                            class="tour-img">
-                    <?php else: ?>
-                        <span class="text-muted">No Image</span>
-                    <?php endif; ?>
-                </td>
-
-                <!-- Tên tour -->
-                <td><?= $tour['name'] ?></td>
-
-                <!-- Số tiền -->
-                <td>
-                    <?= number_format($tour['base_price'], 0, ',', '.') ?> VNĐ
-                </td>
-
-                <!-- Số ngày -->
-                <td>
-                    <?php if (!empty($tour['duration']) && is_numeric($tour['duration'])): ?>
-                        <?= (int)$tour['duration'] ?> ngày <?= max((int)$tour['duration'] - 1, 0) ?> đêm
-                    <?php else: ?>
-                        <span class="text-muted">Chưa xác định</span>
-                    <?php endif; ?>
-                </td>
-
-                <!-- Mô tả -->
-                <td class="text-center">
-                    <?php if (empty(trim($tour['description'] ?? ''))): ?>
-                        <span class="text-muted">Trống...</span>
-                    <?php else: ?>
-                        <span class="description-short"
-                            data-full="<?= htmlspecialchars($tour['description']) ?>">
-                            <?= htmlspecialchars($tour['description']) ?>
-                        </span>
-                        <span class="view-more">Xem thêm</span>
-                    <?php endif; ?>
-                </td>
-
-                <!-- Số người -->
-                <td><?= $tour['so_nguoi'] ?></td>
-
-                <!-- Trạng thái -->
-                <?php
-                $statusText = [
-                    1 => 'Hoạt động',
-                    2 => 'Đã dừng',
-                    3 => 'Đang bảo trì'
-                ];
-                ?>
-                <td><?= $statusText[$tour['status']] ?? 'Không xác định' ?></td>
-
-                <!-- Thời gian tạo -->
-                <td class="text-center">
-                    <?php if (!empty($tour['created_at'])): ?>
-                        <?= date('d/m/Y H:i', strtotime($tour['created_at'])) ?>
-                    <?php else: ?>
-                        <span class="text-muted">—</span>
-                    <?php endif; ?>
-                </td>
-
-                <!-- Danh mục tour -->
-                <?php
-                $cateText = [
-                    1 => 'Trong nước',
-                    2 => 'Ngoài nước',
-                    3 => 'Mạo hiểm',
-                ];
-                ?>
-                <td><?= $cateText[$tour['tour_category_id']] ?? 'Không xác định' ?></td>
-
-                <!-- Hành động -->
-                <td class="text-center">
-                    <!-- Xem -->
-                    <a href="index.php?action=tour-detail&id=<?= $tour['id'] ?>"
-                        class="btn btn-sm btn-info me-1">
-                        <i class="bi bi-eye"></i>
-                    </a>
-
-                    <!-- Sửa -->
-                    <a href="index.php?action=tours&id_edit=<?= $tour['id'] ?>"
-                        class="btn btn-sm btn-warning">
-                        <i class="bi bi-pencil"></i>
-                    </a>
 
 
-                    <!-- Xóa -->
-                    <a href="index.php?action=tour-delete&id=<?= $tour['id'] ?>"
-                        class="btn btn-sm btn-danger"
-                        onclick="return confirm('Bạn có chắc chắn muốn xóa tour này?')">
-                        <i class="bi bi-trash"></i>
-                    </a>
-                </td>
 
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
 
-</table>
+<!-- ======================== LAYOUT DƯỚI: LỌC + BẢNG ======================== -->
+<div class="layout-wrapper">
+
+    <!-- ======== FORM LỌC (TRÁI) ======== -->
+    <div class="filter-card card">
+        <div class="card-body">
+
+            <form method="get" action="index.php">
+                <input type="hidden" name="action" value="tours">
+
+                <div class="mb-3">
+                    <label class="fw-bold">Tìm tour</label>
+                    <input type="text" name="keyword" class="form-control"
+                        value="<?= $_GET['keyword'] ?? '' ?>" placeholder="Nhập tên tour...">
+                </div>
+
+                <div class="mb-3">
+                    <label class="fw-bold">Danh mục</label>
+                    <select name="category" class="form-select">
+                        <option value="">-- Tất cả --</option>
+                        <option value="1" <?= ($_GET['category'] ?? '') == 1 ? 'selected' : '' ?>>Trong nước</option>
+                        <option value="2" <?= ($_GET['category'] ?? '') == 2 ? 'selected' : '' ?>>Ngoài nước</option>
+                        <option value="3" <?= ($_GET['category'] ?? '') == 3 ? 'selected' : '' ?>>Mạo hiểm</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="fw-bold">Khoảng giá</label>
+                    <select name="price" class="form-select">
+                        <option value="">-- Tất cả --</option>
+                        <option value="1" <?= ($_GET['price'] ?? '') == 1 ? 'selected' : '' ?>>Dưới 5 triệu</option>
+                        <option value="2" <?= ($_GET['price'] ?? '') == 2 ? 'selected' : '' ?>>5 - 10 triệu</option>
+                        <option value="3" <?= ($_GET['price'] ?? '') == 3 ? 'selected' : '' ?>>Trên 10 triệu</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-success w-100">
+                    <i class="bi bi-search"></i> Lọc
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+
+    <!-- ======== BẢNG TOUR (PHẢI) ======== -->
+    <div class="table-wrapper">
+
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+                <tr class="text-center">
+                    <th>ID</th>
+                    <th>Ảnh</th>
+                    <th>Tour</th>
+                    <th>Giá</th>
+                    <th>Thời gian</th>
+                    <th>Mô tả</th>
+                    <th>Số người</th>
+                    <th>Trạng thái</th>
+                    <th>Tạo lúc</th>
+                    <th>Danh mục</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php foreach ($tours as $tour): ?>
+                    <tr>
+
+                        <td class="text-center"><?= $tour['id'] ?></td>
+
+                        <td class="text-center">
+                            <?php if (!empty($tour['image'])): ?>
+                                <img src="<?= htmlspecialchars($tour['image']) ?>" class="tour-img">
+                            <?php else: ?><span class="text-muted">No Image</span><?php endif; ?>
+                        </td>
+
+                        <td><?= $tour['name'] ?></td>
+
+                        <td><?= number_format($tour['base_price'], 0, ',', '.') ?> VNĐ</td>
+
+                        <td>
+                            <?= (int)$tour['duration'] ?> ngày <?= max((int)$tour['duration'] - 1, 0) ?> đêm
+                        </td>
+
+                        <td>
+                            <?php if (empty(trim($tour['description']))): ?>
+                                <span class="text-muted">Trống...</span>
+                            <?php else: ?>
+                                <span class="description-short"
+                                    data-full="<?= htmlspecialchars($tour['description']) ?>">
+                                    <?= htmlspecialchars($tour['description']) ?>
+                                </span>
+                                <span class="view-more">Xem thêm</span>
+                            <?php endif; ?>
+                        </td>
+
+                        <td><?= $tour['so_nguoi'] ?></td>
+
+                        <?php $statusText = [1 => 'Hoạt động', 2 => 'Đã dừng', 3 => 'Bảo trì']; ?>
+                        <td><?= $statusText[$tour['status']] ?? '—' ?></td>
+
+                        <td><?= date('d/m/Y H:i', strtotime($tour['created_at'])) ?></td>
+
+                        <?php $cateText = [1 => 'Trong nước', 2 => 'Ngoài nước', 3 => 'Mạo hiểm']; ?>
+                        <td><?= $cateText[$tour['tour_category_id']] ?? '—' ?></td>
+
+                        <!-- Hành động -->
+                        <td class="text-center">
+                            <a href="index.php?action=tours&id_edit=<?= $tour['id'] ?>"
+                                class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
+
+                            <a onclick="return confirm('Bạn có chắc muốn xoá?')"
+                                href="index.php?action=tour-delete&id=<?= $tour['id'] ?>"
+                                class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
+                        </td>
+
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
 <script>
     document.querySelectorAll('.view-more').forEach(btn => {
         btn.addEventListener('click', function() {
-            const fullText = this.previousElementSibling.dataset.full;
-            alert(fullText); // ✅ đơn giản
+            alert(this.previousElementSibling.dataset.full);
         });
     });
 </script>
