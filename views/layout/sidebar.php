@@ -5,17 +5,17 @@
 
   <a href="index.php?action=/"
      class="<?= $current == '/' ? 'active' : '' ?>">
-    <i class="bi bi-house-door"></i><span>Trang chủ</span>
+    <i class="bi bi-house-door"></i><span>ADMIN-_-</span>
   </a>
 
   <a href="index.php?action=#"
      class="<?= $current == '#' ? 'active' : '' ?>">
-    <i class="bi bi-calendar-check"></i><span>Quản lý Tour</span>
+    <i class="bi bi-list-columns"></i><span>Quản lý Tour</span>
   </a>
 
    <a href="index.php?action=booking"
      class="<?= $current == 'booking' ? 'active' : '' ?>">
-    <i class="bi bi-calendar-check"></i><span>Quản lý Booking</span>
+    <i class="bi bi-bookmark-check-fill"></i><span>Quản lý Booking</span>
   </a>
 
 

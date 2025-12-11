@@ -90,9 +90,9 @@
   }
 
   /* Khi sidebar mở */
-  .sidebar:hover~.topbar {
+  /* .sidebar:hover~.topbar {
     left: 220px;
-  }
+  } */
 
   .search-bar input {
     background-color: #3c0a4d;
@@ -123,9 +123,9 @@
     transition: margin-left 0.3s;
   }
 
-  .sidebar:hover~.content {
+  /* .sidebar:hover~.content {
     margin-left: 235px;
-  }
+  } */
 
   /* ========== TABLE ========== */
   .table thead th {
