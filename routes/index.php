@@ -5,7 +5,7 @@ require_once __DIR__ . '/../models/BaseModel.php';
 require_once __DIR__ . '/../controllers/HomeController.php';
 require_once __DIR__ . '/../controllers/ManageController.php';
 require_once __DIR__ . '/../controllers/GroupController.php';
-require_once __DIR__ . '/../controllers/BookingController.php';
+require_once __DIR__ . '/../controllers/BookIngController.php';
 require_once __DIR__ . '/../controllers/UserController.php';
 require_once __DIR__ . '/../controllers/SupplierController.php';
 require_once __DIR__ . '/../models/SupplierModel.php';
@@ -13,6 +13,8 @@ require_once __DIR__ . '/../models/GuideModel.php';
 require_once __DIR__ . '/../controllers/AuthController.php';
 require_once __DIR__ . '/../middleware/AuthMiddleware.php';
 require_once __DIR__ . '/../models/UserModel.php';
+require_once __DIR__ . '/../controllers/TourController.php';
+require_once __DIR__ . '/../models/TourModel.php';
 
 
 $model = new GuideModel();
@@ -25,7 +27,10 @@ $public_actions = ['login', 'login_form'];
 if (!in_array($action, $public_actions)) {
     AuthMiddleware::checkLogin();
 }
+
+
 match ($action) {
+
 
     // ============ AUTH ============ //
     'login_form'        => (new AuthController)->loginForm(),
@@ -36,14 +41,33 @@ match ($action) {
     '/'                 => (new HomeController)->index(),
     'home'              => (new HomeController)->index(),
 
+<<<<<<< HEAD
    // ============ BOOKING ============ //
     'booking'               => (new BookingController)->index(),
     'booking-detail'        => (new BookingController)->detail(),
     'booking-update'        => (new BookingController)->updateStatus(),
+=======
+    // Tour
+    'tours'            => (new TourController)->list(),
+    'tour-store'       => (new TourController)->store(),
+    'tour-update'      => (new TourController)->update($_GET['id'] ?? null),
+    'tour-delete'      => (new TourController)->delete($_GET['id'] ?? null),
+
+
+
+    // Booking
+    // ============ BOOKING ============ //
+    'booking'               => (new BookingController)->index(),
+    'booking-detail'        => (new BookingController)->detail(),
+    'booking-update'        => (new BookingController)->updateStatus(),
+
+
+>>>>>>> master
 
     // Users
-    'users'             => (new UserController)->listUser(),
-    'users-roles'       => (new UserController)->listUser(),
+    // 'users'             => (new UserController)->listUser(),
+    // 'users-roles'       => (new UserController)->listUser(),
+    'roles_users'       => (new UserController)->listUser(),
     'users_add'         => (new UserController)->addUser(),
     'users_store'       => (new UserController)->storeUser(),
     'users_edit'        => (new UserController)->editUser(),
@@ -80,3 +104,4 @@ match ($action) {
         echo "Trang không tồn tại (action chưa được khai báo).";
     }
 };
+error_log("ACTION: " . $action);

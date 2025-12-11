@@ -18,8 +18,14 @@ class ManageController
         $tours = (new TourModel())->getAllTours();
         $guides = (new GuideModel())->getAllActiveGuides();
         $services = (new ServiceModel())->getAllServiceModel();
-        require_once PATH_VIEW . "Manage/manage.php";
+
+        // ✅ GÁN VIEW
+        $view = PATH_VIEW . "Manage/manage.php";
+
+        // ✅ LOAD LAYOUT CHUNG
+        require_once PATH_VIEW . "layout/master.php";
     }
+
 
 
     // Lưu dữ liệu mới

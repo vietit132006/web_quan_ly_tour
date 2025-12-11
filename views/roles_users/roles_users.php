@@ -1,5 +1,4 @@
 <?php $current = 'users'; ?>
-<?php ob_start(); ?>
 
 <div class="content">
     <div class="container-fluid">
@@ -61,12 +60,12 @@
                                         </td>
                                         <td>
                                             <a href="index.php?action=users_edit&id=<?= $u['id'] ?>"
-                                               class="btn btn-warning btn-sm">
+                                                class="btn btn-warning btn-sm">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
                                             <a href="index.php?action=users_delete&id=<?= $u['id'] ?>"
-                                               class="btn btn-danger btn-sm"
-                                               onclick="return confirm('Delete user ID: <?= $u['id'] ?>?');">
+                                                class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Delete user ID: <?= $u['id'] ?>?');">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                         </td>
@@ -112,12 +111,12 @@
                                         <td><?= $r['created_at'] ?? 'lỗi' ?></td>
                                         <td>
                                             <a href="index.php?action=roles_edit&id=<?= $r['id'] ?>"
-                                               class="btn btn-warning btn-sm">
+                                                class="btn btn-warning btn-sm">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
                                             <a href="index.php?action=roles_delete&id=<?= $r['id'] ?>"
-                                               class="btn btn-danger btn-sm"
-                                               onclick="return confirm('Delete role ID: <?= $r['id'] ?>?');">
+                                                class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Delete role ID: <?= $r['id'] ?>?');">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                         </td>
@@ -139,4 +138,3 @@
 </div>
 
 <?php $content = ob_get_clean(); ?>
-<?php include PATH_VIEW . 'layout/master.php'; ?>

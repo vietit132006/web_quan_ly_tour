@@ -1,4 +1,3 @@
-
 <?php ob_start(); ?>
 <!-- CONTENT -->
 <div class="content">
@@ -116,5 +115,5 @@
       ?>
     </div>
   </div>
-<?php $content = ob_get_clean(); ?>
-<?php include __DIR__ . '/layout/master.php'; ?>
+  <?php $content = ob_get_clean(); ?>
+  <?php include __DIR__ . '/layout/master.php'; ?>
