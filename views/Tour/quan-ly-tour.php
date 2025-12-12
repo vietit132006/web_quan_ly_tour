@@ -3,7 +3,10 @@
     $formAction = $isEdit
         ? "index.php?action=tour-update&id={$editTour['id']}"
         : "index.php?action=tour-store";
+    $itineraries = $itineraries ?? [];
+
     ?>
+
     <style>
         /* ======================== GLOBAL LAYOUT ======================== */
         #tour-page .layout-wrapper {
@@ -243,80 +246,187 @@
 
             <div class="card-body">
 
-                <form method="post" action="<?= $formAction ?>" class="form-2col">
+                <form action="<?= $formAction ?>" method="POST" enctype="multipart/form-data" class="p-3">
+                    <input type="hidden" name="id" value="<?= $editTour['id'] ?? '' ?>">
+
+                    <h3><?= $isEdit ? "Cập nhật tour" : "Thêm tour mới" ?></h3>
 
                     <!-- Tên tour -->
-                    <div>
-                        <label class="fw-bold">Tên tour</label>
-                        <input type="text" name="name" class="form-control" required
-                            value="<?= $editTour['name'] ?? '' ?>">
+                    <div class="mb-3">
+                        <label class="form-label">Tên tour</label>
+                        <input type="text" name="name" class="form-control"
+                            value="<?= $editTour['name'] ?? '' ?>" required>
                     </div>
 
                     <!-- Giá -->
-                    <div>
-                        <label class="fw-bold">Giá</label>
-                        <input type="number" name="base_price" class="form-control" required
-                            value="<?= $editTour['base_price'] ?? '' ?>">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Giá gốc</label>
+                            <input type="number" name="base_price" class="form-control"
+                                value="<?= $editTour['base_price'] ?? '' ?>" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Giá khuyến mãi</label>
+                            <input type="number" name="promo_price" class="form-control"
+                                value="<?= $editTour['promo_price'] ?? '' ?>">
+                        </div>
                     </div>
 
-                    <!-- Số ngày -->
-                    <div>
-                        <label class="fw-bold">Số ngày</label>
-                        <input type="number" name="duration" class="form-control" required
-                            value="<?= $editTour['duration'] ?? '' ?>">
+                    <!-- Thời lượng -->
+                    <div class="mb-3">
+                        <label class="form-label">Thời lượng</label>
+                        <input type="text" name="duration" class="form-control"
+                            value="<?= $editTour['duration'] ?? '' ?>" required>
                     </div>
 
-                    <!-- Số người -->
-                    <div>
-                        <label class="fw-bold">Số người</label>
+                    <!-- Mô tả -->
+                    <div class="mb-3">
+                        <label class="form-label">Mô tả</label>
+                        <textarea name="description" class="form-control" rows="4"><?= $editTour['description'] ?? '' ?></textarea>
+                    </div>
+                    <!-- Danh mục tour -->
+                    <div class="form-group">
+                        <label>Danh mục tour</label>
+                        <select name="tour_category_id" class="form-control" required>
+                            <option value="">-- Chọn danh mục --</option>
+                            <?php foreach ($tourCategories as $cate): ?>
+                                <option value="<?= $cate['id']; ?>"
+                                    <?= isset($editTour) && $editTour['tour_category_id'] == $cate['id'] ? 'selected' : '' ?>>
+                                    <?= $cate['name']; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+
+                    <!-- Số người tối đa -->
+                    <div class="form-group">
+                        <label>Số lượng người</label>
                         <input type="number" name="so_nguoi" class="form-control"
-                            min="7" max="30" required
-                            value="<?= $editTour['so_nguoi'] ?? '' ?>">
+                            value="<?= $editTour['so_nguoi'] ?? '' ?>" required>
+                    </div>
+
+
+                    <!-- Điểm đi -->
+                    <div class="mb-3">
+                        <label class="form-label">Điểm đi</label>
+                        <input type="text" name="diem_di" class="form-control"
+                            value="<?= $editTour['diem_di'] ?? '' ?>" required>
+                    </div>
+
+                    <!-- Điểm đến -->
+                    <div class="mb-3">
+                        <label class="form-label">Điểm đến</label>
+                        <input type="text" name="diem_den" class="form-control"
+                            value="<?= $editTour['diem_den'] ?? '' ?>" required>
+                    </div>
+
+                    <!-- Phương tiện -->
+                    <div class="mb-3">
+                        <label class="form-label">Phương tiện</label>
+                        <input type="text" name="phuong_tien" class="form-control"
+                            value="<?= $editTour['phuong_tien'] ?? '' ?>" required>
                     </div>
 
                     <!-- Trạng thái -->
-                    <div>
-                        <label class="fw-bold">Trạng thái</label>
-                        <select name="status" class="form-select">
-                            <option value="1" <?= (($editTour['status'] ?? 1) == 1) ? 'selected' : '' ?>>Hoạt động</option>
-                            <option value="2" <?= (($editTour['status'] ?? '') == 2) ? 'selected' : '' ?>>Đã dừng</option>
-                            <option value="3" <?= (($editTour['status'] ?? '') == 3) ? 'selected' : '' ?>>Bảo trì</option>
+                    <div class="mb-3">
+                        <label class="form-label">Trạng thái</label>
+                        <select name="status" class="form-select" required>
+                            <option value="1" <?= ($editTour['status'] ?? '') == 1 ? 'selected' : '' ?>>Hoạt động</option>
+                            <option value="2" <?= ($editTour['status'] ?? '') == 2 ? 'selected' : '' ?>>Dừng hoạt động</option>
                         </select>
                     </div>
 
-                    <!-- Danh mục -->
-                    <div>
-                        <label class="fw-bold">Danh mục</label>
-                        <select name="tour_category_id" class="form-select">
-                            <option value="1" <?= (($editTour['tour_category_id'] ?? '') == 1) ? 'selected' : '' ?>>Trong nước</option>
-                            <option value="2" <?= (($editTour['tour_category_id'] ?? '') == 2) ? 'selected' : '' ?>>Ngoài nước</option>
-                            <option value="3" <?= (($editTour['tour_category_id'] ?? '') == 3) ? 'selected' : '' ?>>Mạo hiểm</option>
-                        </select>
-                    </div>
 
-                    <!-- Ảnh -->
-                    <div>
-                        <label class="fw-bold">Ảnh</label>
-                        <input type="text" name="image" class="form-control"
-                            value="<?= $editTour['image'] ?? '' ?>">
-                    </div>
+                    <!-- Ảnh chính -->
+                    <div class="mb-3">
+                        <label class="form-label">Ảnh chính</label>
+                        <input type="file" name="image" class="form-control">
 
-                    <!-- Mô tả (FULL WIDTH) -->
-                    <div class="form-full">
-                        <label class="fw-bold">Mô tả</label>
-                        <textarea name="description" class="form-control"><?= $editTour['description'] ?? '' ?></textarea>
-                    </div>
-
-                    <!-- Nút -->
-                    <div class="form-full mt-2">
-                        <button class="btn btn-success"><?= $isEdit ? 'Cập nhật' : 'Thêm tour' ?></button>
-
-                        <?php if ($isEdit): ?>
-                            <a href="index.php?action=tours" class="btn btn-secondary ms-2">Hủy</a>
+                        <?php if ($isEdit && !empty($editTour['image'])): ?>
+                            <div class="mt-2">
+                                <img src="<?= BASE_ASSETS_UPLOADS . $editTour['image'] ?>"
+                                    alt="Ảnh chính" width="150" style="border-radius:6px">
+                            </div>
                         <?php endif; ?>
                     </div>
 
+                    <!-- Ảnh phụ -->
+                    <div class="mb-3">
+                        <label class="form-label">Ảnh phụ (nhiều)</label>
+                        <input type="file" name="images[]" multiple class="form-control">
+
+                        <?php if ($isEdit && !empty($images)): ?>
+                            <div class="mt-3">
+                                <label>Ảnh hiện có:</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <?php foreach ($images as $img): ?>
+                                        <div style="position:relative; display:inline-block;">
+                                            <img src="<?= BASE_ASSETS_UPLOADS . $img['image'] ?>"
+                                                width="120" style="border-radius:5px">
+
+                                            <!-- Nút xóa ảnh -->
+                                            <a href="index.php?action=deleteTourImage&id=<?= $img['id'] ?>&tour_id=<?= $editTour['id'] ?>"
+                                                style="position:absolute; top:-6px; right:-6px; 
+                               background:red; padding:3px 6px; color:white;
+                               border-radius:50%; font-size:12px;">×</a>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <hr>
+
+                    <!-- Lịch trình -->
+                    <h4>Lịch trình tour</h4>
+
+                    <div id="itinerary-list">
+                        <?php if (!empty($itineraries)): ?>
+                            <?php foreach ($itineraries as $i => $it): ?>
+                                <div class="border rounded p-3 mb-2">
+                                    <label>Ngày:</label>
+                                    <input type="number" name="days[]" class="form-control mb-2" value="<?= $it['day_number'] ?>">
+
+                                    <label>Tiêu đề:</label>
+                                    <input type="text" name="titles[]" class="form-control mb-2" value="<?= $it['title'] ?>">
+
+                                    <label>Nội dung:</label>
+                                    <textarea name="contents[]" class="form-control"><?= $it['content'] ?></textarea>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+
+                    <button type="button" class="btn btn-warning mt-2" onclick="addItinerary()">+ Thêm ngày</button>
+
+                    <hr>
+
+                    <button type="submit" class="btn btn-success">
+                        <?= $isEdit ? "Cập nhật" : "Thêm mới" ?>
+                    </button>
                 </form>
+
+                <script>
+                    function addItinerary() {
+                        const box = `
+        <div class="border rounded p-3 mb-2">
+            <label>Ngày:</label>
+            <input type="number" name="days[]" class="form-control mb-2">
+
+            <label>Tiêu đề:</label>
+            <input type="text" name="titles[]" class="form-control mb-2">
+
+            <label>Nội dung:</label>
+            <textarea name="contents[]" class="form-control"></textarea>
+        </div>
+    `;
+                        document.getElementById('itinerary-list').insertAdjacentHTML('beforeend', box);
+                    }
+                </script>
+
+
             </div>
         </div>
 
@@ -378,12 +488,8 @@
                             <th>Ảnh</th>
                             <th>Tour</th>
                             <th>Giá</th>
-                            <th>Thời gian</th>
-                            <th>Mô tả</th>
-                            <th>Số người</th>
-                            <th>Trạng thái</th>
-                            <th>Tạo lúc</th>
                             <th>Danh mục</th>
+                            <th>Trạng thái</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
@@ -392,46 +498,53 @@
                         <?php foreach ($tours as $tour): ?>
                             <tr>
 
+                                <!-- ID -->
                                 <td class="text-center"><?= $tour['id'] ?></td>
 
+                                <!-- Ảnh -->
                                 <td class="text-center">
                                     <?php if (!empty($tour['image'])): ?>
-                                        <img src="<?= htmlspecialchars($tour['image']) ?>" class="tour-img">
-                                    <?php else: ?><span class="text-muted">No Image</span><?php endif; ?>
-                                </td>
-
-                                <td><?= $tour['name'] ?></td>
-
-                                <td><?= number_format($tour['base_price'], 0, ',', '.') ?> VNĐ</td>
-
-                                <td>
-                                    <?= (int)$tour['duration'] ?> ngày <?= max((int)$tour['duration'] - 1, 0) ?> đêm
-                                </td>
-
-                                <td>
-                                    <?php if (empty(trim($tour['description']))): ?>
-                                        <span class="text-muted">Trống...</span>
+                                        <img src="<?= BASE_URL . 'assets/uploads/' . $tour['image'] ?>"
+                                            class="tour-img">
                                     <?php else: ?>
-                                        <span class="description-short"
-                                            data-full="<?= htmlspecialchars($tour['description']) ?>">
-                                            <?= htmlspecialchars($tour['description']) ?>
-                                        </span>
-                                        <span class="view-more">Xem thêm</span>
+                                        <span class="text-muted">No Image</span>
                                     <?php endif; ?>
                                 </td>
 
-                                <td><?= $tour['so_nguoi'] ?></td>
+                                <!-- Tên -->
+                                <td><?= $tour['name'] ?></td>
 
-                                <?php $statusText = [1 => 'Hoạt động', 2 => 'Đã dừng', 3 => 'Bảo trì']; ?>
-                                <td><?= $statusText[$tour['status']] ?? '—' ?></td>
+                                <!-- Giá -->
+                                <td>
+                                    <?php if (!empty($tour['promo_price']) && $tour['promo_price'] < $tour['base_price']): ?>
+                                        <div style="font-weight:700; color:#059669;">
+                                            <?= number_format($tour['promo_price']) ?> VNĐ
+                                        </div>
+                                        <div class="price-original">
+                                            <?= number_format($tour['base_price']) ?> VNĐ
+                                        </div>
+                                    <?php else: ?>
+                                        <div style="font-weight:700;">
+                                            <?= number_format($tour['base_price']) ?> VNĐ
+                                        </div>
+                                    <?php endif; ?>
+                                </td>
 
-                                <td><?= date('d/m/Y H:i', strtotime($tour['created_at'])) ?></td>
+                                <!-- Danh mục -->
+                                <td>
+                                    <?= $cateText[$tour['tour_category_id']] ?? '-' ?>
+                                </td>
 
-                                <?php $cateText = [1 => 'Trong nước', 2 => 'Ngoài nước', 3 => 'Mạo hiểm']; ?>
-                                <td><?= $cateText[$tour['tour_category_id']] ?? '—' ?></td>
+                                <!-- Trạng thái -->
+                                <td>
+                                    <?= $statusText[$tour['status']] ?? '—' ?>
+                                </td>
 
                                 <!-- Hành động -->
                                 <td class="text-center">
+                                    <a href="index.php?action=tour_detail&id=<?= $tour['id'] ?>"
+                                        class="btn btn-sm btn-info">Chi tiết</a>
+
                                     <a href="index.php?action=tours&id_edit=<?= $tour['id'] ?>"
                                         class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
 
@@ -443,18 +556,75 @@
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
-
                 </table>
+
 
             </div>
 
         </div>
     </div>
+    <script>
+        (function() {
+            const baseInput = document.getElementById('base_price');
+            const promoInput = document.getElementById('promo_price');
+            const info = document.getElementById('discount-info');
+
+            function fmt(n) {
+                if (!n) return '';
+                return Math.round(n);
+            }
+
+            function updateDiscount() {
+                const base = parseFloat(baseInput.value) || 0;
+                const promo = parseFloat(promoInput.value) || 0;
+                if (base > 0 && promo > 0 && promo <= base) {
+                    const pct = Math.round((1 - promo / base) * 100);
+                    info.textContent = `Tiết kiệm: ${pct}% — Giá sau giảm: ${promo.toLocaleString()} VNĐ`;
+                    info.style.color = '#059669';
+                } else {
+                    info.textContent = '';
+                }
+            }
+
+            baseInput?.addEventListener('input', updateDiscount);
+            promoInput?.addEventListener('input', updateDiscount);
+
+            // chạy lần đầu (nếu edit)
+            updateDiscount();
+        })();
+    </script>
+
 
     <script>
         document.querySelectorAll('.view-more').forEach(btn => {
             btn.addEventListener('click', function() {
                 alert(this.previousElementSibling.dataset.full);
             });
+        });
+        document.getElementById('add-day').addEventListener('click', function() {
+            const wrapper = document.getElementById('itinerary-wrapper');
+
+            const html = `
+        <div class="itinerary-item mb-3 p-3 border rounded">
+            <label>Ngày:</label>
+            <input type="number" name="days[]" class="form-control mb-2" required>
+
+            <label>Tiêu đề:</label>
+            <input type="text" name="titles[]" class="form-control mb-2" required>
+
+            <label>Mô tả chi tiết:</label>
+            <textarea name="contents[]" class="form-control" required></textarea>
+
+            <button type="button" class="btn btn-danger btn-sm mt-2 remove-day">Xóa ngày</button>
+        </div>
+    `;
+
+            wrapper.insertAdjacentHTML('beforeend', html);
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-day')) {
+                e.target.closest('.itinerary-item').remove();
+            }
         });
     </script>

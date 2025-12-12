@@ -1,97 +1,122 @@
+
 <?php
-// Đổi tên từ ProductModel thành TourModel cho phù hợp với dữ liệu tour
+require_once PATH_ROOT . 'models/TourCategoryModel.php';
+
+
 class TourModel extends BaseModel
 {
-    // Đổi tên bảng từ "product" sang "tours"
     protected $table = "tours";
 
-    // ===================================
-    // 1. Lấy tất cả (Read All)
-    // ===================================
+    // ============================
+    // 1. LẤY TẤT CẢ TOUR
+    // ============================
     public function getAllTours()
     {
-        // Lấy tất cả các cột cần thiết, sắp xếp theo ngày tạo mới nhất
         $sql = "SELECT * FROM {$this->table} ORDER BY created_at DESC";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $this->query($sql)->fetchAll();
     }
 
-    // ===================================
-    // 2. Lấy theo ID (Read One)
-    // ===================================
+    // ============================
+    // 2. LẤY TOUR THEO ID
+    // ============================
     public function getTourById($id)
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE id = :id");
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM {$this->table} WHERE id = ?";
+        return $this->query($sql, [$id])->fetch();
     }
 
-    // ===================================
-    // 3. Thêm Tour (Create)
-    // ===================================
-    // Các tham số phải khớp với các cột có thể CHÈN (bỏ qua id, created_at)
+    // ============================
+    // 3. THÊM TOUR (CREATE)
+    // ============================
     public function addTour($data)
     {
         $sql = "INSERT INTO tours
-(name, base_price, duration, description, status, tour_category_id, so_nguoi, image)
-VALUES
-(:name, :base_price, :duration, :description, :status, :tour_category_id, :so_nguoi, :image)
-";
+        (name, base_price, promo_price, duration, description, status, tour_category_id, so_nguoi, image, diem_di, diem_den, phuong_tien)
+        VALUES
+        (:name, :base_price, :promo_price, :duration, :description, :status, :tour_category_id, :so_nguoi, :image, :diem_di, :diem_den, :phuong_tien)";
 
         $stmt = $this->pdo->prepare($sql);
-        // $data phải chứa 6 key: name, base_price, duration, description, status, tour_category_id
-        return $stmt->execute($data);
+
+        return $stmt->execute([
+            'name' => $data['name'],
+            'base_price' => $data['base_price'],
+            'promo_price' => $data['promo_price'] ?? null,
+            'duration' => $data['duration'],
+            'description' => $data['description'],
+            'status' => $data['status'],
+            'tour_category_id' => $data['tour_category_id'],
+            'so_nguoi' => $data['so_nguoi'],
+            'image' => $data['image'],
+            'diem_di' => $data['diem_di'],
+            'diem_den' => $data['diem_den'],
+            'phuong_tien' => $data['phuong_tien']
+        ]);
     }
 
-    // ===================================
-    // 4. Cập nhật Tour (Update)
-    // ===================================
+    // ============================
+    // 4. CẬP NHẬT TOUR (UPDATE)
+    // ============================
     public function updateTour($id, $data)
     {
-        $data['id'] = $id;
-
         $sql = "UPDATE tours SET
-                name = :name,
-                base_price = :base_price,
-                duration = :duration,
-                description = :description,
-                status = :status,
-                tour_category_id = :tour_category_id,
-                so_nguoi = :so_nguoi,
-                image = :image
-            WHERE id = :id";
+            name = :name,
+            base_price = :base_price,
+            promo_price = :promo_price,
+            duration = :duration,
+            description = :description,
+            status = :status,
+            tour_category_id = :tour_category_id,
+            so_nguoi = :so_nguoi,
+            image = :image,
+            diem_di = :diem_di,
+            diem_den = :diem_den,
+            phuong_tien = :phuong_tien
+        WHERE id = :id";
 
-        return $this->pdo->prepare($sql)->execute($data);
+        return $this->pdo->prepare($sql)->execute([
+            'name' => $data['name'],
+            'base_price' => $data['base_price'],
+            'promo_price' => $data['promo_price'] ?? null,
+            'duration' => $data['duration'],
+            'description' => $data['description'],
+            'status' => $data['status'],
+            'tour_category_id' => $data['tour_category_id'],
+            'so_nguoi' => $data['so_nguoi'],
+            'image' => $data['image'],
+            'diem_di' => $data['diem_di'],
+            'diem_den' => $data['diem_den'],
+            'phuong_tien' => $data['phuong_tien'],
+            'id' => $id
+        ]);
     }
 
-
-    // ===================================
-    // 5. Xóa Tour (Delete)
-    // ===================================
+    // ============================
+    // 5. XÓA TOUR
+    // ============================
     public function deleteTour($id)
     {
-        $stmt = $this->pdo->prepare("DELETE FROM {$this->table} WHERE id = :id");
-        return $stmt->execute(['id' => $id]); // Đảm bảo key truyền vào là 'id'
+        $sql = "DELETE FROM {$this->table} WHERE id = ?";
+        return $this->execute($sql, [$id]);
     }
+
+    // ============================
+    // 6. TÌM KIẾM TOUR
+    // ============================
     public function searchTours($filters)
     {
         $sql = "SELECT * FROM {$this->table} WHERE 1";
         $params = [];
 
-        // Tìm theo tên
         if (!empty($filters['keyword'])) {
-            $sql .= " AND name LIKE :keyword";
-            $params['keyword'] = '%' . $filters['keyword'] . '%';
+            $sql .= " AND name LIKE ?";
+            $params[] = '%' . $filters['keyword'] . '%';
         }
 
-        // Lọc danh mục
         if (!empty($filters['category'])) {
-            $sql .= " AND tour_category_id = :category";
-            $params['category'] = $filters['category'];
+            $sql .= " AND tour_category_id = ?";
+            $params[] = $filters['category'];
         }
 
-        // Lọc giá
         if (!empty($filters['price'])) {
             if ($filters['price'] == 1) {
                 $sql .= " AND base_price < 5000000";
@@ -104,8 +129,80 @@ VALUES
 
         $sql .= " ORDER BY created_at DESC";
 
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $this->query($sql, $params)->fetchAll();
+    }
+
+    // ============================
+    // 7. LỊCH TRÌNH TOUR
+    // ============================
+    public function getItineraries($tourId)
+    {
+        $sql = "SELECT * FROM tour_itineraries WHERE tour_id = ? ORDER BY day_number";
+        return $this->query($sql, [$tourId])->fetchAll();
+    }
+
+    public function addItinerary($tourId, $day, $title, $content)
+    {
+        $sql = "INSERT INTO tour_itineraries (tour_id, day_number, title, content)
+                VALUES (?, ?, ?, ?)";
+        return $this->execute($sql, [$tourId, $day, $title, $content]);
+    }
+
+    public function deleteItineraries($tourId)
+    {
+        $sql = "DELETE FROM tour_itineraries WHERE tour_id = ?";
+        return $this->execute($sql, [$tourId]);
+    }
+    // ===============================
+    // HIỂN THỊ CHI TIẾT TOUR
+    // ===============================
+    public function detail()
+    {
+        if (empty($_GET['id'])) {
+            die("Không tìm thấy tour!");
+        }
+
+        $id = $_GET['id'];
+
+        $tourModel = new TourModel();
+        $tour = $tourModel->getTourById($id);
+        $itineraries = $tourModel->getItineraries($id);
+
+        if (!$tour) {
+            die("Tour không tồn tại!");
+        }
+
+        $view = PATH_VIEW . "Tour/tour_detail.php";
+        require PATH_VIEW . "layout/master.php";
+    }
+    // ============================
+    // LẤY NHIỀU ẢNH TOUR
+    // ============================
+    public function getImages($tourId)
+    {
+        $sql = "SELECT image FROM tour_images WHERE tour_id = ?";
+        return $this->query($sql, [$tourId])->fetchAll();
+    }
+    // ============================
+    // LƯU ẢNH CHO TOUR
+    // ============================
+    public function addImage($tourId, $imageName)
+    {
+        $sql = "INSERT INTO tour_images (tour_id, image) VALUES (?, ?)";
+        return $this->execute($sql, [$tourId, $imageName]);
+    }
+
+    // (Tùy chọn) Lấy ảnh cùng với id (dùng khi muốn xóa từng ảnh)
+    public function getImagesWithId($tourId)
+    {
+        $sql = "SELECT id, image FROM tour_images WHERE tour_id = ? ORDER BY id";
+        return $this->query($sql, [$tourId])->fetchAll();
+    }
+
+    // (Tùy chọn) Xóa một ảnh theo id
+    public function deleteImage($imageId)
+    {
+        $sql = "DELETE FROM tour_images WHERE id = ?";
+        return $this->execute($sql, [$imageId]);
     }
 }

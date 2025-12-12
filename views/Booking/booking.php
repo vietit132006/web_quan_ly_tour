@@ -259,4 +259,3 @@
         <?php endforeach; ?>
     </tbody>
 </table>
->>>>>>> master
