@@ -487,9 +487,16 @@
                             <th>ID</th>
                             <th>Ảnh</th>
                             <th>Tour</th>
+                            <th>Điểm đi</th>
+                            <th>Điểm đến</th>
+                            <th>Phương tiện</th>
                             <th>Giá</th>
-                            <th>Danh mục</th>
+                            <th>Thời gian</th>
+                            <th>Mô tả</th>
+                            <th>Số người</th>
                             <th>Trạng thái</th>
+                            <th>Tạo lúc</th>
+                            <th>Danh mục</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
@@ -498,7 +505,6 @@
                         <?php foreach ($tours as $tour): ?>
                             <tr>
 
-                                <!-- ID -->
                                 <td class="text-center"><?= $tour['id'] ?></td>
 
                                 <!-- Ảnh -->
@@ -511,39 +517,65 @@
                                     <?php endif; ?>
                                 </td>
 
-                                <!-- Tên -->
-                                <td><?= $tour['name'] ?></td>
 
-                                <!-- Giá -->
+                                <td><?= $tour['name'] ?></td>
+                                <td><?= $tour['diem_di'] ?? '' ?></td>
+                                <td><?= $tour['diem_den'] ?? '' ?></td>
+                                <td><?= $tour['phuong_tien'] ?? '' ?></td>
+
+
+
                                 <td>
                                     <?php if (!empty($tour['promo_price']) && $tour['promo_price'] < $tour['base_price']): ?>
-                                        <div style="font-weight:700; color:#059669;">
-                                            <?= number_format($tour['promo_price']) ?> VNĐ
-                                        </div>
-                                        <div class="price-original">
-                                            <?= number_format($tour['base_price']) ?> VNĐ
+                                        <div>
+                                            <div style="font-weight:700; color:#059669;">
+                                                <?= number_format($tour['promo_price'], 0, ',', '.') ?> VNĐ
+                                                <span class="badge bg-success ms-2">
+                                                    -<?= round((1 - $tour['promo_price'] / $tour['base_price']) * 100) ?>%
+                                                </span>
+                                            </div>
+                                            <div style="text-decoration:line-through; color:#94a3b8;">
+                                                <?= number_format($tour['base_price'], 0, ',', '.') ?> VNĐ
+                                            </div>
                                         </div>
                                     <?php else: ?>
                                         <div style="font-weight:700;">
-                                            <?= number_format($tour['base_price']) ?> VNĐ
+                                            <?= number_format($tour['base_price'], 0, ',', '.') ?> VNĐ
                                         </div>
                                     <?php endif; ?>
                                 </td>
 
-                                <!-- Danh mục -->
+
                                 <td>
-                                    <?= $cateText[$tour['tour_category_id']] ?? '-' ?>
+                                    <?= (int)$tour['duration'] ?> ngày <?= max((int)$tour['duration'] - 1, 0) ?> đêm
                                 </td>
 
-                                <!-- Trạng thái -->
                                 <td>
-                                    <?= $statusText[$tour['status']] ?? '—' ?>
+                                    <?php if (empty(trim($tour['description']))): ?>
+                                        <span class="text-muted">Trống...</span>
+                                    <?php else: ?>
+                                        <span class="description-short"
+                                            data-full="<?= htmlspecialchars($tour['description']) ?>">
+                                            <?= htmlspecialchars($tour['description']) ?>
+                                        </span>
+                                        <span class="view-more">Xem thêm</span>
+                                    <?php endif; ?>
                                 </td>
+
+                                <td><?= $tour['so_nguoi'] ?></td>
+
+                                <?php $statusText = [1 => 'Hoạt động', 2 => 'Đã dừng', 3 => 'Bảo trì']; ?>
+                                <td><?= $statusText[$tour['status']] ?? '—' ?></td>
+
+                                <td><?= date('d/m/Y H:i', strtotime($tour['created_at'])) ?></td>
+
+                                <?php $cateText = [1 => 'Trong nước', 2 => 'Ngoài nước', 3 => 'Mạo hiểm']; ?>
+                                <td><?= $cateText[$tour['tour_category_id']] ?? '—' ?></td>
 
                                 <!-- Hành động -->
+
                                 <td class="text-center">
-                                    <a href="index.php?action=tour_detail&id=<?= $tour['id'] ?>"
-                                        class="btn btn-sm btn-info">Chi tiết</a>
+                                    <a href="index.php?action=tour_detail&id=<?= $tour['id'] ?>" class="btn btn-info">Chi tiết</a>
 
                                     <a href="index.php?action=tours&id_edit=<?= $tour['id'] ?>"
                                         class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
