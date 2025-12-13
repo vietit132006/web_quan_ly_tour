@@ -64,6 +64,11 @@ match ($action) {
     'booking'               => (new BookingController)->index(),
     'booking-detail'        => (new BookingController)->detail(),
     'booking-update'        => (new BookingController)->updateStatus(),
+    // Booking
+    'booking-create' => (new BookingController)->create(),
+    'booking-store'  => (new BookingController)->store(),
+
+
 
 
     // Users
