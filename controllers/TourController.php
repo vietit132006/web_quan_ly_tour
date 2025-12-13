@@ -17,16 +17,7 @@ class TourController
     // ===============================
     public function list()
     {
-        $editTour = null;
-        $itineraries = [];
-
-        if (!empty($_GET['id_edit'])) {
-            $tourId = $_GET['id_edit'];
-            $editTour = $this->tourModel->getTourById($tourId);
-            $itineraries = $this->tourModel->getItineraries($tourId);
-        }
-
-        // Filter 
+        // Filter
         $filters = [
             'keyword'  => $_GET['keyword'] ?? null,
             'category' => $_GET['category'] ?? null,
@@ -35,13 +26,14 @@ class TourController
 
         $tours = $this->tourModel->searchTours($filters);
 
-        // LẤY DANH MỤC TOUR (✔ dùng cùng 1 biến tourCategories)
+        // Danh mục
         $categoryModel = new TourCategoryModel();
         $tourCategories = $categoryModel->getAll();
 
         $view = PATH_VIEW . "Tour/quan-ly-tour.php";
-        require_once PATH_VIEW . "layout/master.php";
+        require PATH_VIEW . "layout/master.php";
     }
+
 
     // ===============================
     // 2. Form thêm tour
@@ -49,9 +41,15 @@ class TourController
     public function create()
     {
         $categoryModel = new TourCategoryModel();
-        $tourCategories = $categoryModel->getAll();   // Lấy toàn bộ danh mục tour
+        $tourCategories = $categoryModel->getAll();
 
-        include PATH_VIEW . 'tours/add.php';
+        $isEdit = false;
+        $editTour = null;
+        $itineraries = [];
+        $images = [];
+
+        $view = PATH_VIEW . "Tour/tour-form.php";
+        require PATH_VIEW . "layout/master.php";
     }
 
 
@@ -142,21 +140,30 @@ class TourController
     // ===============================
     public function edit()
     {
-        $id = $_GET['id'];
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            header("Location: index.php?action=tours");
+            exit;
+        }
 
         $editTour = $this->tourModel->getTourById($id);
+        if (!$editTour) {
+            header("Location: index.php?action=tours");
+            exit;
+        }
+
         $itineraries = $this->tourModel->getItineraries($id);
         $images = $this->tourModel->getImagesWithId($id);
 
-        // Danh mục
         $categoryModel = new TourCategoryModel();
         $tourCategories = $categoryModel->getAll();
 
         $isEdit = true;
-        $formAction = "index.php?action=updateTour";
 
-        require PATH_VIEW . 'Tour/form.php';
+        $view = PATH_VIEW . "Tour/tour-form.php";
+        require PATH_VIEW . "layout/master.php";
     }
+
 
     // ===============================
     // 5. Lưu cập nhật tour
@@ -239,16 +246,24 @@ class TourController
     // ===============================
     // 6. Xóa tour
     // ===============================
-    public function delete()
+    public function delete($id)
     {
-        $id = $_GET['id'];
+        $tourModel = new TourModel();
 
-        $this->tourModel->deleteItineraries($id);
-        $this->tourModel->deleteTour($id);
+        // ❌ nếu tour đã có booking
+        if ($tourModel->hasBooking($id)) {
+            $_SESSION['error'] = 'Tour đã có người đặt, không thể xoá!';
+            header('Location: index.php?action=tours');
+            exit;
+        }
 
-        header("Location: index.php?action=tours");
+        // ✅ nếu chưa có booking thì xoá
+        $tourModel->deleteTour($id);
+        $_SESSION['success'] = 'Xoá tour thành công!';
+        header('Location: index.php?action=tours');
         exit;
     }
+
 
     // ===============================
     // 7. Chi tiết tour

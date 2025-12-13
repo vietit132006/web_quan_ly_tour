@@ -49,8 +49,12 @@ match ($action) {
     'tour-update'      => (new TourController)->update($_GET['id'] ?? null),
     'tour-delete'      => (new TourController)->delete($_GET['id'] ?? null),
     'tour_detail'      => (new TourController)->detail($_GET['id'] ?? null),
+    'tour-create' => (new TourController)->create(),
+    'tour-edit'   => (new TourController)->edit(),
 
 
+
+    // Tour Category
     'tour-category'        => (new TourCategoryController)->index(),
     'tour-category-store'  => (new TourCategoryController)->store(),
     'tour-category-delete' => (new TourCategoryController)->delete(),

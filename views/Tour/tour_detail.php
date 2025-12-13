@@ -9,65 +9,134 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
     <style>
+        /* ================== BASE ================== */
+        body {
+            background: #f1f5f9;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        #tour-detail-page {
+            max-width: 1180px;
+        }
+
+        /* ================== CARD ================== */
         #tour-detail-page .card {
-            border-radius: 14px;
+            border-radius: 18px;
             border: none;
             background: #ffffff;
-            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 16px 48px rgba(15, 23, 42, 0.12);
+            overflow: hidden;
         }
 
         #tour-detail-page .card-header {
-            background: linear-gradient(135deg, #10b981, #0d8f6e);
-            color: #fff;
-            padding: 20px 26px;
-            font-size: 22px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+            padding: 24px 30px;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        #tour-detail-page .card-header button {
+            font-size: 14px;
             font-weight: 600;
-            border-radius: 14px 14px 0 0;
+            border-radius: 10px;
+            padding: 6px 14px;
         }
 
+        /* ================== IMAGES ================== */
+        #tour-detail-page .carousel img,
         #tour-detail-page .tour-img {
-            width: 100%;
-            border-radius: 14px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            border-radius: 16px;
+            max-height: 440px;
+            object-fit: cover;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
         }
 
+        /* ================== TITLES ================== */
         #tour-detail-page .section-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 14px;
+            font-size: 24px;
+            font-weight: 800;
             color: #0f172a;
+            margin-bottom: 18px;
+            border-left: 6px solid #10b981;
+            padding-left: 14px;
         }
 
-        #tour-detail-page .itinerary-item {
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            background: #f8fafc;
-            margin-bottom: 14px;
-        }
-
-        #tour-detail-page .itinerary-item h4 {
-            color: #0d9488;
-            font-size: 18px;
-            font-weight: 700;
-        }
-
+        /* ================== TEXT ================== */
         #tour-detail-page p {
-            font-size: 15px;
+            font-size: 17px;
+            line-height: 1.7;
             color: #334155;
+            margin-bottom: 10px;
         }
 
-        #tour-detail-page .price-tag {
-            font-size: 22px;
+        #tour-detail-page strong {
             font-weight: 700;
+            color: #020617;
+        }
+
+        /* ================== PRICE ================== */
+        #tour-detail-page .price-tag {
+            font-size: 26px;
+            font-weight: 800;
             color: #059669;
         }
 
         #tour-detail-page .price-original {
-            text-decoration: line-through;
+            font-size: 17px;
             color: #94a3b8;
+            text-decoration: line-through;
+        }
+
+        /* ================== ITINERARY ================== */
+        #tour-detail-page .itinerary-item {
+            padding: 20px 22px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            background: linear-gradient(180deg, #ffffff, #f8fafc);
+            margin-bottom: 18px;
+            transition: 0.25s ease;
+        }
+
+        #tour-detail-page .itinerary-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.08);
+        }
+
+        #tour-detail-page .itinerary-item h4 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0d9488;
+            margin-bottom: 8px;
+        }
+
+        #tour-detail-page .itinerary-item p {
+            font-size: 16px;
+            color: #334155;
+        }
+
+        /* ================== RESPONSIVE ================== */
+        @media (max-width: 768px) {
+            #tour-detail-page .card-header {
+                font-size: 20px;
+                padding: 18px 20px;
+            }
+
+            #tour-detail-page .section-title {
+                font-size: 20px;
+            }
+
+            #tour-detail-page p {
+                font-size: 16px;
+            }
+
+            #tour-detail-page .price-tag {
+                font-size: 22px;
+            }
         }
     </style>
+
 </head>
 
 <body class="p-4">

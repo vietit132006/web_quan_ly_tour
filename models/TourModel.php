@@ -89,15 +89,45 @@ class TourModel extends BaseModel
             'id' => $id
         ]);
     }
+    // ============================
+    // KIỂM TRA TOUR ĐÃ CÓ BOOKING CHƯA
+    // ============================
+    public function hasBooking($tourId)
+    {
+        $sql = "SELECT COUNT(*) FROM booking WHERE tour_id = ?";
+        return $this->query($sql, [$tourId])->fetchColumn() > 0;
+    }
 
     // ============================
     // 5. XÓA TOUR
     // ============================
     public function deleteTour($id)
     {
-        $sql = "DELETE FROM {$this->table} WHERE id = ?";
-        return $this->execute($sql, [$id]);
+        // 1. Xóa lịch trình
+        $this->execute(
+            "DELETE FROM tour_itinerary WHERE tour_id = ?",
+            [$id]
+        );
+
+        // 2. Xóa ảnh phụ
+        $this->execute(
+            "DELETE FROM tour_images WHERE tour_id = ?",
+            [$id]
+        );
+
+        // 3. Xóa booking (nếu có)
+        $this->execute(
+            "DELETE FROM booking WHERE tour_id = ?",
+            [$id]
+        );
+
+        // 4. Cuối cùng xóa tour
+        return $this->execute(
+            "DELETE FROM tours WHERE id = ?",
+            [$id]
+        );
     }
+
 
     // ============================
     // 6. TÌM KIẾM TOUR
