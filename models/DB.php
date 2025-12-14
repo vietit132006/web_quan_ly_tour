@@ -8,11 +8,9 @@ class DB
     {
         try {
             $this->pdo = new PDO(
-<<<<<<< HEAD
-                "mysql:host=localhost;dbname=tour_management4;charset=utf8mb4",
-=======
-                "mysql:host=localhost;dbname=tour_management;charset=utf8mb4",
->>>>>>> master
+
+                "mysql:host=localhost;dbname=tour2;charset=utf8mb4",
+
                 "root",
                 "",
                 [

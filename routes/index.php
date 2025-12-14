@@ -18,7 +18,7 @@ require_once __DIR__ . '/../models/TourModel.php';
 
 
 $model = new GuideModel();
-$action = $_GET['action'] ?? '/';
+$action = $_GET['action'] ?? 'home';
 
 
 // Các action KHÔNG cần đăng nhập
@@ -41,12 +41,8 @@ match ($action) {
     '/'                 => (new HomeController)->index(),
     'home'              => (new HomeController)->index(),
 
-<<<<<<< HEAD
-   // ============ BOOKING ============ //
-    'booking'               => (new BookingController)->index(),
-    'booking-detail'        => (new BookingController)->detail(),
-    'booking-update'        => (new BookingController)->updateStatus(),
-=======
+
+
     // Tour
     'tours'            => (new TourController)->list(),
     'tour-store'       => (new TourController)->store(),
@@ -62,7 +58,6 @@ match ($action) {
     'booking-update'        => (new BookingController)->updateStatus(),
 
 
->>>>>>> master
 
     // Users
     // 'users'             => (new UserController)->listUser(),
@@ -74,12 +69,13 @@ match ($action) {
     'users_update'      => (new UserController)->updateUser(),
     'users_delete'      => (new UserController)->deleteUser(),
 
+   
     // Nhà cung cấp
     'nhacungcap'        => (new SupplierController)->listSuppliers(),
     'nhacungcap_add'    => (new SupplierController)->addSupplier(),
-    'supplier_store'    => (new SupplierController)->storeSupplier(),
+    'nhacungcap_store'  => (new SupplierController)->storeSupplier(),  // SỬA LẠI
     'nhacungcap_edit'   => (new SupplierController)->editSupplier(),
-    'update' => (new SupplierController)->updateSupplier(),
+    'nhacungcap_update' => (new SupplierController)->updateSupplier(), // SỬA LẠI
     'nhacungcap_delete' => (new SupplierController)->deleteSupplier(),
 
     // Manage
@@ -97,6 +93,13 @@ match ($action) {
     //     json_decode(file_get_contents("php://input"), true)['quantity'],
     //     json_decode(file_get_contents("php://input"), true)['date_use']
     // ),
+
+
+    //HDV
+   'HDV'        => (new TourGuideController)->listTourGuide(),
+   'HDV_add'        => (new TourGuideController)->addTourGuide(),
+   'HDV_store'        => (new TourGuideController)->storeTourGuide(),
+
 
 
     default => function () {

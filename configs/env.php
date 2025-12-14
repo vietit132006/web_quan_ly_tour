@@ -7,6 +7,8 @@ define('PATH_ROOT',         __DIR__ . '/../');
 
 define('PATH_VIEW',         PATH_ROOT . 'views/');
 
+define("PATH_LAYOUT", PATH_VIEW . "layout/");
+
 define('PATH_VIEW_MAIN',    PATH_ROOT . 'views/main.php');
 
 define('BASE_ASSETS_UPLOADS',   BASE_URL . 'assets/uploads/');
@@ -24,11 +26,9 @@ define('DB_PORT',     '3306');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
 
-<<<<<<< HEAD
-define('DB_NAME',     'tour_management4');
-=======
-define('DB_NAME',     'tour_management');
->>>>>>> master
+
+define('DB_NAME',     'tour2');
+
 define('DB_OPTIONS', [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
