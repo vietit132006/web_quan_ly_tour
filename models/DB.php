@@ -8,11 +8,7 @@ class DB
     {
         try {
             $this->pdo = new PDO(
-<<<<<<< HEAD
-                "mysql:host=localhost;dbname=tour_management4;charset=utf8mb4",
-=======
                 "mysql:host=localhost;dbname=tour_management;charset=utf8mb4",
->>>>>>> master
                 "root",
                 "",
                 [
@@ -37,8 +33,8 @@ class DB
         return $this->pdo->lastInsertId();
     }
     public function execute($sql, $params = [])
-{
-    $stmt = $this->pdo->prepare($sql);
-    return $stmt->execute($params);
-}
+    {
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute($params);
+    }
 }
