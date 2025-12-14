@@ -4,6 +4,8 @@ require_once PATH_ROOT . 'models/GuestModel.php';
 require_once PATH_ROOT . 'models/TourLogModel.php';
 require_once PATH_ROOT . 'models/TourModel.php';
 require_once PATH_ROOT . 'models/BookingServiceModel.php';
+require_once PATH_ROOT . 'models/CustomerModel.php';
+
 
 class BookingController
 {
@@ -12,10 +14,13 @@ class BookingController
     protected $logModel;
     protected $tourModel;
     protected $bookingServiceModel;
+    protected $customerModel;
+
 
     public function __construct()
     {
         $this->bookingModel = new BookingModel();
+        $this->customerModel = new CustomerModel();
         $this->guestModel   = new GuestModel();
         $this->logModel     = new TourLogModel();
         $this->tourModel    = new TourModel();
@@ -33,36 +38,48 @@ class BookingController
         $view = PATH_VIEW . 'booking/index.php';
         require PATH_VIEW . 'layout/master.php';
     }
-
     // =========================
     // CHI TIẾT BOOKING
     // =========================
     public function detail()
     {
         $id = $_GET['id'] ?? null;
-        if (!$id) die('Thiếu ID booking');
+        if (!$id) {
+            die('Thiếu ID booking');
+        }
 
+        // 1️⃣ LẤY BOOKING
         $booking = $this->bookingModel->find($id);
-        if (!$booking) die('Booking không tồn tại');
+        if (!$booking) {
+            die('Booking không tồn tại');
+        }
 
-        $guests = $this->guestModel->getByBooking($id);
-        $logs   = $this->logModel->getByBooking($id);
+        // 2️⃣ LẤY DANH SÁCH KHÁCH
+        // 2️⃣ LẤY DANH SÁCH KHÁCH (LUÔN LÀ MẢNG)
+        $customers = $this->guestModel->getByBooking($id) ?? [];
 
-        // Lấy danh sách dịch vụ
+        $guests = $this->guestModel->getByBooking($id) ?? [];
+
+
+
+        // 3️⃣ NHẬT KÝ
+        $logs = $this->logModel->getByBooking($id);
+
+        // 4️⃣ DỊCH VỤ
         $services = $this->bookingServiceModel->getByBooking($id);
 
-        // 💰 TÍNH TIỀN
+        // 5️⃣ 💰 TÍNH TIỀN
         $totalMoney = $this->bookingModel->calculateTotal($id);
 
-        // Cộng tiền dịch vụ vào tổng
         $serviceTotal = 0;
         foreach ($services as $s) {
             $serviceTotal += $s['price'];
         }
+
         $totalMoney['service_price'] = $serviceTotal;
         $totalMoney['total'] += $serviceTotal;
 
-        // View vẫn theo chuẩn master
+        // 6️⃣ VIEW
         $view = PATH_VIEW . 'booking/detail.php';
         require PATH_VIEW . 'layout/master.php';
     }
@@ -129,29 +146,80 @@ class BookingController
             die('Phương thức không hợp lệ');
         }
 
-        // Tạo booking
-        $bookingId = $this->bookingModel->create([
-            'tour_id' => $_POST['tour_id'],
-            'user_id' => $_SESSION['user']['id'],
-            'status'  => $_POST['status'] ?? 'pending',
-            'admin_note' => $_POST['admin_note'] ?? null
-        ]);
-
-        // Lưu danh sách khách
-        if (!empty($_POST['guests'])) {
-            foreach ($_POST['guests'] as $guest) {
-                if (empty($guest['name'])) continue;
-
-                $guest['booking_id'] = $bookingId;
-                $this->guestModel->create($guest);
-            }
+        // =========================
+        // 1️⃣ LẤY TOUR
+        // =========================
+        $tour = $this->tourModel->find($_POST['tour_id'] ?? null);
+        if (!$tour) {
+            $_SESSION['error'] = 'Tour không tồn tại';
+            header('Location: index.php?action=booking-create');
+            exit;
         }
 
-        // Tạo nhật ký tour (log)
+        // =========================
+        // 2️⃣ LẤY + LỌC KHÁCH
+        // =========================
+        $guests = $_POST['guests'] ?? [];
+
+        $validGuests = array_filter($guests, function ($g) {
+            return !empty(trim($g['name']));
+        });
+
+        $guestCount = count($validGuests);
+
+        // =========================
+        // 3️⃣ VALIDATE MIN / MAX
+        // =========================
+        if ($guestCount < $tour['min_people']) {
+            $_SESSION['error'] =
+                "Tour này yêu cầu tối thiểu {$tour['min_people']} khách (hiện tại: $guestCount)";
+            header('Location: index.php?action=booking-create');
+            exit;
+        }
+
+        if ($guestCount > $tour['max_people']) {
+            $_SESSION['error'] =
+                "Tour này chỉ cho phép tối đa {$tour['max_people']} khách";
+            header('Location: index.php?action=booking-create');
+            exit;
+        }
+
+        // =========================
+        // 4️⃣ TẠO CUSTOMER
+        // =========================
+        $customerId = $this->customerModel->findOrCreate([
+            'name'    => $_POST['customer_name'],
+            'phone'   => $_POST['customer_phone'],
+            'email'   => $_POST['customer_email'] ?? null,
+            'address' => $_POST['customer_address'] ?? null
+        ]);
+
+        // =========================
+        // 5️⃣ TẠO BOOKING
+        // =========================
+        $bookingId = $this->bookingModel->create([
+            'tour_id'     => $_POST['tour_id'],
+            'user_id'     => $_SESSION['user']['id'],
+            'customer_id' => $customerId,
+            'status'      => $_POST['status'] ?? 'pending',
+            'admin_note'  => $_POST['admin_note'] ?? null,
+        ]);
+
+        // =========================
+        // 6️⃣ LƯU KHÁCH
+        // =========================
+        foreach ($validGuests as $guest) {
+            $guest['booking_id'] = $bookingId;
+            $this->guestModel->create($guest);
+        }
+
+        // =========================
+        // 7️⃣ LOG
+        // =========================
         $this->logModel->create(
             $bookingId,
             'Tạo booking',
-            "Admin tạo booking mới cho tour ID: {$_POST['tour_id']}",
+            "Tạo booking mới - Customer ID: $customerId",
             $_SESSION['user']['id'] ?? null
         );
 
@@ -159,6 +227,7 @@ class BookingController
         header('Location: index.php?action=booking-detail&id=' . $bookingId);
         exit;
     }
+
     public function save_guest()
     {
         // Lấy dữ liệu từ form
@@ -196,6 +265,7 @@ class BookingController
 
 
         $_SESSION['success'] = "Thêm khách thành công!";
-        header("Location: /booking/view/$booking_id");
+        header('Location: index.php?action=booking-detail&id=' . $booking_id);
+        exit;
     }
 }

@@ -235,4 +235,11 @@ class TourModel extends BaseModel
         $sql = "DELETE FROM tour_images WHERE id = ?";
         return $this->execute($sql, [$imageId]);
     }
+
+    // LẤY min / max TRONG TourModel
+    public function find($id)
+    {
+        $sql = "SELECT * FROM tours WHERE id = ? LIMIT 1";
+        return $this->query($sql, [$id])->fetch();
+    }
 }

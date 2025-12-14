@@ -2,20 +2,35 @@
     <a href="index.php?action=booking" class="btn btn-secondary mb-3">⬅ Quay lại</a>
 
     <h3 class="mb-4">➕ Tạo Booking mới</h3>
+    <?php if (!empty($tour)): ?>
+        <p class="text-muted">
+            Tour yêu cầu từ
+            <strong><?= $tour['min_people'] ?></strong> →
+            <strong><?= $tour['max_people'] ?></strong> khách
+        </p>
+    <?php endif; ?>
 
-    <form action="index.php?action=booking-store" method="POST" id="bookingForm">
+    <p id="tourLimit" class="text-muted mt-2"></p>
+
+    <form action="index.php?action=booking-store" method="POST" id="bookingForm" onsubmit="return validateGuestCount()">
         <!-- ===== Thông tin Booking ===== -->
         <div class="card mb-4">
             <div class="card-header bg-success text-white">Thông tin Booking</div>
             <div class="card-body row g-3">
                 <div class="col-md-6">
                     <label class="form-label">Tour</label>
-                    <select name="tour_id" class="form-select" required>
+                    <select name="tour_id" class="form-select" required onchange="showLimit(this)">
                         <option value="">-- Chọn tour --</option>
                         <?php foreach ($tours as $tour): ?>
-                            <option value="<?= $tour['id'] ?>"><?= htmlspecialchars($tour['name']) ?></option>
+                            <option
+                                value="<?= $tour['id'] ?>"
+                                data-min="<?= $tour['min_people'] ?>"
+                                data-max="<?= $tour['max_people'] ?>">
+                                <?= htmlspecialchars($tour['name']) ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
+
                 </div>
 
                 <div class="col-md-6">
@@ -33,6 +48,35 @@
                 </div>
             </div>
         </div>
+
+        <!-- ===== Thông tin khách đặt tour ===== -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                👤 Thông tin khách đặt tour
+            </div>
+            <div class="card-body row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Họ tên</label>
+                    <input type="text" name="customer_name" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Số điện thoại</label>
+                    <input type="text" name="customer_phone" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="customer_email" class="form-control">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Địa chỉ</label>
+                    <input type="text" name="customer_address" class="form-control">
+                </div>
+            </div>
+        </div>
+
 
         <!-- ===== Danh sách khách ===== -->
         <div class="card mb-4">
@@ -98,4 +142,42 @@
     // Thêm sẵn 1 khách khi load trang
     addGuest();
 </script>
+<script>
+    function showLimit(select) {
+        const opt = select.options[select.selectedIndex];
+        const min = opt.getAttribute('data-min');
+        const max = opt.getAttribute('data-max');
+
+        if (min && max) {
+            document.getElementById('tourLimit').innerHTML =
+                `Tour yêu cầu từ <strong>${min}</strong> → <strong>${max}</strong> khách`;
+        } else {
+            document.getElementById('tourLimit').innerHTML = '';
+        }
+    }
+</script>
+<script>
+    function validateGuestCount() {
+        const tourSelect = document.querySelector('select[name="tour_id"]');
+
+        if (!tourSelect.value) {
+            alert('Vui lòng chọn tour');
+            return false;
+        }
+
+        const selectedOption = tourSelect.options[tourSelect.selectedIndex];
+        const min = parseInt(selectedOption.getAttribute('data-min'));
+        const max = parseInt(selectedOption.getAttribute('data-max'));
+
+        const guestCount = document.querySelectorAll('.guest-item').length;
+
+        if (guestCount < min || guestCount > max) {
+            alert(`Số khách phải từ ${min} đến ${max}. Hiện tại: ${guestCount}`);
+            return false; // ❌ chặn submit → không reload
+        }
+
+        return true; // ✅ hợp lệ → submit
+    }
+</script>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
