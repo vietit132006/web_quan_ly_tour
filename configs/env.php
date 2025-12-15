@@ -1,4 +1,5 @@
 <?php
+$config = require __DIR__ . '/config.php';
 define('BASE_URL', 'http://localhost/PHP1_BaseMVC_Exam/BaseMVC/');
 
 
@@ -27,7 +28,7 @@ define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
 
 
-define('DB_NAME',     'tour2');
+define('DB_NAME',     $config['DB_NAME']);
 
 define('DB_OPTIONS', [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

@@ -6,10 +6,11 @@ class DB
 
     public function __construct()
     {
+       $config = require __DIR__ . '/config.php';
         try {
             $this->pdo = new PDO(
 
-                "mysql:host=localhost;dbname=tour2;charset=utf8mb4",
+                "mysql:host=localhost;dbname=" . $config['DB_NAME'] . ";charset=utf8mb4",
 
                 "root",
                 "",
