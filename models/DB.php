@@ -6,7 +6,7 @@ class DB
 
     public function __construct()
     {
-       $config = require __DIR__ . '/config.php';
+       $config = require PATH_ROOT . '/config.php';
         try {
             $this->pdo = new PDO(
 

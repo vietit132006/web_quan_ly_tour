@@ -1,10 +1,12 @@
 <?php
-$config = require __DIR__ . '/config.php';
+
 define('BASE_URL', 'http://localhost/PHP1_BaseMVC_Exam/BaseMVC/');
 
 
 
 define('PATH_ROOT',         __DIR__ . '/../');
+
+$config = require PATH_ROOT . '/config.php';
 
 define('PATH_VIEW',         PATH_ROOT . 'views/');
 
