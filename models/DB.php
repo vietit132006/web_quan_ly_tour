@@ -35,8 +35,8 @@ class DB
         return $this->pdo->lastInsertId();
     }
     public function execute($sql, $params = [])
-{
-    $stmt = $this->pdo->prepare($sql);
-    return $stmt->execute($params);
-}
+    {
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute($params);
+    }
 }

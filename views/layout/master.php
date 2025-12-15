@@ -1,6 +1,13 @@
 <?php include __DIR__ . '/header.php'; ?>
 <?php include __DIR__ . '/topbar.php'; ?>
 <?php include __DIR__ . '/sidebar.php'; ?>
+<?php if (!empty($_SESSION['error'])): ?>
+  <div class="alert alert-danger">
+    <?= $_SESSION['error'] ?>
+  </div>
+  <?php unset($_SESSION['error']); ?>
+<?php endif; ?>
+
 
 <main class="ml-64 mt-16 p-8 bg-gray-50 min-h-screen">
   <?php

@@ -26,5 +26,6 @@ $listActions = [
       </a>
     <?php endforeach; ?>
   </nav>
+
 </aside>
 

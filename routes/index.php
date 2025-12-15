@@ -15,6 +15,8 @@ require_once __DIR__ . '/../middleware/AuthMiddleware.php';
 require_once __DIR__ . '/../models/UserModel.php';
 require_once __DIR__ . '/../controllers/TourController.php';
 require_once __DIR__ . '/../models/TourModel.php';
+require_once __DIR__ . '/../controllers/TourCategoryController.php';
+require_once __DIR__ . '/../models/TourCategoryModel.php';
 
 
 $model = new GuideModel();
@@ -41,21 +43,31 @@ match ($action) {
     '/'                 => (new HomeController)->index(),
     'home'              => (new HomeController)->index(),
 
-
-
     // Tour
     'tours'            => (new TourController)->list(),
     'tour-store'       => (new TourController)->store(),
     'tour-update'      => (new TourController)->update($_GET['id'] ?? null),
     'tour-delete'      => (new TourController)->delete($_GET['id'] ?? null),
+    'tour_detail'      => (new TourController)->detail($_GET['id'] ?? null),
+    'tour-create' => (new TourController)->create(),
+    'tour-edit'   => (new TourController)->edit(),
 
 
+
+    // Tour Category
+    'tour-category'        => (new TourCategoryController)->index(),
+    'tour-category-store'  => (new TourCategoryController)->store(),
+    'tour-category-delete' => (new TourCategoryController)->delete(),
 
     // Booking
     // ============ BOOKING ============ //
     'booking'               => (new BookingController)->index(),
     'booking-detail'        => (new BookingController)->detail(),
     'booking-update'        => (new BookingController)->updateStatus(),
+    // Booking
+    'booking-create' => (new BookingController)->create(),
+    'booking-store'  => (new BookingController)->store(),
+
 
 
 

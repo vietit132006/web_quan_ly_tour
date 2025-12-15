@@ -4,6 +4,7 @@ require_once __DIR__ . '/../configs/database.php';
 class BaseModel
 {
     protected $table;
+    /** @var PDO */
     protected $pdo;
 
     public function __construct()
