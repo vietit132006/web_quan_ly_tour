@@ -64,9 +64,12 @@
           Cài Đặt
         </div>
 
-        <div class="user-menu-item border-t border-gray-200 text-red-600">
-          Đăng Xuất
-        </div>
+        <form action="index.php?action=logout" method="POST">
+          <button type="submit"
+            class="user-menu-item border-t border-gray-200 text-red-600 w-full text-left">
+            Đăng Xuất
+          </button>
+        </form>
       </div>
     </div>
 

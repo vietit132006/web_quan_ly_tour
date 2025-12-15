@@ -9,8 +9,12 @@ class SupplierController
     {
         $model = new SupplierModel();
         $suppliers = $model->getAllSuppliers();
+        // Truyền biến view cho master
+        // đường dẫn đúng
+        $view = PATH_VIEW . "Nhacungcap/nhacungcap.php";
 
-        include PATH_VIEW . "tour/supplier/nhacungcap.php";
+        // load layout
+        include PATH_LAYOUT . "master.php";
     }
 
     // ======================
@@ -18,7 +22,11 @@ class SupplierController
     // ======================
     public function addSupplier()
     {
-        include PATH_VIEW . "tour/supplier/add.php";
+        // đường dẫn đúng
+        $view = PATH_VIEW . "Nhacungcap/add.php";
+
+        // load layout
+        include PATH_LAYOUT . "master.php";
     }
 
     // ======================
@@ -64,7 +72,13 @@ class SupplierController
         $model = new SupplierModel();
         $supplier = $model->findById($id);
 
-        include PATH_VIEW . "tour/supplier/edit.php";
+
+
+        // đường dẫn đúng
+        $view = PATH_VIEW . "Nhacungcap/edit.php";
+
+        // load layout
+        include PATH_LAYOUT . "master.php";
     }
 
     // ======================
@@ -120,4 +134,3 @@ class SupplierController
         }
     }
 }
-

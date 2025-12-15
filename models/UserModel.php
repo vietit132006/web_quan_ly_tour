@@ -137,6 +137,19 @@ ORDER BY u.full_name ASC
     }
 
 
+    public function getTourGuideUsers()
+{
+    $sql = "
+        SELECT id, full_name, email 
+        FROM users 
+        WHERE role_id = 3 AND status = 1
+        ORDER BY full_name
+    ";
+
+    return $this->query_all($sql);
+}
+
+
 
     //đăng nhập 
 

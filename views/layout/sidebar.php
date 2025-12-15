@@ -3,14 +3,16 @@ $currentAction = $_GET['action'] ?? 'home';
 $listActions = [
   ['label' => 'Tổng Quan', 'action' => ['home', '/'], 'icon' => 'bi-speedometer2'],
   ['label' => 'Quản Lý Tour', 'action' => ['tours'], 'icon' => 'bi-card-list'],
-  ['label' => 'Quản lý booking', 'action' => ['booking'], 'icon' => 'bi-bookmark-check-fill'],
-  ['label' => 'Lịch trình tour', 'action' => ['manage'], 'icon' => 'bi-calendar-check'],
-  ['label' => 'Quản lý người dùng', 'action' => ['roles_users'], 'icon' => 'bi-person-lines-fill']
+  ['label' => 'Đặt Tour', 'action' => ['booking'], 'icon' => 'bi-calendar-check'],
+  ['label' => 'Lịch trình tour', 'action' => ['manage'], 'icon' => 'bi-bookmark-check-fill'],
+  ['label' => 'Quản lý người dùng', 'action' => ['roles_users'], 'icon' => 'bi-person-lines-fill'],
+  ['label' => 'Đối tác', 'action' => ['nhacungcap'], 'icon' => 'bi-people']
 ];
 ?>
 
 <aside class="fixed top-16 left-0 bottom-0 w-64 bg-white shadow-lg overflow-y-auto">
   <nav class="p-4 space-y-2">
+
 
     <?php foreach ($listActions as $item): ?>
       <?php $isActive = in_array($currentAction, $item['action']); ?>
@@ -24,4 +26,6 @@ $listActions = [
       </a>
     <?php endforeach; ?>
   </nav>
+
 </aside>
+

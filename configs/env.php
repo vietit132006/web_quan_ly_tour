@@ -1,4 +1,5 @@
 <?php
+$config = require __DIR__ . '/config.php';
 define('BASE_URL', 'http://localhost/PHP1_BaseMVC_Exam/BaseMVC/');
 
 
@@ -6,6 +7,8 @@ define('BASE_URL', 'http://localhost/PHP1_BaseMVC_Exam/BaseMVC/');
 define('PATH_ROOT',         __DIR__ . '/../');
 
 define('PATH_VIEW',         PATH_ROOT . 'views/');
+
+define("PATH_LAYOUT", PATH_VIEW . "layout/");
 
 define('PATH_VIEW_MAIN',    PATH_ROOT . 'views/main.php');
 
@@ -23,7 +26,10 @@ define('DB_HOST',     'localhost');
 define('DB_PORT',     '3306');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
-define('DB_NAME',     'tour_management');
+
+
+define('DB_NAME',     $config['DB_NAME']);
+
 define('DB_OPTIONS', [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
