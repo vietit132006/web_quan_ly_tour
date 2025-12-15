@@ -5,6 +5,11 @@ require_once PATH_ROOT . 'models/TourLogModel.php';
 require_once PATH_ROOT . 'models/TourModel.php';
 require_once PATH_ROOT . 'models/BookingServiceModel.php';
 require_once PATH_ROOT . 'models/CustomerModel.php';
+require_once PATH_ROOT . 'models/PaymentModel.php';
+require_once PATH_ROOT . 'models/TourGroupModel.php';
+require_once PATH_ROOT . 'models/TourGuideModel.php';
+require_once PATH_ROOT . 'models/GuideModel.php';
+
 
 
 class BookingController
@@ -15,6 +20,11 @@ class BookingController
     protected $tourModel;
     protected $bookingServiceModel;
     protected $customerModel;
+    protected $paymentModel;
+    protected $tourGroupModel;
+    protected $tourGuideModel;
+    protected $guideModel;
+
 
 
     public function __construct()
@@ -25,6 +35,10 @@ class BookingController
         $this->logModel     = new TourLogModel();
         $this->tourModel    = new TourModel();
         $this->bookingServiceModel = new BookingServiceModel();
+        $this->paymentModel = new PaymentModel();
+        $this->tourGroupModel = new TourGroupModel();
+        $this->tourGuideModel = new TourGuideModel();
+        $this->guideModel = new GuideModel();
     }
 
     // =========================
@@ -44,48 +58,117 @@ class BookingController
     public function detail()
     {
         $id = $_GET['id'] ?? null;
-        if (!$id) {
-            die('Thiếu ID booking');
-        }
+        if (!$id) die('Thiếu ID booking');
 
-        // 1️⃣ LẤY BOOKING
+        // 1️⃣ Booking
         $booking = $this->bookingModel->find($id);
-        if (!$booking) {
-            die('Booking không tồn tại');
-        }
+        if (!$booking) die('Booking không tồn tại');
 
-        // 2️⃣ LẤY DANH SÁCH KHÁCH
-        // 2️⃣ LẤY DANH SÁCH KHÁCH (LUÔN LÀ MẢNG)
-        $customers = $this->guestModel->getByBooking($id) ?? [];
-
-        $guests = $this->guestModel->getByBooking($id) ?? [];
-
-
-
-        // 3️⃣ NHẬT KÝ
-        $logs = $this->logModel->getByBooking($id);
-
-        // 4️⃣ DỊCH VỤ
+        // 2️⃣ Related data
+        $guests   = $this->guestModel->getByBooking($id);
+        $payment  = $this->paymentModel->getByBooking($id);
+        $logs     = $this->logModel->getByBooking($id);
         $services = $this->bookingServiceModel->getByBooking($id);
 
-        // 5️⃣ 💰 TÍNH TIỀN
+        // 3️⃣ TÍNH TIỀN – CHỈ 1 NGUỒN DUY NHẤT
         $totalMoney = $this->bookingModel->calculateTotal($id);
 
-        $serviceTotal = 0;
-        foreach ($services as $s) {
-            $serviceTotal += $s['price'];
-        }
-
-        $totalMoney['service_price'] = $serviceTotal;
-        $totalMoney['total'] += $serviceTotal;
-
-        // 6️⃣ VIEW
+        // 4️⃣ View
         $view = PATH_VIEW . 'booking/detail.php';
         require PATH_VIEW . 'layout/master.php';
     }
 
 
+    public function createTourGroup()
+    {
+        $bookingId = $_GET['booking_id'] ?? null;
+        if (!$bookingId) die('Thiếu booking');
 
+        $booking = $this->bookingModel->find($bookingId);
+        $guides  = $this->tourGuideModel->getActiveGuides();
+
+        $view = PATH_VIEW . 'tour_group/create.php';
+        require PATH_VIEW . 'layout/master.php';
+    }
+
+    public function storeTourGroup()
+    {
+        $data = $_POST;
+
+        if (empty($data['guide_id'])) {
+            $_SESSION['error'] = 'Vui lòng chọn hướng dẫn viên';
+            header('Location: index.php?action=tour-group-create&booking_id=' . $data['booking_id']);
+            exit;
+        }
+
+        $this->tourGroupModel->create([
+            'booking_id'     => $data['booking_id'],
+            'tour_id'        => $data['tour_id'],
+            'guide_id'       => $data['guide_id'],
+            'start_date'     => $data['start_date'],
+            'end_date'       => $data['end_date'],
+            'total_days'     => $data['total_days'],
+            'departure_time' => $data['departure_time'],
+            'address'        => $data['address'],
+            'number_guests'  => $data['number_guests'],
+            'status'         => 'confirmed',
+            'note'           => $data['note'] ?? null
+        ]);
+
+        $_SESSION['success'] = 'Tạo tour group & gán hướng dẫn viên thành công';
+        header('Location: index.php?action=booking-detail&id=' . $data['booking_id']);
+        exit;
+    }
+
+    public function assignGuide()
+    {
+        $bookingId = $_GET['booking_id'] ?? null;
+        if (!$bookingId) die('Thiếu booking_id');
+
+        $booking = $this->bookingModel->find($bookingId);
+        if (!$booking) die('Booking không tồn tại');
+
+        $guides = $this->guideModel->getAllActiveGuides();
+
+        $view = PATH_VIEW . 'booking/assign_guide.php';
+        require PATH_VIEW . 'layout/master.php';
+    }
+
+
+
+    public function assignGuideStore()
+    {
+        $data = $_POST;
+
+        if (empty($data['booking_id']) || empty($data['guide_id'])) {
+            die('Thiếu dữ liệu');
+        }
+
+        $this->tourGroupModel->create([
+            'booking_id'     => $data['booking_id'],
+            'tour_id'        => $data['tour_id'],
+            'guide_id'       => $data['guide_id'],
+            'start_date'     => $data['start_date'],
+            'end_date'       => $data['end_date'],
+            'departure_time' => $data['departure_time'],
+            'total_days'     => $data['total_days'],
+            'address'        => $data['address'],
+            'number_guests'  => $data['number_guests'],
+            'status'         => 'confirmed',
+            'note'           => $data['note'] ?? null
+        ]);
+
+        $this->logModel->create(
+            $data['booking_id'],
+            'Gán hướng dẫn viên',
+            'Admin gán hướng dẫn viên cho booking',
+            $_SESSION['user']['id'] ?? null
+        );
+
+        $_SESSION['success'] = 'Gán hướng dẫn viên thành công';
+        header('Location: index.php?action=booking-detail&id=' . $data['booking_id']);
+        exit;
+    }
 
     // =========================
     // CẬP NHẬT TRẠNG THÁI
@@ -122,6 +205,7 @@ class BookingController
     {
         // Lấy danh sách tour
         $tours = $this->tourModel->getAllTours();
+        $guides = $this->guideModel->getAllActiveGuides();
 
         // Trạng thái mặc định cho booking mới
         $statuses = [
@@ -131,7 +215,6 @@ class BookingController
             'completed' => 'Hoàn thành'
         ];
 
-        // Load view
         $view = PATH_VIEW . 'booking/create.php';
         require PATH_VIEW . 'layout/master.php';
     }
@@ -204,6 +287,30 @@ class BookingController
             'status'      => $_POST['status'] ?? 'pending',
             'admin_note'  => $_POST['admin_note'] ?? null,
         ]);
+        // =========================
+        // 8️⃣ TÍNH TỔNG TIỀN (SAU KHI CÓ GUEST)
+        // =========================
+        $totalMoney = $this->bookingModel->calculateTotal($bookingId);
+
+        // fallback an toàn
+        $totalMoney = is_array($totalMoney)
+            ? $totalMoney
+            : [
+                'total' => (float)$totalMoney
+            ];
+
+        $amount = $totalMoney['total'] ?? 0;
+
+        // =========================
+        // 9️⃣ TẠO PAYMENT ĐẶT CỌC
+        // =========================
+        $this->paymentModel->create([
+            'booking_id' => $bookingId,
+            'method'     => $_POST['payment_method'] ?? 'cash',
+            'amount'     => $_POST['deposit_amount'] ?? 0,
+            'status'     => 'unpaid',
+            'note'       => 'Đặt cọc khi tạo booking'
+        ]);
 
         // =========================
         // 6️⃣ LƯU KHÁCH
@@ -227,45 +334,18 @@ class BookingController
         header('Location: index.php?action=booking-detail&id=' . $bookingId);
         exit;
     }
-
-    public function save_guest()
+    public function confirmPayment()
     {
-        // Lấy dữ liệu từ form
-        $booking_id = $_POST['booking_id'] ?? null;
-        $name = $_POST['name'] ?? null;
-        $phone = $_POST['phone'] ?? null;
-        $email = $_POST['email'] ?? null;
-        $age = $_POST['age'] ?? null;
-        $date_birth = $_POST['date_birth'] ?? null;
-        $sex = $_POST['sex'] ?? null;
-        $address = $_POST['address'] ?? null;
-        $identification = $_POST['identification'] ?? null;
-        $request = $_POST['request'] ?? null;
+        $bookingId = $_POST['booking_id'] ?? null;
+        if (!$bookingId) die('Thiếu booking ID');
 
-        if (!$booking_id || !$name) {
-            // Thiếu thông tin quan trọng
-            $_SESSION['error'] = "Tên khách và booking ID là bắt buộc!";
-            header("Location: /booking/view/$booking_id");
-            exit;
-        }
+        $this->paymentModel->markPaid(
+            $bookingId,
+            $_POST['note'] ?? 'Admin xác nhận thanh toán'
+        );
 
-        // Gọi model để lưu
-        $this->guestModel->addGuest([
-            'booking_id' => $booking_id,
-            'name' => $name,
-            'phone' => $phone,
-            'email' => $email,
-            'age' => $age,
-            'date_birth' => $date_birth,
-            'sex' => $sex,
-            'address' => $address,
-            'identification' => $identification,
-            'request' => $request
-        ]);
-
-
-        $_SESSION['success'] = "Thêm khách thành công!";
-        header('Location: index.php?action=booking-detail&id=' . $booking_id);
+        $_SESSION['success'] = 'Đã xác nhận thanh toán';
+        header('Location: index.php?action=booking-detail&id=' . $bookingId);
         exit;
     }
 }

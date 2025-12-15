@@ -67,6 +67,14 @@ match ($action) {
     // Booking
     'booking-create' => (new BookingController)->create(),
     'booking-store'  => (new BookingController)->store(),
+    // ===== GÁN HƯỚNG DẪN VIÊN =====
+    'booking-assign-guide'       => (new BookingController)->assignGuide(),
+    'booking-assign-guide-store' => (new BookingController)->assignGuideStore(),
+
+    'booking-assign-guide' => (new BookingController)->assignGuide(),
+    // Tour Group / Assign Guide
+    'tour-group-create' => (new GroupController)->create(),
+    'tour-group-store'  => (new GroupController)->store(),
 
 
 
@@ -81,7 +89,7 @@ match ($action) {
     'users_update'      => (new UserController)->updateUser(),
     'users_delete'      => (new UserController)->deleteUser(),
 
-   
+
     // Nhà cung cấp
     'nhacungcap'        => (new SupplierController)->listSuppliers(),
     'nhacungcap_add'    => (new SupplierController)->addSupplier(),
@@ -108,9 +116,9 @@ match ($action) {
 
 
     //HDV
-   'HDV'        => (new TourGuideController)->listTourGuide(),
-   'HDV_add'        => (new TourGuideController)->addTourGuide(),
-   'HDV_store'        => (new TourGuideController)->storeTourGuide(),
+    'HDV'        => (new TourGuideController)->listTourGuide(),
+    'HDV_add'        => (new TourGuideController)->addTourGuide(),
+    'HDV_store'        => (new TourGuideController)->storeTourGuide(),
 
 
 

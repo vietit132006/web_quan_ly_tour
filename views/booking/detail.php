@@ -73,6 +73,17 @@
         font-weight: 700;
     }
 
+    /* Thanh toán */
+    .payment-status-paid {
+        color: green;
+        font-weight: bold;
+    }
+
+    .payment-status-unpaid {
+        color: red;
+        font-weight: bold;
+    }
+
     /* Nhật ký */
     .booking-detail .log-item {
         padding: 10px 0;
@@ -97,50 +108,44 @@
         }
     }
 </style>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<div class="content-wrapper booking-detail">
-    <!-- toàn bộ code bạn gửi -->
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="content-wrapper booking-detail">
     <div class="container mt-4">
+        <!-- Nút quay lại -->
         <a href="index.php?action=booking" class="btn btn-secondary mb-3">⬅ Quay lại</a>
 
         <!-- ===== THÔNG TIN BOOKING ===== -->
         <div class="card mb-4">
-            <div class="card-header bg-success text-white d-flex justify-content-between">
-                <span>📌 Booking #<?= $booking['id'] ?></span>
+            <div class="card-header d-flex justify-content-between 
+                        <?= ($booking['status'] ?? '') === 'completed' ? 'bg-success text-white' : 'bg-light' ?>">
+                <span>📌 Booking #<?= htmlspecialchars($booking['id'] ?? '---') ?></span>
                 <span class="badge bg-light text-dark">
-                    <?= strtoupper($booking['status']) ?>
+                    <?= strtoupper($booking['status'] ?? 'PENDING') ?>
                 </span>
             </div>
-
             <div class="card-body row">
                 <div class="col-md-6">
-                    <p><strong>Khách hàng:</strong> <?= htmlspecialchars($booking['customer_name']) ?></p>
-                    <p><strong>SĐT:</strong> <?= htmlspecialchars($booking['customer_phone']) ?></p>
-                    <p><strong>Email:</strong> <?= htmlspecialchars($booking['customer_email']) ?></p>
-
+                    <p><strong>Khách hàng:</strong> <?= htmlspecialchars($booking['customer_name'] ?? '---') ?></p>
+                    <p><strong>SĐT:</strong> <?= htmlspecialchars($booking['customer_phone'] ?? '---') ?></p>
+                    <p><strong>Email:</strong> <?= htmlspecialchars($booking['customer_email'] ?? '---') ?></p>
                     <p>
                         <strong>Số người:</strong>
-                        <?= count($guests) ?> người
-
-                        <?php if (count($guests) < 5): ?>
+                        <?= isset($guests) ? count($guests) : 0 ?> người
+                        <?php if (isset($guests) && count($guests) < 5): ?>
                             <span class="text-danger">(Chưa đủ 5 khách)</span>
                         <?php endif; ?>
                     </p>
-
-
-
                 </div>
-
-
                 <div class="col-md-6">
-                    <p><strong>Tour:</strong> <?= $booking['tour_name'] ?></p>
+                    <p><strong>Tour:</strong> <?= htmlspecialchars($booking['tour_name'] ?? '---') ?></p>
                     <p><strong>Ngày tạo:</strong>
-                        <?= date('d/m/Y H:i', strtotime($booking['created_at'])) ?>
+                        <?= isset($booking['created_at']) ? date('d/m/Y H:i', strtotime($booking['created_at'])) : '---' ?>
                     </p>
                     <p><strong>Ghi chú:</strong><br>
-                        <?= nl2br($booking['admin_note'] ?? '—') ?>
+                        <?= nl2br(htmlspecialchars($booking['admin_note'] ?? '—')) ?>
                     </p>
                 </div>
             </div>
@@ -151,17 +156,18 @@
             <div class="card-header bg-warning">⚙️ Cập nhật trạng thái</div>
             <div class="card-body">
                 <form method="post" action="index.php?action=booking-update" class="row g-3">
-                    <input type="hidden" name="id" value="<?= $booking['id'] ?>">
-
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($booking['id'] ?? '') ?>">
                     <div class="col-md-4">
                         <select name="status" class="form-select">
-                            <option value="pending" <?= $booking['status'] == 'pending' ? 'selected' : '' ?>>Chờ xác nhận</option>
-                            <option value="confirmed" <?= $booking['status'] == 'confirmed' ? 'selected' : '' ?>>Đã xác nhận</option>
-                            <option value="completed" <?= $booking['status'] == 'completed' ? 'selected' : '' ?>>Hoàn thành</option>
-                            <option value="cancelled" <?= $booking['status'] == 'cancelled' ? 'selected' : '' ?>>Huỷ</option>
+                            <?php
+                            $statuses = ['pending' => 'Chờ xác nhận', 'confirmed' => 'Đã xác nhận', 'completed' => 'Hoàn thành', 'cancelled' => 'Huỷ'];
+                            $currentStatus = $booking['status'] ?? 'pending';
+                            foreach ($statuses as $key => $label):
+                            ?>
+                                <option value="<?= $key ?>" <?= $currentStatus === $key ? 'selected' : '' ?>><?= $label ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
-
                     <div class="col-md-3">
                         <button class="btn btn-success">Cập nhật</button>
                     </div>
@@ -169,23 +175,24 @@
             </div>
         </div>
 
+
+
+
+
         <!-- ===== DANH SÁCH KHÁCH ===== -->
         <div class="card mb-4">
             <div class="card-header bg-info text-white">
-                👥 Danh sách khách (<?= count($guests) ?> người)
+                👥 Danh sách khách (<?= isset($guests) ? count($guests) : 0 ?> người)
             </div>
-
             <div class="card-body">
                 <?php if (!empty($guests) && is_array($guests)): ?>
                     <ul class="list-group list-group-flush">
                         <?php foreach ($guests as $g): ?>
                             <li class="list-group-item">
-                                <div class="fw-semibold"><?= htmlspecialchars($g['name']) ?></div>
+                                <div class="fw-semibold"><?= htmlspecialchars($g['name'] ?? '---') ?></div>
                                 <small class="text-muted">
                                     <?= $g['phone'] ?? '—' ?>
-                                    <?php if (!empty($g['email'])): ?>
-                                        · <?= $g['email'] ?>
-                                    <?php endif; ?>
+                                    <?= !empty($g['email']) ? '· ' . htmlspecialchars($g['email']) : '' ?>
                                 </small>
                             </li>
                         <?php endforeach; ?>
@@ -196,19 +203,17 @@
             </div>
         </div>
 
-
         <!-- ===== DỊCH VỤ ===== -->
         <div class="card mb-4">
             <div class="card-header bg-primary text-white">🧾 Dịch vụ sử dụng</div>
             <div class="card-body">
-                <?php if (!empty($services)): ?>
+                <?php if (!empty($services) && is_array($services)): ?>
                     <ul class="list-group">
                         <?php foreach ($services as $s): ?>
                             <li class="list-group-item">
-                                <?= $s['name'] ?>
-                                — <?= number_format($s['price']) ?>đ
+                                <?= htmlspecialchars($s['name'] ?? '---') ?>
+                                — <?= number_format($s['price'] ?? 0) ?>đ
                             </li>
-
                         <?php endforeach; ?>
                     </ul>
                 <?php else: ?>
@@ -216,38 +221,39 @@
                 <?php endif; ?>
             </div>
         </div>
+
         <!-- 💰 TỔNG TIỀN -->
         <hr>
         <h5 class="mt-4">💰 Chi phí</h5>
+        <p><strong>Giá tour:</strong> <?= number_format($totalMoney['tour_price'] ?? 0) ?>đ</p>
+        <p><strong>Dịch vụ:</strong> <?= number_format($totalMoney['service_price'] ?? 0) ?>đ</p>
+        <p class="total-price text-danger">Tổng cộng: <?= number_format($totalMoney['total'] ?? 0) ?>đ</p>
 
-        <p>
-            <strong>Giá tour:</strong>
-            <?= number_format($totalMoney['tour_price'] ?? 0) ?>đ
+        <!-- Thanh toán -->
+        <h3>Thanh toán</h3>
+        <p>Phương thức: <b><?= strtoupper($payment['method'] ?? '---') ?></b></p>
+        <p>Số tiền: <b><?= number_format($payment['amount'] ?? 0) ?> VNĐ</b></p>
+        <p>Trạng thái:
+            <b class="<?= ($payment['status'] ?? '') === 'paid' ? 'payment-status-paid' : 'payment-status-unpaid' ?>">
+                <?= $payment['status'] ?? '---' ?>
+            </b>
         </p>
-
-        <p>
-            <strong>Dịch vụ:</strong>
-            <?= number_format($totalMoney['service_price'] ?? 0) ?>đ
-        </p>
-
-        <p class="fw-bold text-danger">
-            Tổng cộng:
-            <?= number_format($totalMoney['total'] ?? 0) ?>đ
-        </p>
-
-
+        <?php if (!empty($payment['paid_at'])): ?>
+            <p>Thời gian thanh toán: <?= date('d/m/Y H:i', strtotime($payment['paid_at'])) ?></p>
+        <?php endif; ?>
+        <?php if (!empty($payment['note'])): ?>
+            <p>Ghi chú: <?= nl2br(htmlspecialchars($payment['note'])) ?></p>
+        <?php endif; ?>
 
         <!-- ===== NHẬT KÝ ===== -->
         <div class="card">
             <div class="card-header bg-dark text-white">📘 Nhật ký tour</div>
             <div class="card-body">
-                <?php if (!empty($logs)): ?>
+                <?php if (!empty($logs) && is_array($logs)): ?>
                     <?php foreach ($logs as $log): ?>
-                        <p>
-                            <small class="text-muted">
-                                <?= date('d/m/Y H:i', strtotime($log['created_at'])) ?>
-                            </small><br>
-                            <?= $log['content'] ?>
+                        <p class="log-item">
+                            <small><?= date('d/m/Y H:i', strtotime($log['created_at'] ?? '')) ?></small><br>
+                            <?= htmlspecialchars($log['content'] ?? '---') ?>
                         </p>
                         <hr>
                     <?php endforeach; ?>
@@ -258,3 +264,7 @@
         </div>
     </div>
 </div>
+<a href="index.php?action=booking-assign-guide&booking_id=<?= $booking['id'] ?>"
+    class="btn btn-warning">
+    👨‍✈️ Gán hướng dẫn viên
+</a>
