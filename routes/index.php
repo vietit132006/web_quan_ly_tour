@@ -1,5 +1,10 @@
 
 <?php
+// Bật hiển thị tất cả lỗi PHP (chỉ dùng trong môi trường phát triển)
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once __DIR__ . '/../models/DB.php';
 require_once __DIR__ . '/../models/BaseModel.php';
 require_once __DIR__ . '/../controllers/HomeController.php';
@@ -81,7 +86,7 @@ match ($action) {
     'users_update'      => (new UserController)->updateUser(),
     'users_delete'      => (new UserController)->deleteUser(),
 
-   
+
     // Nhà cung cấp
     'nhacungcap'        => (new SupplierController)->listSuppliers(),
     'nhacungcap_add'    => (new SupplierController)->addSupplier(),

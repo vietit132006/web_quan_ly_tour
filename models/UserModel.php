@@ -3,116 +3,115 @@ class UserModel extends BaseModel
 {
     protected $table = "users";
 
+    /* =========================
+        LẤY DANH SÁCH USER
+    ========================= */
     public function getAllUsers()
     {
-        // Lấy tất cả các cột cần thiết, sắp xếp theo ngày tạo mới nhất
-        $sql = "SELECT 
-    users.id,
-    users.username,
-    users.password_hash,
-    users.full_name,
-    users.email,
-    users.phone,
-    users.role_id,
-    users.avatar,
-    users.status,
-    users.last_login,
-    users.created_at,
-
-    roles.name AS role_name,
-    roles.description AS role_description,
-    roles.created_at AS role_created_at
-
-FROM users
-LEFT JOIN roles 
-       ON users.role_id = roles.id;";
+        $sql = "
+            SELECT 
+                u.id, u.username, u.full_name, u.email, u.phone, u.role_id, u.avatar, u.status, u.created_at,
+                r.name AS role_name, r.description AS role_description
+            FROM users u
+            LEFT JOIN roles r ON u.role_id = r.id
+            ORDER BY u.created_at DESC
+        ";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /* =========================
+        LẤY USER THEO ID
+    ========================= */
     public function getUserById($id)
     {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE id = :id");
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    /* =========================
+        TẠO USER MỚI
+    ========================= */
     public function createUser($data)
     {
-        $sql = "INSERT INTO users 
-            (username, password_hash, full_name, email, phone, role_id, avatar, status, created_at)
+        $sql = "
+            INSERT INTO {$this->table} 
+                (username, password_hash, full_name, email, phone, role_id, avatar, status, created_at)
             VALUES 
-            (:username, :password_hash, :full_name, :email, :phone, :role_id, :avatar, :status, NOW())";
-
+                (:username, :password_hash, :full_name, :email, :phone, :role_id, :avatar, :status, NOW())
+        ";
         $stmt = $this->pdo->prepare($sql);
-
-        return $stmt->execute([
+        $result = $stmt->execute([
             ':username'      => $data['username'],
             ':password_hash' => password_hash($data['password'], PASSWORD_DEFAULT),
             ':full_name'     => $data['full_name'],
             ':email'         => $data['email'],
             ':phone'         => $data['phone'],
-            ':role_id'       => $data['role_id'],
+            ':role_id'       => $data['role_id'] ?? 2, // 2 = Guide mặc định
             ':avatar'        => $data['avatar'] ?? null,
-            ':status'        => $data['status'] ?? 1,
+            ':status'        => $data['status'] ?? 1
         ]);
+
+        if ($result) {
+            return $this->pdo->lastInsertId(); // trả về ID user mới tạo
+        }
+        return false;
     }
+
+    /* =========================
+        CẬP NHẬT USER
+    ========================= */
     public function updateUser($id, $data)
     {
-        $fields = "";
-
+        $fields = [];
+        $params = [];
         foreach ($data as $key => $value) {
-            $fields .= "$key = :$key,";
+            $fields[] = "$key = :$key";
+            $params[":$key"] = $value;
         }
+        $params[':id'] = $id;
 
-        $fields = rtrim($fields, ",");
-
-        $sql = "UPDATE {$this->table} SET $fields WHERE id = :id";
-
+        $sql = "UPDATE {$this->table} SET " . implode(', ', $fields) . " WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
-
-        $data['id'] = $id;
-
-        return $stmt->execute($data);
+        return $stmt->execute($params);
     }
+
+    /* =========================
+        XÓA USER (kèm tour_guides)
+    ========================= */
     public function deleteUser($id)
     {
         try {
             $this->pdo->beginTransaction();
 
-            // 1) Xóa bảng con trước (ví dụ tour_guides)
-            $sql1 = "DELETE FROM tour_guides WHERE user_id = :id";
-            $stmt1 = $this->pdo->prepare($sql1);
+            // Xóa HDV nếu có
+            $stmt1 = $this->pdo->prepare("DELETE FROM tour_guides WHERE user_id = :id");
             $stmt1->execute(['id' => $id]);
 
-            // Nếu còn bảng khác tham chiếu users, xóa tương tự:
-            // $this->pdo->prepare("DELETE FROM bookings WHERE user_id = :id")->execute(['id' => $id]);
-
-            // 2) Xóa user
-            $sql2 = "DELETE FROM {$this->table} WHERE id = :id";
-            $stmt2 = $this->pdo->prepare($sql2);
+            // Xóa user
+            $stmt2 = $this->pdo->prepare("DELETE FROM {$this->table} WHERE id = :id");
             $stmt2->execute(['id' => $id]);
 
             $this->pdo->commit();
             return true;
         } catch (PDOException $e) {
             $this->pdo->rollBack();
-            // Log lỗi nếu cần
             return false;
         }
     }
 
-
-
-    //role
+    /* =========================
+        LẤY DANH SÁCH ROLE
+    ========================= */
     public function getAllRoles()
     {
-        // Lấy tất cả các cột cần thiết, sắp xếp theo ngày tạo mới nhất
-        $sql = "SELECT id, name, description ,created_at FROM roles ORDER BY created_at DESC";
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare("SELECT id, name, description, created_at FROM roles ORDER BY created_at DESC");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
     public function getRoleById($id)
     {
         $stmt = $this->pdo->prepare("SELECT * FROM roles WHERE id = :id");
@@ -120,56 +119,50 @@ LEFT JOIN roles
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Hướng dẫn viên
+    /* =========================
+        LẤY DANH SÁCH HDV
+    ========================= */
     public function getAllGuides()
     {
-        // Giả sử role_id = 3 là hướng dẫn viên
-        $sql = "SELECT tg.id AS guide_id, u.full_name, u.email, u.phone
-FROM tour_guides tg
-JOIN users u ON tg.user_id = u.id
-WHERE tg.status = 1
-ORDER BY u.full_name ASC
-";
-
+        $sql = "
+            SELECT tg.id AS guide_id, u.id AS user_id, u.full_name, u.email, u.phone
+            FROM tour_guides tg
+            JOIN users u ON tg.user_id = u.id
+            WHERE u.role_id = 2 AND tg.status = 1
+            ORDER BY u.full_name ASC
+        ";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
-    public function getTourGuideUsers()
-{
-    $sql = "
-        SELECT id, full_name, email 
-        FROM users 
-        WHERE role_id = 3 AND status = 1
-        ORDER BY full_name
-    ";
-
-    return $this->query_all($sql);
-}
-
-
-
-    //đăng nhập 
-
-
-
+    /* =========================
+        LẤY USER THEO USERNAME (ĐĂNG NHẬP)
+    ========================= */
     public function getUserByUsername($username)
     {
-        $sql = "SELECT users.*, roles.name AS role_name 
-                FROM users 
-                LEFT JOIN roles ON users.role_id = roles.id
-                WHERE username = ?";
+        $sql = "
+            SELECT u.*, r.name AS role_name 
+            FROM users u
+            LEFT JOIN roles r ON u.role_id = r.id
+            WHERE u.username = :username
+        ";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$username]);
-        return $stmt->fetch();
+        $stmt->execute([':username' => $username]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    /* =========================
+        CẬP NHẬT LẦN ĐĂNG NHẬP CUỐI
+    ========================= */
     public function updateLastLogin($id)
     {
-        $sql = "UPDATE users SET last_login = NOW() WHERE id = ?";
-        $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([$id]);
+        $stmt = $this->pdo->prepare("UPDATE users SET last_login = NOW() WHERE id = :id");
+        return $stmt->execute([':id' => $id]);
+    }
+
+    public function getLastInsertId()
+    {
+        return $this->pdo->lastInsertId();
     }
 }

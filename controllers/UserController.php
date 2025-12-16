@@ -21,10 +21,10 @@ class UserController
 
         $view = PATH_VIEW . "roles_users/user_add.php";
         require_once PATH_VIEW . "layout/master.php";
+        // Sau khi tạo user
     }
 
 
-    // Xử lý thêm vào DB
     public function storeUser()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -37,16 +37,26 @@ class UserController
                 'phone'     => $_POST['phone'],
                 'role_id'   => $_POST['role_id'],
                 'status'    => $_POST['status'] ?? 1,
-                'avatar'    => $_POST['avatar'] ?? null // LẤY URL
+                'avatar'    => $_POST['avatar'] ?? null
             ];
 
             $userModel = new UserModel();
-            $userModel->createUser($data);
+            $userId = $userModel->createUser($data);
+
+            if (!$userId) {
+                die('Tạo user thất bại.');
+            }
+
+            // Nếu muốn, thêm vào bảng tour_guides
+            // $guideModel = new GuideModel();
+            // $guideModel->insert(['user_id' => $userId, ...]);
 
             header("Location: index.php?action=users");
             exit;
         }
     }
+
+
     // Hiển thị form sửa
     public function editUser()
     {
