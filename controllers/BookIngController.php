@@ -54,7 +54,7 @@ class BookingController
         $bookings = $this->bookingModel->getAll($status);
 
         $view = PATH_VIEW . 'booking/index.php';
-        require PATH_VIEW . 'layout/master.php';
+        require PATH_VIEW . 'layout/admin/master.php';
     }
     // =========================
     // CHI TIẾT BOOKING
@@ -82,7 +82,7 @@ class BookingController
 
         // 4️⃣ View
         $view = PATH_VIEW . 'booking/detail.php';
-        require PATH_VIEW . 'layout/master.php';
+        require PATH_VIEW . 'layout/admin/master.php';
     }
 
 
@@ -95,7 +95,7 @@ class BookingController
         $guides  = $this->tourGuideModel->getActiveGuides();
 
         $view = PATH_VIEW . 'tour_group/create.php';
-        require PATH_VIEW . 'layout/master.php';
+        require PATH_VIEW . 'layout/admin/master.php';
     }
 
     public function storeTourGroup()
@@ -138,7 +138,7 @@ class BookingController
         $guides = $this->guideModel->getAllActiveGuides();
 
         $view = PATH_VIEW . 'booking/assign_guide.php';
-        require PATH_VIEW . 'layout/master.php';
+        require PATH_VIEW . 'layout/admin/master.php';
     }
 
 
@@ -222,7 +222,7 @@ class BookingController
         ];
 
         $view = PATH_VIEW . 'booking/create.php';
-        require PATH_VIEW . 'layout/master.php';
+        require PATH_VIEW . 'layout/admin/master.php';
     }
 
 

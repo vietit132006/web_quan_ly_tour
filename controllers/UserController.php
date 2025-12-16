@@ -9,7 +9,7 @@ class UserController
         $roles = $userModel->getAllRoles();
 
         $view = PATH_VIEW . "roles_users/roles_users.php";
-        require_once PATH_VIEW . "layout/master.php";
+        require_once PATH_VIEW . "layout/admin/master.php";
     }
 
 
@@ -20,7 +20,7 @@ class UserController
         $roles = $userModel->getAllRoles();
 
         $view = PATH_VIEW . "roles_users/user_add.php";
-        require_once PATH_VIEW . "layout/master.php";
+        require_once PATH_VIEW . "layout/admin/master.php";
     }
 
 
@@ -61,7 +61,7 @@ class UserController
         $roles = $userModel->getAllRoles();
 
         $view = PATH_VIEW . "roles_users/user_edit.php";
-        require_once PATH_VIEW . "layout/master.php";
+        require_once PATH_VIEW . "layout/admin/master.php";
     }
 
 

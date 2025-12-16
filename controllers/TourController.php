@@ -31,7 +31,7 @@ class TourController
         $tourCategories = $categoryModel->getAll();
 
         $view = PATH_VIEW . "Tour/quan-ly-tour.php";
-        require PATH_VIEW . "layout/master.php";
+        require PATH_VIEW . "layout/admin/master.php";
     }
 
 
@@ -49,7 +49,7 @@ class TourController
         $images = [];
 
         $view = PATH_VIEW . "Tour/tour-form.php";
-        require PATH_VIEW . "layout/master.php";
+        require PATH_VIEW . "layout/admin/master.php";
     }
 
 
@@ -161,7 +161,7 @@ class TourController
         $isEdit = true;
 
         $view = PATH_VIEW . "Tour/tour-form.php";
-        require PATH_VIEW . "layout/master.php";
+        require PATH_VIEW . "layout/admin/master.php";
     }
 
 

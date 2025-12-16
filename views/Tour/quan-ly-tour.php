@@ -248,19 +248,18 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <div id="tour-page">
     <!-- ======================== FORM THÊM / SỬA ======================== -->
+
     <div class="card mb-4">
-        <a href="index.php?action=tour-create" class="btn btn-success mb-3">
+
+        <a href="index.php?action=tour-create" class="btn btn-success">
             <i class="bi bi-plus-circle"></i> Thêm tour mới
         </a>
 
 
-        <div class="card-body">
 
-
-
-            <script>
-                function addItinerary() {
-                    const box = `
+        <script>
+            function addItinerary() {
+                const box = `
         <div class="border rounded p-3 mb-2">
             <label>Ngày:</label>
             <input type="number" name="days[]" class="form-control mb-2">
@@ -272,12 +271,12 @@
             <textarea name="contents[]" class="form-control"></textarea>
         </div>
     `;
-                    document.getElementById('itinerary-list').insertAdjacentHTML('beforeend', box);
-                }
-            </script>
+                document.getElementById('itinerary-list').insertAdjacentHTML('beforeend', box);
+            }
+        </script>
 
 
-        </div>
+
     </div>
 
 
