@@ -1,41 +1,31 @@
 <?php
 
-class TourGuideModel extends BaseModel 
+class TourGuideModel extends BaseModel
 {
     protected $table = "tour_guides";
 
-    // Lấy danh sách hướng dẫn viên
-    public function getAllTourGuides() 
+    /* =========================
+        DANH SÁCH HDV
+    ========================= */
+    public function getAll()
     {
-        $sql = "SELECT 
-            tour_guides.id,
-            tour_guides.user_id,
-            tour_guides.date_birth,
-            tour_guides.avata_id,
-            tour_guides.phone,
-            tour_guides.history,
-            tour_guides.evaluate,
-            tour_guides.health,
-            tour_guides.certificate,
-            tour_guides.license_number,
-            tour_guides.license_expiry,
-            tour_guides.experience_years,
-            tour_guides.language,
-            tour_guides.classify,
-            tour_guides.status,
+        $sql = "
+            SELECT 
+                tg.id AS guide_id,
+                tg.avata_id,
+                tg.phone,
+                tg.experience_years,
+                tg.language,
+                tg.classify,
+                tg.status,
 
-            users.full_name AS user_full_name,
-            users.email AS user_email,
-            tour_guides.avata_id AS avatar,
-
-
-            roles.name AS role_name,
-            roles.description AS role_description
-
-        FROM tour_guides
-        LEFT JOIN users ON tour_guides.user_id = users.id
-        LEFT JOIN roles ON users.role_id = roles.id
-        ORDER BY tour_guides.id DESC";
+                u.full_name,
+                u.email
+            FROM tour_guides tg
+            JOIN users u ON tg.user_id = u.id
+            WHERE u.role_id =2
+            ORDER BY tg.id DESC
+        ";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
@@ -43,19 +33,20 @@ class TourGuideModel extends BaseModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
-    // Lấy thông tin 1 hướng dẫn viên
-    public function getTourGuideById($id)
+    /* =========================
+        CHI TIẾT 1 HDV
+    ========================= */
+    public function findById($id)
     {
-        $sql = "SELECT 
-                tour_guides.*,
-                users.full_name AS user_full_name,
-                users.email AS user_email,
-                roles.name AS role_name
-            FROM tour_guides
-            LEFT JOIN users ON tour_guides.user_id = users.id
-            LEFT JOIN roles ON users.role_id = roles.id
-            WHERE tour_guides.id = :id";
+        $sql = "
+            SELECT 
+                tg.*,
+                u.full_name,
+                u.email
+            FROM tour_guides tg
+            JOIN users u ON tg.user_id = u.id
+            WHERE tg.id = :id
+        ";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
@@ -63,86 +54,81 @@ class TourGuideModel extends BaseModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-
-    // Tạo mới hướng dẫn viên
-    public function createTourGuide($data)
+    /* =========================
+        THÊM HDV
+    ========================= */
+    public function insert($data)
     {
-        $sql = "INSERT INTO tour_guides 
-                (user_id, date_birth, avata_id, phone, history, evaluate, health, certificate, 
-                 license_number, license_expiry, experience_years, language, classify, status)
-                VALUES
-                (:user_id, :date_birth, :avata_id, :phone, :history, :evaluate, :health, :certificate,
-                 :license_number, :license_expiry, :experience_years, :language, :classify, :status)";
+        $sql = "
+            INSERT INTO tour_guides
+            (user_id, date_birth, avata_id, phone, history, evaluate, health,
+             certificate, license_number, license_expiry,
+             experience_years, language, classify, status)
+            VALUES
+            (:user_id, :date_birth, :avata_id, :phone, :history, :evaluate, :health,
+             :certificate, :license_number, :license_expiry,
+             :experience_years, :language, :classify, 1)
+        ";
 
         $stmt = $this->pdo->prepare($sql);
 
         return $stmt->execute([
-            ':user_id'         => $data['user_id'],
-            ':date_birth'      => $data['date_birth'],
-            ':avata_id'       => $data['avata_id'] ?? null,
-            ':phone'           => $data['phone'],
-            ':history'         => $data['history'] ?? null,
-            ':evaluate'        => $data['evaluate'] ?? null,
-            ':health'          => $data['health'] ?? null,
-            ':certificate'     => $data['certificate'] ?? null,
-            ':license_number'  => $data['license_number'],
-            ':license_expiry'  => $data['license_expiry'],
-            ':experience_years'=> $data['experience_years'],
-            ':language'        => $data['language'],
-            ':classify'        => $data['classify'],
-            ':status'          => $data['status'] ?? 1
+            ':user_id'          => $data['user_id'],
+            ':date_birth'       => $data['date_birth'] ?? null,
+            ':avata_id'         => $data['avata_id'] ?? null,
+            ':phone'            => $data['phone'],
+            ':history'          => $data['history'] ?? null,
+            ':evaluate'         => $data['evaluate'] ?? null,
+            ':health'           => $data['health'] ?? null,
+            ':certificate'      => $data['certificate'] ?? null,
+            ':license_number'   => $data['license_number'] ?? null,
+            ':license_expiry'   => $data['license_expiry'] ?? null,
+            ':experience_years' => $data['experience_years'],
+            ':language'         => $data['language'],
+            ':classify'         => $data['classify']
         ]);
     }
 
-
-    // Cập nhật hướng dẫn viên
-    public function updateTourGuide($id, $data)
+    /* =========================
+        CẬP NHẬT HDV
+    ========================= */
+    public function update($id, $data)
     {
-        $sql = "UPDATE tour_guides SET
-                    user_id = :user_id,
-                    date_birth = :date_birth,
-                    avata_id = :avatar_id,
-                    phone = :phone,
-                    history = :history,
-                    evaluate = :evaluate,
-                    health = :health,
-                    certificate = :certificate,
-                    license_number = :license_number,
-                    license_expiry = :license_expiry,
-                    experience_years = :experience_years,
-                    language = :language,
-                    classify = :classify,
-                    status = :status
-                WHERE id = :id";
+        $sql = "
+            UPDATE tour_guides SET
+                phone = :phone,
+                experience_years = :experience_years,
+                language = :language,
+                classify = :classify,
+                evaluate = :evaluate,
+                health = :health,
+                status = :status
+            WHERE id = :id
+        ";
 
         $stmt = $this->pdo->prepare($sql);
 
         return $stmt->execute([
-            ':user_id'         => $data['user_id'],
-            ':date_birth'      => $data['date_birth'],
-            ':avata_id'       => $data['avatar_id'] ?? null,
-            ':phone'           => $data['phone'],
-            ':history'         => $data['history'] ?? null,
-            ':evaluate'        => $data['evaluate'] ?? null,
-            ':health'          => $data['health'] ?? null,
-            ':certificate'     => $data['certificate'] ?? null,
-            ':license_number'  => $data['license_number'],
-            ':license_expiry'  => $data['license_expiry'],
-            ':experience_years'=> $data['experience_years'],
-            ':language'        => $data['language'],
-            ':classify'        => $data['classify'],
-            ':status'          => $data['status'],
-            ':id'              => $id
+            ':phone'            => $data['phone'],
+            ':experience_years' => $data['experience_years'],
+            ':language'         => $data['language'],
+            ':classify'         => $data['classify'],
+            ':evaluate'         => $data['evaluate'] ?? null,
+            ':health'           => $data['health'] ?? null,
+            ':status'           => $data['status'] ?? 1,
+            ':id'               => $id
         ]);
     }
 
-
-    // Xóa hướng dẫn viên
-    public function deleteTourGuide($id)
+    /* =========================
+        XÓA HDV
+    ========================= */
+    public function delete($id)
     {
-        $stmt = $this->pdo->prepare("DELETE FROM tour_guides WHERE id = :id");
+        $stmt = $this->pdo->prepare(
+            "DELETE FROM tour_guides WHERE id = :id"
+        );
+
         return $stmt->execute(['id' => $id]);
     }
 }
-
-?>

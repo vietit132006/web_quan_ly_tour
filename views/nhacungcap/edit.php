@@ -1,44 +1,224 @@
-<h2>Sửa nhà cung cấp</h2>
+<style>
+    
+/* ===========================
+   🌐 THEME – NHÀ CUNG CẤP (ADD)
+=========================== */
+:root {
+    --primary: #06a3c9;
+    --primary-dark: #008bb0;
+    --text-dark: #2c3e50;
+    --bg-card: #ffffff;
+    --bg-hover: #eefaff;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    --transition: all 0.25s ease;
+}
 
-<form action="index.php?action=nhacungcap_update" method="POST">
+/* ===========================
+   📦 FORM WRAPPER
+=========================== */
+.ncc-content {
+    max-width: 1000px;
+    margin: 30px auto;
+    background: var(--bg-card);
+    padding: 28px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
 
-    <input type="hidden" name="id" value="<?= $supplier['id'] ?>">
+.ncc-content h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--primary);
+}
 
-    <label>Tên NCC:</label><br>
-    <input type="text" name="name" value="<?= $supplier['name'] ?>"><br><br>
+/* ===========================
+   🏷 LABEL & INPUT
+=========================== */
+.ncc-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+    display: block;
+}
 
-    <label>Loại:</label><br>
-    <input type="text" name="type" value="<?= $supplier['type'] ?>"><br><br>
+.ncc-input {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid #e1e6ef;
+    font-size: 14px;
+    transition: var(--transition);
+    background: #fff;
+}
 
-    <label>Người liên hệ:</label><br>
-    <input type="text" name="contact_person" value="<?= $supplier['contact_person'] ?>"><br><br>
+.ncc-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(6, 163, 201, 0.15);
+}
 
-    <label>Điện thoại:</label><br>
-    <input type="text" name="phone" value="<?= $supplier['phone'] ?>"><br><br>
+textarea.ncc-input {
+    resize: vertical;
+}
 
-    <label>Email:</label><br>
-    <input type="email" name="email" value="<?= $supplier['email'] ?>"><br><br>
+/* ===========================
+   🎛 BUTTONS
+=========================== */
+.ncc-add-btn {
+    background: var(--primary);
+    border: none;
+    padding: 10px 22px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    color: #fff;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
 
-    <label>Địa chỉ:</label><br>
-    <input type="text" name="address" value="<?= $supplier['address'] ?>"><br><br>
+.ncc-add-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
 
-    <label>Số hợp đồng:</label><br>
-    <input type="text" name="contract_number" value="<?= $supplier['contract_number'] ?>"><br><br>
+.ncc-btn-cancel {
+    padding: 10px 22px;
+    border-radius: var(--radius-sm);
+    background: #eef1f5;
+    color: var(--text-dark);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+}
 
-    <label>Ngày bắt đầu hợp đồng:</label><br>
-    <input type="date" name="contract_start" value="<?= $supplier['contract_start'] ?>"><br><br>
+.ncc-btn-cancel:hover {
+    background: #dfe4ea;
+}
+</style>
+<!-- Bootstrap CSS -->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+>
 
-    <label>Ngày kết thúc hợp đồng:</label><br>
-    <input type="date" name="contract_end" value="<?= $supplier['contract_end'] ?>"><br><br>
+<!-- Bootstrap Icons -->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+  rel="stylesheet"
+>
+<!-- CSS riêng cho Quản lý Nhà Cung Cấp -->
+<link rel="stylesheet" href="assets/css/nhacungcap.css">
+<div class="ncc-content">
+    <h3>Sửa nhà cung cấp</h3>
 
-    <label>Đánh giá:</label><br>
-    <input type="number" name="rating" value="<?= $supplier['rating'] ?>"><br><br>
+    <form action="index.php?action=nhacungcap_update" method="POST">
+        <input type="hidden" name="id" value="<?= htmlspecialchars($supplier['id']) ?>">
 
-    <label>Ghi chú:</label><br>
-    <textarea name="note"><?= $supplier['note'] ?></textarea><br><br>
+        <div class="row g-3">
 
-    <button type="submit">Cập nhật</button>
-</form>
+            <div class="col-md-6">
+                <label class="ncc-label">Tên NCC</label>
+                <input type="text"
+                       name="name"
+                       class="ncc-input"
+                       value="<?= htmlspecialchars($supplier['name']) ?>"
+                       required>
+            </div>
 
-<br>
-<a href="index.php?action=nhacungcap">Quay lại</a>
+            <div class="col-md-6">
+                <label class="ncc-label">Loại</label>
+                <input type="text"
+                       name="type"
+                       class="ncc-input"
+                       value="<?= htmlspecialchars($supplier['type']) ?>">
+            </div>
+
+            <div class="col-md-6">
+                <label class="ncc-label">Người liên hệ</label>
+                <input type="text"
+                       name="contact_person"
+                       class="ncc-input"
+                       value="<?= htmlspecialchars($supplier['contact_person']) ?>">
+            </div>
+
+            <div class="col-md-6">
+                <label class="ncc-label">Điện thoại</label>
+                <input type="text"
+                       name="phone"
+                       class="ncc-input"
+                       value="<?= htmlspecialchars($supplier['phone']) ?>">
+            </div>
+
+            <div class="col-md-6">
+                <label class="ncc-label">Email</label>
+                <input type="email"
+                       name="email"
+                       class="ncc-input"
+                       value="<?= htmlspecialchars($supplier['email']) ?>">
+            </div>
+
+            <div class="col-md-6">
+                <label class="ncc-label">Địa chỉ</label>
+                <input type="text"
+                       name="address"
+                       class="ncc-input"
+                       value="<?= htmlspecialchars($supplier['address']) ?>">
+            </div>
+
+            <div class="col-md-6">
+                <label class="ncc-label">Số hợp đồng</label>
+                <input type="text"
+                       name="contract_number"
+                       class="ncc-input"
+                       value="<?= htmlspecialchars($supplier['contract_number']) ?>">
+            </div>
+
+            <div class="col-md-3">
+                <label class="ncc-label">Ngày bắt đầu</label>
+                <input type="date"
+                       name="contract_start"
+                       class="ncc-input"
+                       value="<?= htmlspecialchars($supplier['contract_start']) ?>">
+            </div>
+
+            <div class="col-md-3">
+                <label class="ncc-label">Ngày kết thúc</label>
+                <input type="date"
+                       name="contract_end"
+                       class="ncc-input"
+                       value="<?= htmlspecialchars($supplier['contract_end']) ?>">
+            </div>
+
+            <div class="col-md-3">
+                <label class="ncc-label">Đánh giá</label>
+                <input type="number"
+                       name="rating"
+                       class="ncc-input"
+                       min="1"
+                       max="5"
+                       value="<?= htmlspecialchars($supplier['rating']) ?>">
+            </div>
+
+            <div class="col-12">
+                <label class="ncc-label">Ghi chú</label>
+                <textarea name="note"
+                          class="ncc-input"
+                          rows="3"><?= htmlspecialchars($supplier['note']) ?></textarea>
+            </div>
+
+            <div class="col-12 d-flex gap-3 mt-3">
+                <button type="submit" class="ncc-add-btn">
+                    💾 Cập nhật
+                </button>
+
+                <a href="index.php?action=nhacungcap" class="ncc-btn-cancel">
+                    ⬅ Quay lại
+                </a>
+            </div>
+
+        </div>
+    </form>
+</div>

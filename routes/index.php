@@ -108,9 +108,16 @@ match ($action) {
 
 
     //HDV
-   'HDV'        => (new TourGuideController)->listTourGuide(),
-   'HDV_add'        => (new TourGuideController)->addTourGuide(),
-   'HDV_store'        => (new TourGuideController)->storeTourGuide(),
+    // ===== HƯỚNG DẪN VIÊN =====
+    'HDV'              => (new TourGuideController)->listTourGuide(),
+
+    'HDV_add'          => (new TourGuideController)->addTourGuide(),
+    'HDV_store'        => (new TourGuideController)->storeTourGuide(),
+
+    'HDV_edit'         => (new TourGuideController)->editTourGuide($_GET['id'] ?? null),
+    'HDV_update'       => (new TourGuideController)->updateTourGuide($_GET['id'] ?? null),
+
+    'HDV_delete'       => (new TourGuideController)->deleteTourGuide($_GET['id'] ?? null),
 
 
 

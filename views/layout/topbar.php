@@ -31,8 +31,10 @@
     </button>
 
     <!-- User -->
+    <!-- User -->
     <div class="relative">
-      <button id="user-button" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition">
+      <button id="user-button"
+        class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition focus:outline-none">
 
         <div class="w-9 h-9 rounded-full bg-white bg-opacity-20 flex items-center justify-center font-semibold">
           NA
@@ -50,28 +52,44 @@
       </button>
 
       <!-- MENU DROPDOWN -->
-      <div id="user-menu" class="user-menu">
-        <div class="user-menu-item border-b border-gray-200">
+      <div id="user-menu"
+        class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50">
+
+        <div class="px-4 py-3 border-b">
           <div class="font-semibold text-sm text-gray-800">Nguyễn Văn A</div>
           <div class="text-xs text-gray-500">admin@travelpro.com</div>
         </div>
 
-        <div class="user-menu-item">
-          Hồ Sơ
-        </div>
+        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+          Hồ sơ
+        </a>
 
-        <div class="user-menu-item">
-          Cài Đặt
-        </div>
+        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+          Cài đặt
+        </a>
 
         <form action="index.php?action=logout" method="POST">
           <button type="submit"
-            class="user-menu-item border-t border-gray-200 text-red-600 w-full text-left">
-            Đăng Xuất
+            class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 border-t">
+            Đăng xuất
           </button>
         </form>
       </div>
     </div>
 
+
   </div>
 </header>
+<script>
+  const userBtn = document.getElementById('user-button');
+  const userMenu = document.getElementById('user-menu');
+
+  userBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    userMenu.classList.toggle('hidden');
+  });
+
+  document.addEventListener('click', () => {
+    userMenu.classList.add('hidden');
+  });
+</script>
