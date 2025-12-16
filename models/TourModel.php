@@ -31,16 +31,22 @@ class TourModel extends BaseModel
     public function addTour($data)
     {
         $sql = "INSERT INTO tours
-        (name, base_price, promo_price, duration, description, status, tour_category_id, so_nguoi, image, diem_di, diem_den, phuong_tien)
-        VALUES
-        (:name, :base_price, :promo_price, :duration, :description, :status, :tour_category_id, :so_nguoi, :image, :diem_di, :diem_den, :phuong_tien)";
+    (
+        name, base_price, promo_price, duration, description, status,
+        tour_category_id, so_nguoi, image, diem_di, diem_den, phuong_tien,
+        start_date, end_date, total_days, total_nights, departure_time
+    )
+    VALUES
+    (
+        :name, :base_price, :promo_price, :duration, :description, :status,
+        :tour_category_id, :so_nguoi, :image, :diem_di, :diem_den, :phuong_tien,
+        :start_date, :end_date, :total_days, :total_nights, :departure_time
+    )";
 
-        $stmt = $this->pdo->prepare($sql);
-
-        return $stmt->execute([
+        return $this->pdo->prepare($sql)->execute([
             'name' => $data['name'],
             'base_price' => $data['base_price'],
-            'promo_price' => $data['promo_price'] ?? null,
+            'promo_price' => $data['promo_price'],
             'duration' => $data['duration'],
             'description' => $data['description'],
             'status' => $data['status'],
@@ -49,9 +55,17 @@ class TourModel extends BaseModel
             'image' => $data['image'],
             'diem_di' => $data['diem_di'],
             'diem_den' => $data['diem_den'],
-            'phuong_tien' => $data['phuong_tien']
+            'phuong_tien' => $data['phuong_tien'],
+
+            // NEW
+            'start_date' => $data['start_date'],
+            'end_date' => $data['end_date'],
+            'total_days' => $data['total_days'],
+            'total_nights' => $data['total_nights'],
+            'departure_time' => $data['departure_time']
         ]);
     }
+
 
     // ============================
     // 4. CẬP NHẬT TOUR (UPDATE)
@@ -59,19 +73,25 @@ class TourModel extends BaseModel
     public function updateTour($id, $data)
     {
         $sql = "UPDATE tours SET
-            name = :name,
-            base_price = :base_price,
-            promo_price = :promo_price,
-            duration = :duration,
-            description = :description,
-            status = :status,
-            tour_category_id = :tour_category_id,
-            so_nguoi = :so_nguoi,
-            image = :image,
-            diem_di = :diem_di,
-            diem_den = :diem_den,
-            phuong_tien = :phuong_tien
-        WHERE id = :id";
+    name = :name,
+    base_price = :base_price,
+    promo_price = :promo_price,
+    duration = :duration,
+    description = :description,
+    status = :status,
+    tour_category_id = :tour_category_id,
+    so_nguoi = :so_nguoi,
+    image = :image,
+    diem_di = :diem_di,
+    diem_den = :diem_den,
+    phuong_tien = :phuong_tien,
+
+    start_date = :start_date,
+    end_date = :end_date,
+    total_days = :total_days,
+    total_nights = :total_nights,
+    departure_time = :departure_time
+WHERE id = :id";
 
         return $this->pdo->prepare($sql)->execute([
             'name' => $data['name'],
@@ -86,7 +106,13 @@ class TourModel extends BaseModel
             'diem_di' => $data['diem_di'],
             'diem_den' => $data['diem_den'],
             'phuong_tien' => $data['phuong_tien'],
-            'id' => $id
+            'id' => $id,
+            'start_date' => $data['start_date'],
+            'end_date' => $data['end_date'],
+            'total_days' => $data['total_days'],
+            'total_nights' => $data['total_nights'],
+            'departure_time' => $data['departure_time'],
+
         ]);
     }
     // ============================

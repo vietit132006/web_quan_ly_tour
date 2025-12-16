@@ -98,7 +98,15 @@ class TourController
             'diem_di' => $_POST['diem_di'],
             'diem_den' => $_POST['diem_den'],
             'phuong_tien' => $_POST['phuong_tien'],
+
+            // NEW
+            'start_date' => $_POST['start_date'],
+            'end_date' => $_POST['end_date'],
+            'total_days' => $_POST['total_days'],
+            'total_nights' => $_POST['total_nights'],
+            'departure_time' => $_POST['departure_time'],
         ]);
+
 
         $tourId = $this->tourModel->lastInsertId();
 
@@ -225,7 +233,13 @@ class TourController
             'image' => $imageName,
             'diem_di' => $_POST['diem_di'],
             'diem_den' => $_POST['diem_den'],
-            'phuong_tien' => $_POST['phuong_tien']
+            'phuong_tien' => $_POST['phuong_tien'],
+            'start_date' => $_POST['start_date'],
+            'end_date' => $_POST['end_date'],
+            'total_days' => $_POST['total_days'],
+            'total_nights' => $_POST['total_nights'],
+            'departure_time' => $_POST['departure_time'],
+
         ]);
 
         // Lịch trình

@@ -21,4 +21,10 @@ class GuideModel extends BaseModel
 
         return $this->query($sql)->fetchAll();
     }
+
+    public function findByUserId($userId)
+    {
+        $sql = "SELECT * FROM tour_guides WHERE user_id = ?";
+        return $this->query($sql, [$userId])->fetch();
+    }
 }

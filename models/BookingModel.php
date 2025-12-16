@@ -163,4 +163,16 @@ class BookingModel extends BaseModel
             [$bookingId]
         )->fetchColumn();
     }
+    public function getAssignedGuides($bookingId)
+    {
+        $sql = "
+        SELECT tg.id AS guide_id, u.full_name, u.email, tg.phone, tg.experience_years, tg.language, tg.classify
+        FROM booking_guides bg
+        JOIN tour_guides tg ON bg.guide_id = tg.id
+        JOIN users u ON tg.user_id = u.id
+        WHERE bg.booking_id = ?
+    ";
+
+        return $this->query($sql, [$bookingId])->fetchAll();
+    }
 }

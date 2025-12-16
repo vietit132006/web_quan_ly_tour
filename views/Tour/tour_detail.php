@@ -187,6 +187,7 @@
                     </div>
 
                     <!-- Thông tin tour -->
+                    <!-- Thông tin tour -->
                     <div class="col-md-6">
                         <h3 class="section-title">Thông tin tour</h3>
 
@@ -202,13 +203,43 @@
                             </p>
                         <?php endif; ?>
 
+                        <hr>
+
                         <p><strong>Điểm đi:</strong> <?= $tour['diem_di'] ?></p>
                         <p><strong>Điểm đến:</strong> <?= $tour['diem_den'] ?></p>
                         <p><strong>Phương tiện:</strong> <?= $tour['phuong_tien'] ?></p>
 
+                        <hr>
+
+                        <p>
+                            <strong>Thời gian:</strong>
+                            <?= date('d/m/Y', strtotime($tour['start_date'])) ?>
+                            →
+                            <?= date('d/m/Y', strtotime($tour['end_date'])) ?>
+                        </p>
+
+                        <p>
+                            <strong>Thời lượng:</strong>
+                            <?= $tour['total_days'] ?> ngày
+                            <?= $tour['total_nights'] ?> đêm
+                        </p>
+
+                        <p>
+                            <strong>Giờ khởi hành:</strong>
+                            <?= date('H:i', strtotime($tour['departure_time'])) ?>
+                        </p>
+
+                        <p>
+                            <strong>Số người tối đa:</strong>
+                            <?= $tour['so_nguoi'] ?> người
+                        </p>
+
+                        <hr>
+
                         <p><strong>Mô tả:</strong></p>
                         <div><?= nl2br($tour['description']) ?></div>
                     </div>
+
                 </div>
 
                 <hr>

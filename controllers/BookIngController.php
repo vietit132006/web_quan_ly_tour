@@ -74,16 +74,17 @@ class BookingController
         $logs     = $this->logModel->getByBooking($id);
         $services = $this->bookingServiceModel->getByBooking($id);
 
-        $guides = $this->tourGuideModel->getGuidesByBooking($id);
+        // ✅ Lấy HDV đã gán
+        $guidesAssigned = $this->bookingModel->getAssignedGuides($id);
 
-
-        // 3️⃣ TÍNH TIỀN – CHỈ 1 NGUỒN DUY NHẤT
+        // 3️⃣ TÍNH TIỀN
         $totalMoney = $this->bookingModel->calculateTotal($id);
 
         // 4️⃣ View
         $view = PATH_VIEW . 'booking/detail.php';
         require PATH_VIEW . 'layout/admin/master.php';
     }
+
 
 
     public function createTourGroup()

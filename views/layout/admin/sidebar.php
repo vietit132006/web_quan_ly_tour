@@ -4,7 +4,7 @@ $listActions = [
   ['label' => 'Tổng Quan', 'action' => ['home', '/'], 'icon' => 'bi-speedometer2'],
   ['label' => 'Quản Lý Tour', 'action' => ['tours'], 'icon' => 'bi-card-list'],
   ['label' => 'Đặt Tour', 'action' => ['booking'], 'icon' => 'bi-calendar-check'],
-  ['label' => 'Lịch trình tour', 'action' => ['manage'], 'icon' => 'bi-bookmark-check-fill'],
+  // ['label' => 'Lịch trình tour', 'action' => ['manage'], 'icon' => 'bi-bookmark-check-fill'],
   ['label' => 'Quản lý người dùng', 'action' => ['roles_users'], 'icon' => 'bi-person-lines-fill'],
   ['label' => 'Đối tác', 'action' => ['nhacungcap'], 'icon' => 'bi-people']
 ];

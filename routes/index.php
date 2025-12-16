@@ -8,6 +8,7 @@ require_once __DIR__ . '/../controllers/GroupController.php';
 require_once __DIR__ . '/../controllers/BookIngController.php';
 require_once __DIR__ . '/../controllers/UserController.php';
 require_once __DIR__ . '/../controllers/SupplierController.php';
+require_once __DIR__ . '/../controllers/CalendarController.php';
 require_once __DIR__ . '/../models/SupplierModel.php';
 require_once __DIR__ . '/../models/GuideModel.php';
 require_once __DIR__ . '/../controllers/AuthController.php';
@@ -17,6 +18,7 @@ require_once __DIR__ . '/../controllers/TourController.php';
 require_once __DIR__ . '/../models/TourModel.php';
 require_once __DIR__ . '/../controllers/TourCategoryController.php';
 require_once __DIR__ . '/../models/TourCategoryModel.php';
+require_once __DIR__ . '/../models/CalendarModel.php';
 
 
 $model = new GuideModel();
@@ -120,6 +122,15 @@ match ($action) {
     'HDV_add'        => (new TourGuideController)->addTourGuide(),
     'HDV_store'        => (new TourGuideController)->storeTourGuide(),
 
+
+    // ========== CALENDAR – HDV ==========
+    'calendar' => (new CalendarController)->index(),
+
+    'calendar-detail' => (new CalendarController)->detail(),
+
+    'calendar-confirm' => (new CalendarController)->confirm(),
+
+    'calendar-reject' => (new CalendarController)->reject(),
 
 
     default => function () {

@@ -208,6 +208,36 @@ $formAction = $isEdit
                             <input type="number" name="so_nguoi" class="form-control"
                                 value="<?= $editTour['so_nguoi'] ?? '' ?>" required>
                         </div>
+                        <div class="form-group">
+                            <label>Ngày bắt đầu</label>
+                            <input type="date" name="start_date" id="start_date"
+                                class="form-control"
+                                value="<?= $editTour['start_date'] ?? '' ?>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Ngày kết thúc</label>
+                            <input type="date" name="end_date" id="end_date"
+                                class="form-control"
+                                value="<?= $editTour['end_date'] ?? '' ?>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Giờ khởi hành</label>
+                            <input type="time" name="departure_time"
+                                class="form-control"
+                                value="<?= $editTour['departure_time'] ?? '' ?>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <strong>
+                                <span id="so_ngay">0</span> ngày
+                                <span id="so_dem">0</span> đêm
+                            </strong>
+                        </div>
+
+                        <input type="hidden" name="total_days" id="total_days">
+                        <input type="hidden" name="total_nights" id="total_nights">
 
                         <div class="form-group">
                             <label>Trạng thái</label>
@@ -299,4 +329,33 @@ $formAction = $isEdit
         </div>
     `);
     }
+
+    function calcDays() {
+        const start = document.getElementById('start_date').value;
+        const end = document.getElementById('end_date').value;
+
+        if (!start || !end) return;
+
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+
+        if (endDate < startDate) {
+            alert("Ngày kết thúc phải sau ngày bắt đầu");
+            return;
+        }
+
+        const diffTime = endDate - startDate;
+        const days = diffTime / (1000 * 60 * 60 * 24) + 1;
+        const nights = days - 1;
+
+        document.getElementById('so_ngay').innerText = days;
+        document.getElementById('so_dem').innerText = nights;
+
+        document.getElementById('total_days').value = days;
+        document.getElementById('total_nights').value = nights;
+    }
+
+    document.getElementById('start_date')?.addEventListener('change', calcDays);
+    document.getElementById('end_date')?.addEventListener('change', calcDays);
+    document.addEventListener('DOMContentLoaded', calcDays);
 </script>
