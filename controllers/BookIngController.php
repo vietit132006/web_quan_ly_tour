@@ -9,6 +9,7 @@ require_once PATH_ROOT . 'models/PaymentModel.php';
 require_once PATH_ROOT . 'models/TourGroupModel.php';
 require_once PATH_ROOT . 'models/TourGuideModel.php';
 require_once PATH_ROOT . 'models/GuideModel.php';
+require_once PATH_ROOT . 'models/ServiceModel.php';
 
 
 
@@ -24,6 +25,8 @@ class BookingController
     protected $tourGroupModel;
     protected $tourGuideModel;
     protected $guideModel;
+    protected $serviceModel;
+
 
 
 
@@ -39,6 +42,7 @@ class BookingController
         $this->tourGroupModel = new TourGroupModel();
         $this->tourGuideModel = new TourGuideModel();
         $this->guideModel = new GuideModel();
+        $this->serviceModel = new ServiceModel();
     }
 
     // =========================
@@ -69,6 +73,9 @@ class BookingController
         $payment  = $this->paymentModel->getByBooking($id);
         $logs     = $this->logModel->getByBooking($id);
         $services = $this->bookingServiceModel->getByBooking($id);
+
+        $guides = $this->tourGuideModel->getGuidesByBooking($id);
+
 
         // 3️⃣ TÍNH TIỀN – CHỈ 1 NGUỒN DUY NHẤT
         $totalMoney = $this->bookingModel->calculateTotal($id);
@@ -138,35 +145,31 @@ class BookingController
 
     public function assignGuideStore()
     {
-        $data = $_POST;
-
-        if (empty($data['booking_id']) || empty($data['guide_id'])) {
-            die('Thiếu dữ liệu');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            die('Phương thức không hợp lệ');
         }
 
-        $this->tourGroupModel->create([
-            'booking_id'     => $data['booking_id'],
-            'tour_id'        => $data['tour_id'],
-            'guide_id'       => $data['guide_id'],
-            'start_date'     => $data['start_date'],
-            'end_date'       => $data['end_date'],
-            'departure_time' => $data['departure_time'],
-            'total_days'     => $data['total_days'],
-            'address'        => $data['address'],
-            'number_guests'  => $data['number_guests'],
-            'status'         => 'confirmed',
-            'note'           => $data['note'] ?? null
-        ]);
+        $bookingId = $_POST['booking_id'] ?? null;
+        $guideId   = $_POST['guide_id'] ?? null;
 
+        if (!$bookingId || !$guideId) {
+            die('Thiếu booking hoặc guide');
+        }
+
+        // ✅ GÁN HƯỚNG DẪN VIÊN CHO BOOKING
+        $this->tourGuideModel->assignGuideToBooking($bookingId, $guideId);
+
+        // ✅ GHI LOG
         $this->logModel->create(
-            $data['booking_id'],
+            $bookingId,
             'Gán hướng dẫn viên',
             'Admin gán hướng dẫn viên cho booking',
             $_SESSION['user']['id'] ?? null
         );
 
         $_SESSION['success'] = 'Gán hướng dẫn viên thành công';
-        header('Location: index.php?action=booking-detail&id=' . $data['booking_id']);
+
+        header('Location: index.php?action=booking-detail&id=' . $bookingId);
         exit;
     }
 
@@ -206,6 +209,9 @@ class BookingController
         // Lấy danh sách tour
         $tours = $this->tourModel->getAllTours();
         $guides = $this->guideModel->getAllActiveGuides();
+
+        // ✅ LẤY DỊCH VỤ
+        $services = $this->serviceModel->getAll();
 
         // Trạng thái mặc định cho booking mới
         $statuses = [
@@ -288,6 +294,25 @@ class BookingController
             'admin_note'  => $_POST['admin_note'] ?? null,
         ]);
         // =========================
+        // 🔹 LƯU DỊCH VỤ
+        // =========================
+        $services = $_POST['services'] ?? [];
+
+        foreach ($services as $s) {
+            if (empty($s['id']) || empty($s['qty'])) continue;
+
+            // lấy giá dịch vụ tại thời điểm booking
+            $service = $this->serviceModel->find($s['id']);
+
+            $this->bookingServiceModel->create([
+                'booking_id' => $bookingId,
+                'service_id' => $s['id'],
+                'price'      => $service['price'],
+                'quantity'   => $s['qty']
+            ]);
+        }
+
+        // =========================
         // 8️⃣ TÍNH TỔNG TIỀN (SAU KHI CÓ GUEST)
         // =========================
         $totalMoney = $this->bookingModel->calculateTotal($bookingId);
@@ -329,6 +354,8 @@ class BookingController
             "Tạo booking mới - Customer ID: $customerId",
             $_SESSION['user']['id'] ?? null
         );
+
+
 
         $_SESSION['success'] = 'Tạo booking thành công';
         header('Location: index.php?action=booking-detail&id=' . $bookingId);

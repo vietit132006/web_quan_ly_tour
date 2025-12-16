@@ -104,23 +104,43 @@ class BookingModel extends BaseModel
      * ========================= */
     public function calculateTotal($bookingId)
     {
-        $sql = "
-            SELECT 
-                COUNT(g.id) AS number_people,
-                COALESCE(t.promo_price, t.base_price) AS price
-            FROM booking b
-            JOIN tours t ON b.tour_id = t.id
-            LEFT JOIN guest g ON g.booking_id = b.id
-            WHERE b.id = ?
-            GROUP BY b.id
-        ";
+        // 1️⃣ Giá tour × số người
+        $sqlTour = "
+        SELECT 
+            COUNT(g.id) AS number_people,
+            COALESCE(t.promo_price, t.base_price) AS price
+        FROM booking b
+        JOIN tours t ON b.tour_id = t.id
+        LEFT JOIN guest g ON g.booking_id = b.id
+        WHERE b.id = ?
+        GROUP BY b.id
+    ";
 
-        $row = $this->query($sql, [$bookingId])->fetch();
+        $tourRow = $this->query($sqlTour, [$bookingId])->fetch();
 
-        return $row
-            ? $row['number_people'] * $row['price']
-            : 0;
+        $numberPeople   = $tourRow['number_people'] ?? 0;
+        $pricePerPerson = $tourRow['price'] ?? 0;
+
+        $tourPrice = $numberPeople * $pricePerPerson;
+
+        // 2️⃣ Tổng dịch vụ (✔ ĐÚNG NGHIỆP VỤ)
+        $sqlService = "
+        SELECT COALESCE(SUM(quantity * price), 0) AS total
+        FROM booking_services
+        WHERE booking_id = ?
+    ";
+
+        $serviceRow = $this->query($sqlService, [$bookingId])->fetch();
+        $servicePrice = $serviceRow['total'] ?? 0;
+
+        // 3️⃣ Trả về format view
+        return [
+            'tour_price'    => (float)$tourPrice,
+            'service_price' => (float)$servicePrice,
+            'total'         => (float)$tourPrice + (float)$servicePrice
+        ];
     }
+
 
     /* =========================
      * CẬP NHẬT TOTAL

@@ -4,10 +4,9 @@
 
     <h4>👨‍✈️ Gán hướng dẫn viên cho Booking #<?= $booking['id'] ?></h4>
 
-    <form method="post" action="index.php?action=tour-group-store">
+    <form method="post" action="index.php?action=booking-assign-guide-store">
 
         <input type="hidden" name="booking_id" value="<?= $booking['id'] ?>">
-        <input type="hidden" name="tour_id" value="<?= $booking['tour_id'] ?>">
 
         <div class="mb-3">
             <label class="form-label">Hướng dẫn viên</label>
@@ -16,7 +15,7 @@
                 <?php foreach ($guides as $g): ?>
                     <option value="<?= $g['id'] ?>">
                         <?= htmlspecialchars($g['full_name']) ?>
-                        (<?= $g['phone'] ?>)
+                        (<?= htmlspecialchars($g['phone']) ?>)
                     </option>
                 <?php endforeach; ?>
             </select>

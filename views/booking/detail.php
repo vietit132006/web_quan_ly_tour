@@ -203,25 +203,67 @@
             </div>
         </div>
 
-        <!-- ===== DỊCH VỤ ===== -->
+        <!--   ==============Dịch vụ  -->
         <div class="card mb-4">
             <div class="card-header bg-primary text-white">🧾 Dịch vụ sử dụng</div>
             <div class="card-body">
-                <?php if (!empty($services) && is_array($services)): ?>
+
+                <?php if (!empty($services)): ?>
                     <ul class="list-group">
                         <?php foreach ($services as $s): ?>
-                            <li class="list-group-item">
-                                <?= htmlspecialchars($s['name'] ?? '---') ?>
-                                — <?= number_format($s['price'] ?? 0) ?>đ
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>
+                                    <?= htmlspecialchars($s['name']) ?>
+                                    * <?= $s['quantity'] ?>
+                                </span>
+                                <strong><?= number_format($s['total']) ?>đ</strong>
                             </li>
                         <?php endforeach; ?>
                     </ul>
                 <?php else: ?>
-                    <p class="text-muted fst-italic">Chưa có dịch vụ</p>
+                    <p class="text-muted">Chưa có dịch vụ</p>
                 <?php endif; ?>
+
             </div>
         </div>
 
+
+        <!-- ===== HƯỚNG DẪN VIÊN ===== -->
+        <div class="card mb-4">
+            <div class="card-header bg-warning">
+                👨‍✈️ Hướng dẫn viên
+            </div>
+            <div class="card-body">
+                <?php if (!empty($guidesAssigned) && is_array($guidesAssigned)): ?>
+                    <ul class="list-group list-group-flush">
+                        <?php foreach ($guidesAssigned as $g): ?>
+                            <li class="list-group-item">
+                                <div class="fw-semibold">
+                                    <?= htmlspecialchars($g['full_name']) ?>
+                                </div>
+                                <small class="text-muted">
+                                    📞 <?= htmlspecialchars($g['phone'] ?? '—') ?>
+                                    <?= !empty($g['email']) ? ' · ✉ ' . htmlspecialchars($g['email']) : '' ?>
+                                </small>
+                                <div class="mt-1">
+                                    <span class="badge bg-info">KN: <?= $g['experience_years'] ?> năm</span>
+                                    <span class="badge bg-secondary"><?= htmlspecialchars($g['language']) ?></span>
+                                    <span class="badge bg-dark"><?= htmlspecialchars($g['classify']) ?></span>
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <p class="text-muted fst-italic mb-0">
+                        Chưa gán hướng dẫn viên cho booking này
+                    </p>
+                <?php endif; ?>
+            </div>
+        </div>
+        <a href="index.php?action=booking-assign-guide&booking_id=<?= $booking['id'] ?>"
+            class="btn btn-warning">
+            👨‍✈️ Gán hướng dẫn viên
+        </a>
         <!-- 💰 TỔNG TIỀN -->
         <hr>
         <h5 class="mt-4">💰 Chi phí</h5>
@@ -263,8 +305,5 @@
             </div>
         </div>
     </div>
+
 </div>
-<a href="index.php?action=booking-assign-guide&booking_id=<?= $booking['id'] ?>"
-    class="btn btn-warning">
-    👨‍✈️ Gán hướng dẫn viên
-</a>

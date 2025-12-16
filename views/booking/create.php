@@ -68,6 +68,52 @@
                   </div>
               </div>
           </div>
+          <!-- ================= SERVICES ================= -->
+          <div class="card mb-4">
+              <div class="card-header bg-primary text-white">
+                  🧾 Dịch vụ thêm
+              </div>
+              <div class="card-body">
+
+                  <?php if (!empty($services)): ?>
+                      <?php foreach ($services as $s): ?>
+                          <div class="row align-items-center mb-2 border-bottom pb-2">
+                              <div class="col-md-5">
+                                  <label class="form-check-label">
+                                      <input
+                                          type="checkbox"
+                                          class="form-check-input service-checkbox"
+                                          name="services[<?= $s['id'] ?>][id]"
+                                          value="<?= $s['id'] ?>"
+                                          data-price="<?= $s['price'] ?>"
+                                          onchange="toggleServiceQty(this)">
+                                      <?= htmlspecialchars($s['name']) ?>
+                                  </label>
+                              </div>
+
+                              <div class="col-md-3">
+                                  <span class="text-muted">
+                                      <?= number_format($s['price']) ?> đ
+                                  </span>
+                              </div>
+
+                              <div class="col-md-4">
+                                  <input
+                                      type="number"
+                                      class="form-control service-qty"
+                                      name="services[<?= $s['id'] ?>][qty]"
+                                      value="1"
+                                      min="1"
+                                      disabled>
+                              </div>
+                          </div>
+                      <?php endforeach; ?>
+                  <?php else: ?>
+                      <p class="text-muted fst-italic">Chưa có dịch vụ nào</p>
+                  <?php endif; ?>
+
+              </div>
+          </div>
 
           <!-- ================= GUEST ================= -->
           <div class="card mb-4">
@@ -164,5 +210,18 @@
 
       function validateGuestCount() {
           return document.querySelectorAll('.guest-item').length > 0;
+      }
+
+      function toggleServiceQty(checkbox) {
+          const row = checkbox.closest('.row');
+          const qtyInput = row.querySelector('.service-qty');
+
+          if (checkbox.checked) {
+              qtyInput.disabled = false;
+              qtyInput.value = 1;
+          } else {
+              qtyInput.disabled = true;
+              qtyInput.value = 1;
+          }
       }
   </script>

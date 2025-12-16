@@ -155,6 +155,51 @@ class TourGuideModel extends BaseModel
         ]);
     }
 
+    // ================== BOOKING - GUIDE ==================
+
+    // Lấy danh sách hướng dẫn viên theo booking
+    public function getGuidesByBooking($bookingId)
+    {
+        $sql = "
+        SELECT 
+            tg.id AS guide_id,
+            u.full_name,
+            u.phone,
+            u.email,
+            tg.experience_years,
+            tg.language,
+            tg.classify
+        FROM booking_guides bg
+        JOIN tour_guides tg ON bg.guide_id = tg.id
+        JOIN users u ON tg.user_id = u.id
+        WHERE bg.booking_id = ?
+    ";
+
+        return $this->query($sql, [$bookingId])->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    // Gán hướng dẫn viên cho booking
+    public function assignGuideToBooking($bookingId, $guideId)
+    {
+        // Không cho gán trùng
+        $check = "
+        SELECT COUNT(*) 
+        FROM booking_guides 
+        WHERE booking_id = ? AND guide_id = ?
+    ";
+
+        if ($this->query($check, [$bookingId, $guideId])->fetchColumn() > 0) {
+            return false;
+        }
+
+        $sql = "
+        INSERT INTO booking_guides (booking_id, guide_id)
+        VALUES (?, ?)
+    ";
+
+        return $this->query($sql, [$bookingId, $guideId]);
+    }
 
     // Xóa hướng dẫn viên
     public function deleteTourGuide($id)
