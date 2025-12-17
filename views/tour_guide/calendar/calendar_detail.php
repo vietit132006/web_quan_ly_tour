@@ -200,7 +200,7 @@
 
 
         <!-- ===== HÀNH ĐỘNG ===== -->
-        <?php if ($booking['booking_status'] === 'pending'): ?>
+        <?php if ($booking['guide_status'] === 'pending'): ?>
             <div class="d-flex gap-3 flex-wrap mb-4">
                 <a href="index.php?action=calendar-confirm&id=<?= $booking['booking_id'] ?>"
                     class="btn btn-success">✅ Nhận booking</a>
