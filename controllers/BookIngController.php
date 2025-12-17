@@ -76,6 +76,8 @@ class BookingController
 
         // ✅ Lấy HDV đã gán
         $guidesAssigned = $this->bookingModel->getAssignedGuides($id);
+        $isAddGuideAllowed = $this->bookingModel->isAddGuideAllowed($id);
+        $statuses = ['pending' => 'Chờ xác nhận', 'confirmed' => 'Đã xác nhận', 'completed' => 'Hoàn thành', 'cancelled' => 'Huỷ'];
 
         // 3️⃣ TÍNH TIỀN
         $totalMoney = $this->bookingModel->calculateTotal($id);
