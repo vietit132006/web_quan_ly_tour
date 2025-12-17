@@ -9,8 +9,8 @@ class CalendarModel extends BaseModel
     {
         $sql = "
             SELECT
-                b.id AS booking_id,
-                b.status AS booking_status,
+                bg.booking_id AS booking_id,
+                bg.status_guides AS booking_status,
                 b.admin_note,
 
                 t.name AS tour_name,
@@ -31,7 +31,7 @@ class CalendarModel extends BaseModel
             LEFT JOIN customers c ON b.customer_id = c.id
             LEFT JOIN guest g ON g.booking_id = b.id
             WHERE bg.guide_id = ?
-            GROUP BY b.id
+            GROUP BY bg.booking_id, bg.status_guides
             ORDER BY t.start_date ASC
         ";
 
@@ -47,6 +47,7 @@ class CalendarModel extends BaseModel
         SELECT
             b.id              AS booking_id,
             b.status          AS booking_status,
+            bg.status_guides   AS guide_status,
             b.admin_note,
 
             t.name            AS tour_name,
@@ -82,15 +83,20 @@ class CalendarModel extends BaseModel
         return $this->query($sql, [$bookingId])->fetchAll();
     }
 
-    public function confirmBooking($bookingId)
+    public function confirmBooking($bookingId, $guideId)
     {
-        $sql = "UPDATE booking SET status = 'confirmed' WHERE id = ?";
-        $this->query($sql, [$bookingId]);
+        $sql = "UPDATE booking SET status = 'confirmed', guide_id = ? WHERE id = ?";
+        $sql2 = "UPDATE booking_guides SET status_guides = 'confirmed' WHERE booking_id = ? AND guide_id = ?";
+
+        $this->query($sql, [$guideId, $bookingId]);
+        $this->query($sql2, [$bookingId, $guideId]);
     }
 
-    public function rejectBooking($bookingId)
+    public function rejectBooking($bookingId, $guideId)
     {
         $sql = "UPDATE booking SET status = 'cancelled' WHERE id = ?";
+        $sql2 = "UPDATE booking_guides SET status_guides = 'cancelled' WHERE booking_id = ? AND guide_id = ?";
         $this->query($sql, [$bookingId]);
+        $this->query($sql2, [$bookingId, $guideId]);
     }
 }
