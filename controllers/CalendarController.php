@@ -52,13 +52,19 @@ class CalendarController
 
     public function confirm()
     {
-        (new CalendarModel())->confirmBooking($_GET['id']);
+        $userId    = $_SESSION['user']['id'];
+        $guide = (new GuideModel())->findByUserId($userId);
+        $guideId = $guide['id'];
+        (new CalendarModel())->confirmBooking($_GET['id'], $guideId);
         header('Location: index.php?action=calendar');
     }
 
     public function reject()
     {
-        (new CalendarModel())->rejectBooking($_GET['id']);
+        $userId    = $_SESSION['user']['id'];
+        $guide = (new GuideModel())->findByUserId($userId);
+        $guideId = $guide['id'];
+        (new CalendarModel())->rejectBooking($_GET['id'], $guideId);
         header('Location: index.php?action=calendar');
     }
 }
