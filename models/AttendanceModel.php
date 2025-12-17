@@ -69,7 +69,7 @@ class AttendanceModel extends BaseModel
     }
 
     // Lịch sử các phiên
-    public function getSessionsByBooking($bookingId, $guideId)
+    public function getSessionsByBooking($bookingId, $guideId,)
     {
         $sql = "
         SELECT id, note, created_at
