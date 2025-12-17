@@ -13,12 +13,12 @@
             <select name="guide_id" class="form-select" required>
                 <option value="">-- Chọn hướng dẫn viên --</option>
                 <?php foreach ($guides as $g): ?>
-                    <option value="<?= $g['id'] ?>">
-                        <?= htmlspecialchars($g['full_name']) ?>
-                        (<?= htmlspecialchars($g['phone']) ?>)
+                    <option value="<?= $g['guide_id'] ?>">
+                        <?= htmlspecialchars($g['full_name']) ?> (<?= htmlspecialchars($g['phone']) ?>)
                     </option>
                 <?php endforeach; ?>
             </select>
+
         </div>
 
         <button class="btn btn-success">💾 Gán hướng dẫn viên</button>
