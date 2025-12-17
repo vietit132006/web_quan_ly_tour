@@ -73,7 +73,6 @@ match ($action) {
     'booking-assign-guide'       => (new BookingController)->assignGuide(),
     'booking-assign-guide-store' => (new BookingController)->assignGuideStore(),
 
-    'booking-assign-guide' => (new BookingController)->assignGuide(),
     // Tour Group / Assign Guide
     'tour-group-create' => (new GroupController)->create(),
     'tour-group-store'  => (new GroupController)->store(),
