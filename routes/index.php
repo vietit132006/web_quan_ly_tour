@@ -8,6 +8,7 @@ require_once __DIR__ . '/../controllers/GroupController.php';
 require_once __DIR__ . '/../controllers/BookIngController.php';
 require_once __DIR__ . '/../controllers/UserController.php';
 require_once __DIR__ . '/../controllers/SupplierController.php';
+require_once __DIR__ . '/../controllers/CalendarController.php';
 require_once __DIR__ . '/../models/SupplierModel.php';
 require_once __DIR__ . '/../models/GuideModel.php';
 require_once __DIR__ . '/../controllers/AuthController.php';
@@ -17,6 +18,7 @@ require_once __DIR__ . '/../controllers/TourController.php';
 require_once __DIR__ . '/../models/TourModel.php';
 require_once __DIR__ . '/../controllers/TourCategoryController.php';
 require_once __DIR__ . '/../models/TourCategoryModel.php';
+require_once __DIR__ . '/../models/CalendarModel.php';
 
 
 $model = new GuideModel();
@@ -67,6 +69,14 @@ match ($action) {
     // Booking
     'booking-create' => (new BookingController)->create(),
     'booking-store'  => (new BookingController)->store(),
+    // ===== GÁN HƯỚNG DẪN VIÊN =====
+    'booking-assign-guide'       => (new BookingController)->assignGuide(),
+    'booking-assign-guide-store' => (new BookingController)->assignGuideStore(),
+
+    'booking-assign-guide' => (new BookingController)->assignGuide(),
+    // Tour Group / Assign Guide
+    'tour-group-create' => (new GroupController)->create(),
+    'tour-group-store'  => (new GroupController)->store(),
 
 
 
@@ -81,7 +91,7 @@ match ($action) {
     'users_update'      => (new UserController)->updateUser(),
     'users_delete'      => (new UserController)->deleteUser(),
 
-   
+
     // Nhà cung cấp
     'nhacungcap'        => (new SupplierController)->listSuppliers(),
     'nhacungcap_add'    => (new SupplierController)->addSupplier(),
@@ -108,10 +118,21 @@ match ($action) {
 
 
     //HDV
-   'HDV'        => (new TourGuideController)->listTourGuide(),
-   'HDV_add'        => (new TourGuideController)->addTourGuide(),
-   'HDV_store'        => (new TourGuideController)->storeTourGuide(),
+    'HDV'        => (new TourGuideController)->listTourGuide(),
+    'HDV_add'        => (new TourGuideController)->addTourGuide(),
+    'HDV_store'        => (new TourGuideController)->storeTourGuide(),
 
+
+    // ========== CALENDAR – HDV ==========
+    'calendar' => (new CalendarController)->index(),
+    'calendar-detail' => (new CalendarController)->detail(),
+    'calendar-confirm' => (new CalendarController)->confirm(),
+    'calendar-reject' => (new CalendarController)->reject(),
+    'attendance'        => (new AttendanceController)->index(),
+    'attendance-store'  => (new AttendanceController)->store(),
+    // ===== ATTENDANCE =====
+    'attendance-store'       => (new AttendanceController)->store(),
+    'attendance-session'     => (new AttendanceController)->sessionDetail(),
 
 
     default => function () {

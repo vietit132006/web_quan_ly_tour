@@ -64,7 +64,17 @@ class CustomerModel extends BaseModel
     // =========================
     public function find($id)
     {
-        $sql = "SELECT * FROM customers WHERE id = ? LIMIT 1";
+        $sql = "
+        SELECT 
+            b.*,
+            c.name  AS customer_name,
+            c.phone AS customer_phone,
+            c.email AS customer_email,
+            c.address AS customer_address
+        FROM booking b
+        JOIN customers c ON b.customer_id = c.id
+        WHERE b.id = ?
+    ";
         return $this->query($sql, [$id])->fetch();
     }
 }

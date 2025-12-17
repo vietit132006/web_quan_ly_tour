@@ -2,6 +2,7 @@
 
 class GroupModel extends DB
 {
+    protected $table = 'tour_group';
     // Lấy danh sách tour group
     public function all()
     {
@@ -130,5 +131,32 @@ class GroupModel extends DB
                 );
             }
         }
+    }
+    public function create($data)
+    {
+        $sql = "
+            INSERT INTO tour_group
+            (booking_id, tour_id, guide_id, start_date, end_date, departure_time, total_days, address, note, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ";
+
+        return $this->execute($sql, [
+            $data['booking_id'],
+            $data['tour_id'],
+            $data['guide_id'],
+            $data['start_date'],
+            $data['end_date'],
+            $data['departure_time'],
+            $data['total_days'],
+            $data['address'],
+            $data['note'],
+            'confirmed'
+        ]);
+    }
+
+    public function findByBooking($bookingId)
+    {
+        $sql = "SELECT * FROM tour_group WHERE booking_id = ?";
+        return $this->query($sql, [$bookingId])->fetch();
     }
 }

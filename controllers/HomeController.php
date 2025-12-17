@@ -7,6 +7,10 @@ class HomeController
         $tourModel = new TourModel();
         $tours = $tourModel->getAllTours();
 
-        require_once PATH_VIEW . 'home.php';
+        // Gán biến view
+        $view = __DIR__ . '/../views/home.php';
+
+        // Include layout master
+        include __DIR__ . '/../views/layout/admin/master.php';
     }
 }

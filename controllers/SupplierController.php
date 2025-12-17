@@ -14,7 +14,7 @@ class SupplierController
         $view = PATH_VIEW . "Nhacungcap/nhacungcap.php";
 
         // load layout
-        include PATH_LAYOUT . "master.php";
+        include PATH_LAYOUT . "admin/master.php";
     }
 
     // ======================
@@ -26,7 +26,7 @@ class SupplierController
         $view = PATH_VIEW . "Nhacungcap/add.php";
 
         // load layout
-        include PATH_LAYOUT . "master.php";
+        include PATH_LAYOUT . "admin/master.php";
     }
 
     // ======================
@@ -78,7 +78,7 @@ class SupplierController
         $view = PATH_VIEW . "Nhacungcap/edit.php";
 
         // load layout
-        include PATH_LAYOUT . "master.php";
+        include PATH_LAYOUT . "admin/master.php";
     }
 
     // ======================

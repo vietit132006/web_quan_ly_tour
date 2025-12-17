@@ -17,13 +17,13 @@ class ManageController
         $tour_group = $this->groupModel->all();
         $tours = (new TourModel())->getAllTours();
         $guides = (new GuideModel())->getAllActiveGuides();
-        $services = (new ServiceModel())->getAllServiceModel();
+        $services = (new ServiceModel())->getAll();
 
         // ✅ GÁN VIEW
         $view = PATH_VIEW . "Manage/manage.php";
 
         // ✅ LOAD LAYOUT CHUNG
-        require_once PATH_VIEW . "layout/master.php";
+        require_once PATH_VIEW . "layout/admin/master.php";
     }
 
 
@@ -63,7 +63,7 @@ class ManageController
     {
         $tours = (new TourModel())->getAllTours();
         $guides = (new GuideModel())->getAllActiveGuides();
-        $services = (new ServiceModel())->getAllServiceModel();
+        $services = (new ServiceModel())->getAll();
 
         $group = $this->groupModel->find($id);
         $selectedServices = $this->groupModel->getServices($id);
