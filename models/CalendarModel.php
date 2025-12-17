@@ -45,11 +45,11 @@ class CalendarModel extends BaseModel
     {
         $sql = "
         SELECT
-            b.id AS booking_id,
-            b.status AS booking_status,
+            b.id              AS booking_id,
+            b.status          AS booking_status,
             b.admin_note,
 
-            t.name AS tour_name,
+            t.name            AS tour_name,
             t.description,
             t.start_date,
             t.end_date,
@@ -60,21 +60,21 @@ class CalendarModel extends BaseModel
             t.diem_den,
             t.phuong_tien,
 
-            c.name  AS customer_name,
-            c.phone AS customer_phone,
-            c.email AS customer_email
-
+            c.name            AS customer_name,
+            c.phone           AS customer_phone,
+            c.email           AS customer_email
         FROM booking b
         JOIN booking_guides bg ON bg.booking_id = b.id
         JOIN tours t ON b.tour_id = t.id
         LEFT JOIN customers c ON b.customer_id = c.id
-
-        WHERE b.id = ? AND bg.guide_id = ?
+        WHERE b.id = ?
+          AND bg.guide_id = ?
         LIMIT 1
     ";
 
         return $this->query($sql, [$bookingId, $guideId])->fetch();
     }
+
 
     public function getGuestsByBooking($bookingId)
     {

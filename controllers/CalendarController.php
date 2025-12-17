@@ -40,6 +40,10 @@ class CalendarController
         $guideId = $guide['id'];
 
         $booking = $this->calendarModel->getBookingDetail($bookingId, $guideId);
+
+        if (!$booking) {
+            die('❌ Không tìm thấy booking hoặc bạn không được phân công');
+        }
         $guests  = $this->calendarModel->getGuestsByBooking($bookingId);
 
         $view = PATH_VIEW . "tour_guide/calendar/calendar_detail.php";

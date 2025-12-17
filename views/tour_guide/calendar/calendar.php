@@ -236,6 +236,10 @@
                                     class="btn btn-info btn-sm">
                                     Chi tiết
                                 </a>
+                                <a href="index.php?action=attendance&id=<?= $t['booking_id'] ?>"
+                                    class="btn btn-success btn-sm">
+                                    Điểm danh
+                                </a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

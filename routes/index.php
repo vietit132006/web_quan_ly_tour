@@ -125,12 +125,14 @@ match ($action) {
 
     // ========== CALENDAR – HDV ==========
     'calendar' => (new CalendarController)->index(),
-
     'calendar-detail' => (new CalendarController)->detail(),
-
     'calendar-confirm' => (new CalendarController)->confirm(),
-
     'calendar-reject' => (new CalendarController)->reject(),
+    'attendance'        => (new AttendanceController)->index(),
+    'attendance-store'  => (new AttendanceController)->store(),
+    // ===== ATTENDANCE =====
+    'attendance-store'       => (new AttendanceController)->store(),
+    'attendance-session'     => (new AttendanceController)->sessionDetail(),
 
 
     default => function () {
