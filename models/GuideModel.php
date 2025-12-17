@@ -3,10 +3,16 @@ class GuideModel extends BaseModel
 {
     public function getAllActiveGuides()
     {
-        $sql = "SELECT id, full_name, phone 
-                FROM users 
-                WHERE role_id = 2 AND status = 1 
-                ORDER BY full_name ASC";
+        $sql = "
+            SELECT 
+                tg.id AS guide_id, 
+                u.full_name, 
+                u.phone
+            FROM tour_guides tg
+            JOIN users u ON tg.user_id = u.id
+            WHERE tg.status = 1 AND u.role_id = 2
+            ORDER BY u.full_name ASC
+        ";
         return $this->query($sql)->fetchAll();
     }
 
