@@ -166,7 +166,7 @@ class BookingModel extends BaseModel
     public function getAssignedGuides($bookingId)
     {
         $sql = "
-        SELECT tg.id AS guide_id, u.full_name, u.email, tg.phone, tg.experience_years, tg.language, tg.classify
+        SELECT tg.id AS guide_id, u.full_name, u.email, tg.phone, tg.experience_years, tg.language, tg.classify, bg.status_guides
         FROM booking_guides bg
         JOIN tour_guides tg ON bg.guide_id = tg.id
         JOIN users u ON tg.user_id = u.id
@@ -174,5 +174,21 @@ class BookingModel extends BaseModel
     ";
 
         return $this->query($sql, [$bookingId])->fetchAll();
+    }
+
+    public function isAddGuideAllowed($bookingId)
+    {
+        $sql = "SELECT b.status, bg.status_guides
+            FROM booking b
+            JOIN booking_guides bg ON b.id = bg.booking_id
+            WHERE b.id = ?";
+
+        $result = $this->query($sql, [$bookingId])->fetchAll();
+        foreach ($result as $row) {
+            if ($row['status'] === 'confirmed' || $row['status_guides'] === 'confirmed' || $row['status_guides'] === 'pending') {
+                return false;
+            }
+        }
+        return true;
     }
 }
