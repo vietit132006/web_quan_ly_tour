@@ -6,6 +6,9 @@ $listActions = [
 ?>
 
 <aside class="fixed top-16 left-0 bottom-0 w-64 bg-white shadow-lg overflow-y-auto">
+  <h1 class="fs-3 fw-bold text-center">Hướng Dẫn Viên</h1>
+
+
   <nav class="p-4 space-y-2">
 
 

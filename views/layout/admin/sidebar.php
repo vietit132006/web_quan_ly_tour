@@ -11,8 +11,9 @@ $listActions = [
 ?>
 
 <aside class="fixed top-16 left-0 bottom-0 w-64 bg-white shadow-lg overflow-y-auto">
-  <nav class="p-4 space-y-2">
+  <h1 class="fs-3 fw-bold text-center">Quản Trị Viên</h1>
 
+  <nav class="p-4 space-y-2">
 
     <?php foreach ($listActions as $item): ?>
       <?php $isActive = in_array($currentAction, $item['action']); ?>
