@@ -109,6 +109,7 @@
     }
 </style>
 
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -160,7 +161,6 @@
                     <div class="col-md-4">
                         <select name="status" class="form-select">
                             <?php
-                            $statuses = ['pending' => 'Chờ xác nhận', 'confirmed' => 'Đã xác nhận', 'completed' => 'Hoàn thành', 'cancelled' => 'Huỷ'];
                             $currentStatus = $booking['status'] ?? 'pending';
                             foreach ($statuses as $key => $label):
                             ?>
@@ -237,6 +237,7 @@
                 <?php if (!empty($guidesAssigned) && is_array($guidesAssigned)): ?>
                     <ul class="list-group list-group-flush">
                         <?php foreach ($guidesAssigned as $g): ?>
+
                             <li class="list-group-item">
                                 <div class="fw-semibold">
                                     <?= htmlspecialchars($g['full_name']) ?>
@@ -249,7 +250,9 @@
                                     <span class="badge bg-info">KN: <?= $g['experience_years'] ?> năm</span>
                                     <span class="badge bg-secondary"><?= htmlspecialchars($g['language']) ?></span>
                                     <span class="badge bg-dark"><?= htmlspecialchars($g['classify']) ?></span>
+                                    <span class="badge bg-info"><?= $statuses[$g['status_guides'] ?? 'pending'] ?? 'Chờ xác nhận' ?></span>
                                 </div>
+
                             </li>
                         <?php endforeach; ?>
                     </ul>
@@ -260,10 +263,12 @@
                 <?php endif; ?>
             </div>
         </div>
-        <a href="index.php?action=booking-assign-guide&booking_id=<?= $booking['id'] ?>"
-            class="btn btn-warning">
-            👨‍✈️ Gán hướng dẫn viên
-        </a>
+        <?php if ($isAddGuideAllowed): ?>
+            <a href="index.php?action=booking-assign-guide&booking_id=<?= $booking['id'] ?>"
+                class="btn btn-warning">
+                👨‍✈️ Gán hướng dẫn viên
+            </a>
+        <?php endif; ?>
         <!-- 💰 TỔNG TIỀN -->
         <hr>
         <h5 class="mt-4">💰 Chi phí</h5>
