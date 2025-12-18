@@ -6,7 +6,7 @@
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
         d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
-    <h1 class="text-xl font-bold">WanderNest</h1>
+    <h1 class="text-xl font-bold">TravelPro</h1>
   </div>
 
   <!-- Search + notification + user -->
@@ -31,16 +31,19 @@
     </button>
 
     <!-- User -->
+    <!-- User -->
     <div class="relative">
-      <button id="user-button" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition">
+      <button id="user-button"
+        class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition focus:outline-none">
 
         <div class="w-9 h-9 rounded-full bg-white bg-opacity-20 flex items-center justify-center font-semibold">
-          NA
+          <img src="https://nguoinoitieng.tv/images/nnt/97/0/bb39.jpg" alt="Avatar"
+            class="w-9 h-9 rounded-full object-cover">
         </div>
 
         <div class="hidden md:block text-left">
-          <div class="text-sm font-semibold">Nguyễn Văn A</div>
-          <div class="text-xs opacity-80">Quản Trị Viên</div>
+          <div class="text-sm font-semibold">Nguyễn Đức Việt</div>
+          <div class="text-xs opacity-80">Hướng dẫn viên</div>
         </div>
 
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -50,28 +53,44 @@
       </button>
 
       <!-- MENU DROPDOWN -->
-      <div id="user-menu" class="user-menu">
-        <div class="user-menu-item border-b border-gray-200">
-          <div class="font-semibold text-sm text-gray-800">Nguyễn Văn A</div>
-          <div class="text-xs text-gray-500">admin@travelpro.com</div>
+      <div id="user-menu"
+        class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50">
+
+        <div class="px-4 py-3 border-b">
+          <div class="font-semibold text-sm text-gray-800">Nguyễn Đức Việt</div>
+          <div class="text-xs text-gray-500">ducviet@travelpro.com</div>
         </div>
 
-        <div class="user-menu-item">
-          Hồ Sơ
-        </div>
+        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+          Hồ sơ
+        </a>
 
-        <div class="user-menu-item">
-          Cài Đặt
-        </div>
+        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+          Cài đặt
+        </a>
 
         <form action="index.php?action=logout" method="POST">
           <button type="submit"
-            class="user-menu-item border-t border-gray-200 text-red-600 w-full text-left">
-            Đăng Xuất
+            class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 border-t">
+            Đăng xuất
           </button>
         </form>
       </div>
     </div>
 
+
   </div>
 </header>
+<script>
+  const userBtn = document.getElementById('user-button');
+  const userMenu = document.getElementById('user-menu');
+
+  userBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    userMenu.classList.toggle('hidden');
+  });
+
+  document.addEventListener('click', () => {
+    userMenu.classList.add('hidden');
+  });
+</script>
