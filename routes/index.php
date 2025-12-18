@@ -121,6 +121,9 @@ match ($action) {
     'HDV_add'        => (new TourGuideController)->addTourGuide(),
     'HDV_store'        => (new TourGuideController)->storeTourGuide(),
 
+    // quản lý hdv
+
+
 
     // ========== CALENDAR – HDV ==========
     'calendar' => (new CalendarController)->index(),

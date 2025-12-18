@@ -1,5 +1,7 @@
 <?php
+
 $currentAction = $_GET['action'] ?? 'home';
+$currentUri = $_SERVER['REQUEST_URI'];
 $listActions = [
   ['label' => 'Tổng Quan', 'action' => ['home', '/'], 'icon' => 'bi-speedometer2'],
   ['label' => 'Quản Lý Tour', 'action' => ['tours'], 'icon' => 'bi-card-list'],
@@ -26,6 +28,22 @@ $listActions = [
         <span class="font-medium"><?= $item['label'] ?></span>
       </a>
     <?php endforeach; ?>
+
+    <!-- ===== MENU FILE THUẦN: HƯỚNG DẪN VIÊN ===== -->
+    <?php
+    $isHDVActive = str_contains($currentUri, 'quan_li_hdv');
+    ?>
+
+    <a href="views/quan_li_hdv/index.php"
+      class="sidebar-link flex items-center space-x-3 px-4 py-3 rounded-lg
+  <?= $isHDVActive
+    ? 'active text-cyan-600 bg-cyan-50'
+    : 'text-gray-700 hover:bg-gray-100' ?>">
+      <i class="bi bi-compass text-lg"></i>
+      <span class="font-medium">Quản lý hướng dẫn viên</span>
+    </a>
+
+
   </nav>
 
 </aside>
